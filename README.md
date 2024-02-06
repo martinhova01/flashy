@@ -18,3 +18,7 @@
 - `mvn checkstyle:check` to run checkstyle
 - `mvn spotbugs:spotbugs` to run spotbugs
 
+### Reqiures
+- Java (tested with version 17.0.8)
+- Maven (tested with version 3.9.4)
+
