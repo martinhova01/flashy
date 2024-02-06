@@ -1,0 +1,6 @@
+# ignore maven build folder
+*target/
+
+*.vscode
+*.DS_Store
+
