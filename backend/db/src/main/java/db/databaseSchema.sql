@@ -1,0 +1,52 @@
+CREATE TABLE deck
+(
+    deck_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name    VARCHAR(50)
+);
+
+CREATE TABLE profile
+(
+    profile_id  INTEGER PRIMARY KEY AUTOINCREMENT,
+    email       VARCHAR(320),
+    firstname   VARCHAR(50),
+    lastname    VARCHAR(50),
+    is_admin    BOOLEAN DEFAULT false
+);
+
+CREATE TABLE card
+(
+    card_id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    front_page          VARCHAR(2000),
+    front_page_picture  VARCHAR(2083),
+    back_page           VARCHAR(2000),
+    back_page_picture   VARCHAR(2083),
+    deck_id             INTEGER,
+    FOREIGN KEY (deck_id) REFERENCES deck(deck_id)
+);
+
+CREATE TABLE owner 
+(
+    owner_id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    deck_id              INTEGER,
+    profile_id           INTEGER,
+    FOREIGN KEY (deck_id) REFERENCES deck(deck_id),
+    FOREIGN KEY (profile_id) REFERENCES profile(profile_id)
+);
+
+CREATE TABLE user_like
+(
+    like_id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    deck_id              INTEGER,
+    profile_id           INTEGER,
+    FOREIGN KEY (deck_id) REFERENCES deck(deck_id),
+    FOREIGN KEY (profile_id) REFERENCES profile(profile_id)
+);
+
+CREATE TABLE favorite
+(
+    favorite_id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    deck_id              INTEGER,
+    profile_id           INTEGER,
+    FOREIGN KEY (deck_id) REFERENCES deck(deck_id),
+    FOREIGN KEY (profile_id) REFERENCES profile(profile_id)
+);
