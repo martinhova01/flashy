@@ -1,11 +1,13 @@
 package db;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 
 
@@ -15,6 +17,7 @@ import java.sql.SQLException;
  */
 public class DbConnection {
 
+    final static String sqlFilepath = System.getProperty("user.dir") + File.separator + "backend" + File.separator + "db" + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "db" + File.separator + "databaseSchema.sql";
     private static String filePath = 
         System.getProperty("user.home") + System.getProperty("file.separator") + "flashy.db";
 
@@ -24,91 +27,183 @@ public class DbConnection {
         return databaseFile.exists();
     }
 
+     /**
+     * Reads sql file
+     */
+    private static String readSqlFile(String filePath) {
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return content.toString();
+    }
 
     /**
-     * Creates db-file if it is not already created and fills db with mock data.
+     * Runs sql file
      */
-    public void createDb() {
-        try {
-            if (dbExits()) {
-                System.out.println("Database already exists");
-                return;
+    private void runSqlFile(Connection conn, String filePath) {
+        try (Statement stmt = conn.createStatement()) {
+            String[] sqlStatements = readSqlFile(filePath).split(";");
+            for (String sqlStatement : sqlStatements) {
+                if (!sqlStatement.trim().isEmpty()) {
+                    stmt.execute(sqlStatement);
+                }
             }
-
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
-            System.out.println("Connected to the SQLite database.");
-
-            //TODO: Fill database with mock-data
-
-            conn.close();
-           
+            System.out.println("Tables created successfully.");
         } catch (SQLException e) {
-            System.out.println("SQLite connection error: " + e.getMessage());
+            System.out.println("Error creating tables: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Creates db-file if it is not already created and fills db with tables.
+     */
+public void createDb() {
+    try {
+        System.out.println(sqlFilepath);
+        if (dbExits()) {
+            System.out.println("Database already exists");
+            return;
+        }
+
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+        System.out.println("Connected to the SQLite database.");
+
+        // Run SQL file to create tables
+        runSqlFile(conn, sqlFilepath);
+
+        conn.close();
+
+    } catch (SQLException e) {
+        System.out.println("SQLite connection error: " + e.getMessage());
+    }
+}
+    /**
+     * Seeds data into the tables.
+     * @throws SQLException 
+     */
+    public void seedData() throws SQLException {
+        Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+        seedDecks(conn);
+        seedProfiles(conn);
+        seedCards(conn);
+        seedOwners(conn);
+        seedUserLikes(conn);
+        seedFavorites(conn);
+        System.out.println("Sample data seeded successfully.");
+    }
+
+    private void seedDecks(Connection connection) {
+        String insertQuery = "INSERT INTO deck (name) VALUES (?)";
+        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
+            statement.setString(1, "Sample Deck 1");
+            statement.executeUpdate();
+
+            statement.setString(1, "Sample Deck 2");
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    public void createUserInfoTable() {
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
-             java.sql.Statement stmt = conn.createStatement()) {
-            
-            String sql = "CREATE TABLE IF NOT EXISTS userinfo (\n"
-                         + " id INTEGER PRIMARY KEY,\n"
-                         + " username TEXT NOT NULL,\n"
-                         + " email TEXT NOT NULL\n"
-                         + ");";
-            stmt.execute(sql);
-            
-            System.out.println("Userinfo table created successfully.");
+    private void seedProfiles(Connection connection) {
+        String insertQuery = "INSERT INTO profile (email, firstname, lastname, is_admin) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
+            statement.setString(1, "user1@example.com");
+            statement.setString(2, "John");
+            statement.setString(3, "Doe");
+            statement.setBoolean(4, false);
+            statement.executeUpdate();
+
+            statement.setString(1, "admin@example.com");
+            statement.setString(2, "Admin");
+            statement.setString(3, "User");
+            statement.setBoolean(4, true);
+            statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Error creating userinfo table: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    public void addUser(String username, String email) {
-        String sql = "INSERT INTO userinfo(username, email) VALUES(?, ?)";
-        
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, username);
-            pstmt.setString(2, email);
-            pstmt.executeUpdate();
-            
-            System.out.println("User added successfully.");
+    private void seedCards(Connection connection) {
+        String insertQuery = "INSERT INTO card (front_page, front_page_picture, back_page, back_page_picture, deck_id) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
+            statement.setString(1, "Sample Front Page 1");
+            statement.setString(2, "front_page_picture_1.jpg");
+            statement.setString(3, "Sample Back Page 1");
+            statement.setString(4, "back_page_picture_1.jpg");
+            statement.setInt(5, 1);
+            statement.executeUpdate();
+
+            statement.setString(1, "Sample Front Page 2");
+            statement.setString(2, "front_page_picture_2.jpg");
+            statement.setString(3, "Sample Back Page 2");
+            statement.setString(4, "back_page_picture_2.jpg");
+            statement.setInt(5, 2);
+            statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Error adding user: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    public void getUser(String username) {
-        String sql = "SELECT * FROM userinfo WHERE username = ?";
-        
-        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            
-            pstmt.setString(1, username);
-            ResultSet rs = pstmt.executeQuery();
-            
-            if (rs.next()) {
-                System.out.println("User found:");
-                System.out.println("ID: " + rs.getInt("id"));
-                System.out.println("Username: " + rs.getString("username"));
-                System.out.println("Email: " + rs.getString("email"));
-            } else {
-                System.out.println("User not found.");
-            }
+    private void seedOwners(Connection connection) {
+        String insertQuery = "INSERT INTO owner (deck_id, profile_id) VALUES (?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
+            statement.setInt(1, 1);
+            statement.setInt(2, 1);
+            statement.executeUpdate();
+
+            statement.setInt(1, 2);
+            statement.setInt(2, 2);
+            statement.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Error getting user: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) {
+    private void seedUserLikes(Connection connection) {
+        String insertQuery = "INSERT INTO user_like (deck_id, profile_id) VALUES (?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
+            statement.setInt(1, 1);
+            statement.setInt(2, 1);
+            statement.executeUpdate();
+
+            statement.setInt(1, 2);
+            statement.setInt(2, 2);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void seedFavorites(Connection connection) {
+        String insertQuery = "INSERT INTO favorite (deck_id, profile_id) VALUES (?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
+            statement.setInt(1, 1); // Assuming deck_id 1 exists
+            statement.setInt(2, 1);
+            statement.executeUpdate();
+
+            statement.setInt(1, 2);
+            statement.setInt(2, 2);
+            statement.executeUpdate();
+
+            // Add more favorites relationships as needed
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    
+
+    public static void main(String[] args) throws SQLException {
         DbConnection db = new DbConnection();
         db.createDb();
-        db.createUserInfoTable();
-        db.addUser("martinhova", "martin@mail.com");
-        db.getUser("martinhova");
-        db.getUser("johnDoe");
-
+        db.seedData();
     }
 }
