@@ -2,7 +2,8 @@ package db;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -13,11 +14,9 @@ import java.sql.Statement;
 
 /**
  * Class that handles connection to the database.
- * (This is just an example on how to communicate with the databse)
  */
 public class DbConnection {
 
-    final static String sqlFilepath = System.getProperty("user.dir") + File.separator + "backend" + File.separator + "db" + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "db" + File.separator + "databaseSchema.sql";
     private static String filePath = 
         System.getProperty("user.home") + System.getProperty("file.separator") + "flashy.db";
 
@@ -27,12 +26,16 @@ public class DbConnection {
         return databaseFile.exists();
     }
 
-     /**
-     * Reads sql file
+    /**
+     * Reads the sql file.
+     *
+     * @return the file content as a String
      */
-    private static String readSqlFile(String filePath) {
+    private String readSqlFile() {
         StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        InputStream is = getClass().getResourceAsStream("databaseSchema.sql");
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 content.append(line).append("\n");
@@ -44,11 +47,11 @@ public class DbConnection {
     }
 
     /**
-     * Runs sql file
+     * Runs sql file.
      */
-    private void runSqlFile(Connection conn, String filePath) {
+    private void runSqlFile(Connection conn) {
         try (Statement stmt = conn.createStatement()) {
-            String[] sqlStatements = readSqlFile(filePath).split(";");
+            String[] sqlStatements = readSqlFile().split(";");
             for (String sqlStatement : sqlStatements) {
                 if (!sqlStatement.trim().isEmpty()) {
                     stmt.execute(sqlStatement);
@@ -63,30 +66,32 @@ public class DbConnection {
     /**
      * Creates db-file if it is not already created and fills db with tables.
      */
-public void createDb() {
-    try {
-        System.out.println(sqlFilepath);
-        if (dbExits()) {
-            System.out.println("Database already exists");
-            return;
+    public void createDb() {
+        try {
+            if (dbExits()) {
+                System.out.println("Database already exists");
+                return;
+            }
+
+            Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+            System.out.println("Connected to the SQLite database.");
+
+            // Run SQL file to create tables and seeds data into tables
+            runSqlFile(conn);
+            seedData();
+
+            conn.close();
+
+        } catch (SQLException e) {
+            System.out.println("SQLite connection error: " + e.getMessage());
         }
-
-        Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
-        System.out.println("Connected to the SQLite database.");
-
-        // Run SQL file to create tables
-        runSqlFile(conn, sqlFilepath);
-
-        conn.close();
-
-    } catch (SQLException e) {
-        System.out.println("SQLite connection error: " + e.getMessage());
     }
-}
     /**
      * Seeds data into the tables.
-     * @throws SQLException 
+     *
+     * @throws SQLException if sql file is invalid
      */
+
     public void seedData() throws SQLException {
         Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
         seedDecks(conn);
@@ -112,7 +117,8 @@ public void createDb() {
     }
 
     private void seedProfiles(Connection connection) {
-        String insertQuery = "INSERT INTO profile (email, firstname, lastname, is_admin) VALUES (?, ?, ?, ?)";
+        String insertQuery =
+            "INSERT INTO profile (email, firstname, lastname, is_admin) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "user1@example.com");
             statement.setString(2, "John");
@@ -131,7 +137,9 @@ public void createDb() {
     }
 
     private void seedCards(Connection connection) {
-        String insertQuery = "INSERT INTO card (front_page, front_page_picture, back_page, back_page_picture, deck_id) VALUES (?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO card"
+            + "(front_page, front_page_picture, back_page, back_page_picture, deck_id)"
+            + "VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "Sample Front Page 1");
             statement.setString(2, "front_page_picture_1.jpg");
@@ -201,9 +209,9 @@ public void createDb() {
 
     
 
-    public static void main(String[] args) throws SQLException {
-        DbConnection db = new DbConnection();
-        db.createDb();
-        db.seedData();
-    }
+    // public static void main(String[] args) throws SQLException {
+    //     DbConnection db = new DbConnection();
+    //     db.createDb();
+    //     db.seedData();
+    // }
 }

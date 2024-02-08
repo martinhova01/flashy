@@ -1,7 +1,6 @@
 package restserver;
 
 import db.DbConnection;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,18 +21,15 @@ public class FlashyController {
 
 
     /**
-    * Check if the server is running.
+    * Check if the server is running. Create db if not already created.
     *
     * @return true if client is succesfully connected to server
     */
     @GetMapping
     public boolean isRunning() {
 
-        //example on how to connect to db
         DbConnection dbConnection = new DbConnection();
         dbConnection.createDb();
-
-
 
         return true;
     }
