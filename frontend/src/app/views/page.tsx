@@ -17,12 +17,6 @@ const page = () => {
 
   return (
     <Box sx={{ height: 400 }}>
-      <Button
-        variant="outlined"
-        sx={{ margin: "0.5rem", borderRadius: "0rem" }}
-      >
-        Flashy
-      </Button>
       <Typography
         variant="h5"
         component="div"
@@ -37,7 +31,7 @@ const page = () => {
       </Typography>
       <Card
         sx={{
-          maxWidth: 400,
+          maxWidth: 500,
           margin: "1rem",
           marginLeft: "1.5rem",
           border: "1px solid #ccc",
