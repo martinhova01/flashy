@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography, Container, TextField } from "@mui/material";
+import { Typography, Container, TextField, Grid, Box, Button } from "@mui/material";
 
 export default function Home() {
   
@@ -8,17 +8,47 @@ export default function Home() {
     
     <Container>
         
-      <Typography sx={{ fontFamily: "Monospace", fontSize: 60, textAlign: "center", paddingTop: "40px" }}>
+      <Typography sx={{ fontFamily: "Italic", fontSize: 100, textAlign: "center", paddingTop: "30px" }}>
         Flashy
       </Typography>
       
-      <Typography sx={{ fontFamily: "Monospace", fontSize: 30, textAlign: "center", paddingTop: "40px" }}>
+      <Typography sx={{ fontFamily: "Monospace", fontSize: 30, textAlign: "center", paddingTop: "30px" }}>
         Logg inn
       </Typography>
-      
-      <TextField placeholder="E-post" sx={{ fontFamily: "Monospace", paddingTop: "40px" }}>
+
+      <Grid container direction={"column"} alignContent={"center"}>
         
-      </TextField>
+        <TextField placeholder="E-post" sx={{ fontFamily: "Monospace", paddingTop: "40px", textAlign: "center"}}>
+        
+        </TextField>
+       
+      
+      
+        <TextField placeholder="Passord" sx={{ fontFamily: "Monospace", paddingTop: "40px", paddingBottom: "40px" }}>
+  
+        </TextField>
+      
+
+      <Box textAlign={"center"}>
+      <div>
+        <Button variant="contained">
+          Logg inn
+           
+        </Button>
+      </div>
+      <div>
+        <Button variant="text" sx={{paddingTop: "30px"}}>
+          Lag ny bruker
+           
+        </Button>
+      </div>
+      </Box>
+    
+
+      </Grid>
+
+      
+      
       
     </Container>
     
