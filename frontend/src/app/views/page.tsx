@@ -31,7 +31,7 @@ const page = () => {
       </Typography>
       <Card
         sx={{
-          maxWidth: 500,
+          maxWidth: 400,
           margin: "1rem",
           marginLeft: "1.5rem",
           border: "1px solid #ccc",
