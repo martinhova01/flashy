@@ -118,18 +118,21 @@ public class DbConnection {
 
     private void seedProfiles(Connection connection) {
         String insertQuery =
-            "INSERT INTO profile (email, firstname, lastname, is_admin) VALUES (?, ?, ?, ?)";
+            "INSERT INTO profile (email, firstname, lastname, school, is_admin) "
+            + "VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "user1@example.com");
             statement.setString(2, "John");
             statement.setString(3, "Doe");
-            statement.setBoolean(4, false);
+            statement.setString(4, "NTNU");
+            statement.setBoolean(5, false);
             statement.executeUpdate();
 
             statement.setString(1, "admin@example.com");
             statement.setString(2, "Admin");
             statement.setString(3, "User");
-            statement.setBoolean(4, true);
+            statement.setString(4, "Admin");
+            statement.setBoolean(5, true);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -209,9 +212,8 @@ public class DbConnection {
 
     
 
-    // public static void main(String[] args) throws SQLException {
-    //     DbConnection db = new DbConnection();
-    //     db.createDb();
-    //     db.seedData();
-    // }
+    public static void main(String[] args) throws SQLException {
+        DbConnection db = new DbConnection();
+        db.createDb();
+    }
 }
