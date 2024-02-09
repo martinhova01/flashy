@@ -4,6 +4,12 @@ import { Typography, Container, TextField, Grid, Box, Button } from "@mui/materi
 
 export default function Home() {
   
+  
+  function moveToSignUpPage() {
+    window.location.href = "/signup"
+  }
+  
+  
   return <div>
     
     <Container>
@@ -37,7 +43,7 @@ export default function Home() {
         </Button>
       </div>
       <div>
-        <Button variant="text" sx={{paddingTop: "30px"}}>
+        <Button variant="text" sx={{paddingTop: "30px"}} onClick={moveToSignUpPage}>
           Lag ny bruker
            
         </Button>
