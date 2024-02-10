@@ -3,7 +3,7 @@ package core;
 /**
  * Dummy class.
  */
-public class HelloWorld {
+public class Profile {
 
     public String helloWorld() {
         return "hello world";
