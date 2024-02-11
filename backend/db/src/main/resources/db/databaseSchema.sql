@@ -8,6 +8,7 @@ CREATE TABLE profile
 (
     profile_id  INTEGER PRIMARY KEY AUTOINCREMENT,
     email       VARCHAR(320),
+    password    VARCHAR(320),
     firstname   VARCHAR(50),
     lastname    VARCHAR(50),
     school      VARCHAR(50),

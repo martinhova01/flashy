@@ -11,9 +11,21 @@ public class SqlQueries {
      * @param profileId the id of the user.
      * @return the SQL-query as a String.
      */
-    public String getProfileQuery(int profileId) {
+    public static String getProfileQuery(int profileId) {
         return String.format("SELECT * FROM profile WHERE profile_id=%s;",
             Integer.toString(profileId));
+    }
+
+    /**
+     * Generate SQL-query for getting a profile with given email and password.
+     *
+     * @param email email
+     * @param password password
+     * @return the SQL-query as a String
+     */
+    public static String getProfileQuery(String email, String password) {
+        return String.format("SELECT * FROM profile WHERE email='%s' and password='%s'",
+            email, password);
     }
 
     /**
@@ -25,10 +37,12 @@ public class SqlQueries {
      * @param school school
      * @return the SQL-query as a String
      */
-    public String addProfileQuery(String email, String firstName, String lastName, String school) {
-        return String.format("INSERT INTO profile (email, firstname, lastname, school, is_admin) "
-            + "VALUES ('%s', '%s', '%s', '%s', %b)",
-            email, firstName, lastName, school, false);
+    public static String addProfileQuery(String email, String password, String firstName,
+        String lastName, String school) {
+        return String.format(
+            "INSERT INTO profile (email, password, firstname, lastname, school, is_admin) "
+            + "VALUES ('%s', '%s', '%s', '%s', '%s', %b)",
+            email, password, firstName, lastName, school, false);
     }
 
     /**
@@ -37,7 +51,7 @@ public class SqlQueries {
      * @param profileId the ID of the profile to delete.
      * @return the SQL-query as a String
      */
-    public String deleteProfileQuery(int profileId) {
+    public static String deleteProfileQuery(int profileId) {
         return String.format("DELETE FROM profile WHERE profile_id=%s",
             Integer.toString(profileId));
     }
@@ -53,7 +67,7 @@ public class SqlQueries {
      * @param isAdmin is_admin
      * @return the SQL-query as a String
      */
-    public String updateProfileQuery(
+    public static String updateProfileQuery(
         int profileId,
         String email,
         String firstName,

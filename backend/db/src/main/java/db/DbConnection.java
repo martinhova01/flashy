@@ -1,5 +1,6 @@
 package db;
 
+import core.Profile;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
@@ -7,8 +8,11 @@ import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
@@ -19,6 +23,21 @@ public class DbConnection {
 
     private static String filePath = 
         System.getProperty("user.home") + System.getProperty("file.separator") + "flashy.db";
+
+    private Connection connection;
+
+    /**
+     * Constructor. Atempts to connect to database.
+     */
+    public DbConnection() {
+        try {
+            createDb();
+            connection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+
+        } catch (SQLException e) {
+            System.out.println("SQLite connection error: " + e.getMessage());
+        }
+    }
 
 
     public boolean dbExits() {
@@ -118,21 +137,23 @@ public class DbConnection {
 
     private void seedProfiles(Connection connection) {
         String insertQuery =
-            "INSERT INTO profile (email, firstname, lastname, school, is_admin) "
-            + "VALUES (?, ?, ?, ?, ?)";
+            "INSERT INTO profile (email, password, firstname, lastname, school, is_admin) "
+            + "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "user1@example.com");
-            statement.setString(2, "John");
-            statement.setString(3, "Doe");
-            statement.setString(4, "NTNU");
-            statement.setBoolean(5, false);
+            statement.setString(2, "password");
+            statement.setString(3, "John");
+            statement.setString(4, "Doe");
+            statement.setString(5, "NTNU");
+            statement.setBoolean(6, false);
             statement.executeUpdate();
 
             statement.setString(1, "admin@example.com");
-            statement.setString(2, "Admin");
-            statement.setString(3, "User");
-            statement.setString(4, "Admin");
-            statement.setBoolean(5, true);
+            statement.setString(2, "adminpassword");
+            statement.setString(3, "Admin");
+            statement.setString(4, "User");
+            statement.setString(5, "Admin");
+            statement.setBoolean(6, true);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -209,11 +230,92 @@ public class DbConnection {
         }
     }
 
+    /**
+     * Atempts to get a profile with the given email and password from the database. 
+     *
+     * @param email email
+     * @param password password
+     * @return the profile if found, null otherwise
+     */
+    public Profile getProfile(String email, String password) {
+        String query = SqlQueries.getProfileQuery(email, password);
+        Statement statement;
+        try {
+            statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            if (!result.next()) {
+                return null;
+            }
+            int profileId = result.getInt("profile_id");
+            String emailResult = result.getString("email");
+            String passwordResult = result.getString("password");
+            String firstname = result.getString("firstname");
+            String lastname = result.getString("lastname");
+            String school = result.getString("school");
+            boolean isAdmin = result.getBoolean("is_admin");
+            return new Profile(profileId, emailResult, passwordResult,
+                firstname, lastname, school, isAdmin);
 
-    
 
-    public static void main(String[] args) throws SQLException {
-        DbConnection db = new DbConnection();
-        db.createDb();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Gets a list of all the emails registered in the database. 
+     *
+     * @return the list of emails
+     */
+    public List<String> getEmails() {
+        String query = "SELECT email FROM profile";
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            List<String> emails = new ArrayList<>();
+            while (result.next()) {
+                emails.add(result.getString("email"));
+            }
+            return emails;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    /**
+     * Adds a new profile to the database. 
+     *
+     * @param p the profile to add
+     */
+    public void addProfile(Profile p) {
+        String query = SqlQueries.addProfileQuery(
+            p.getEmail(), p.getPassword(), p.getFirstname(), p.getLastname(), p.getSchool());
+
+        try {
+            Statement statement = this.connection.createStatement();
+            statement.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+    }
+
+    /**
+     * Deletes a prfile from the database. 
+     *
+     * @param profileId the id of the profile to delete
+     */
+    public void deleteProfile(int profileId) {
+        String query = SqlQueries.deleteProfileQuery(profileId);
+        try {
+            Statement statement = this.connection.createStatement();
+            statement.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

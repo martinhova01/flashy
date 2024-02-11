@@ -26,7 +26,16 @@ Attempts to get the data from a profile with the given email and password.
 - returns: profile data as json
 - example return data:
 ```json
-[]
+{
+    "profileId": 1,
+    "email": "user1@example.com",
+    "password": "password",
+    "firstname": "John",
+    "lastname": "Doe",
+    "school": "NTNU",
+    "ownedDecks": [],
+    "admin": false
+}
 ```
 
 ### addNewProfile()
@@ -36,7 +45,16 @@ Creates a new profile.
 - body: profile data as json
 - example body
 ```json
-[]
+{
+    "profileId": 0, //id does not matter
+    "email": "user1@example.com",
+    "password": "password",
+    "firstname": "John",
+    "lastname": "Doe",
+    "school": "NTNU",
+    "ownedDecks": [],
+    "admin": false
+}
 ```
 - returns `true` if successfully created and `false` if email is already used by a profile.
 
@@ -54,7 +72,16 @@ Updates the profile with the given profile_ID.
 - body: profile data as json
 - example body:
 ```json
-[]
+{
+    "profileId": 0,
+    "email": "user1@example.com",
+    "password": "password",
+    "firstname": "John",
+    "lastname": "Doe",
+    "school": "NTNU",
+    "ownedDecks": [],
+    "admin": false
+}
 ```
 - returns `true` if successfully updated and `false` if there exists no user with given profile_ID.
 
