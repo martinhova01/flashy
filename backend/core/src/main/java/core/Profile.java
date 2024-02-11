@@ -12,16 +12,26 @@ public class Profile {
     private String firstname;
     private String lastname;
     private Boolean isAdmin;
+    private int profileID;
 
     private List<Deck> ownedDecks;
     
 
-    public Profile(String email, String firstname, String lastname, Boolean isAdmin) {
+    public Profile(String email, String firstname, String lastname, Boolean isAdmin, int profileID) {
         this.email=email;
         this.firstname=firstname;
         this.lastname=lastname;
         this.isAdmin=isAdmin;
+        this.profileID=profileID;
         this.ownedDecks = new ArrayList<>();
+    }
+
+    public int getProfileID() {
+        return profileID;
+    }
+
+    public void setProfileID(int profileID) {
+        this.profileID = profileID;
     }
 
     public List<Deck> getOwnedDecks() {
