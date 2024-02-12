@@ -15,6 +15,7 @@ public class Profile {
     private String lastname;
     private String school;
     private Boolean isAdmin;
+    private int profileID;
 
     private List<Deck> ownedDecks;
 
@@ -33,6 +34,14 @@ public class Profile {
         this.school = school;
         this.isAdmin = isAdmin;
         this.ownedDecks = new ArrayList<>();
+    }
+
+    public int getProfileID() {
+        return profileID;
+    }
+
+    public void setProfileID(int profileID) {
+        this.profileID = profileID;
     }
 
     public List<Deck> getOwnedDecks() {

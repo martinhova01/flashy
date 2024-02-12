@@ -6,11 +6,11 @@ import java.util.List;
 public class Deck {
 
     private String deckName;
-    private String deckID;
+    private int deckID;
 
     private List<Card> cardList;
 
-    public Deck(String deckName, String deckID) {
+    public Deck(String deckName, int deckID) {
         this.deckName = deckName;
         this.deckID = deckID;
         this.cardList = new ArrayList<>();
@@ -32,7 +32,7 @@ public class Deck {
         return deckName;
     }
 
-    public String getDeckID() {
+    public int getDeckID() {
         return deckID;
     }
 
@@ -40,7 +40,7 @@ public class Deck {
         this.deckName = deckName;
     }
 
-    public void setDeckID(String deckID) {
+    public void setDeckID(int deckID) {
         this.deckID = deckID;
     }
 
