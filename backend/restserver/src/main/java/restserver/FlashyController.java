@@ -72,15 +72,29 @@ public class FlashyController {
      * Deletes the profile with the given ID. 
      *
      * @param profileId the id to delete
+     * @return true if successfully updated, false otherwise.
      */
     @DeleteMapping(path = "/profiles/{profileId}")
     public boolean deleteProfile(@PathVariable("profileId") int profileId) {
+        if (dbConnection.profileExists(profileId)) {
+            return false;
+        }
         dbConnection.deleteProfile(profileId);
         return true;
     }
 
+    /**
+     * Updates profile with given profileID. 
+     *
+     * @param profileId id
+     * @param profile profile
+     * @return true if successfully updated, false otherwise.
+     */
     @PutMapping(path = "/profiles/{profileId}")
     public boolean updateProfile(@PathVariable("profileId") int profileId, @RequestBody Profile profile) {
+        if (dbConnection.profileExists(profileId)) {
+            return false;
+        }
         dbConnection.updateProfile(profile);
         return true;
     }

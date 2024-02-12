@@ -340,7 +340,7 @@ public class DbConnection {
      * Checks if profile with given ID exists.
      *
      * @param profileId id.
-     * @return
+     * @return true if profile exists
      */
     public boolean profileExists(int profileId) {
         String query = SqlQueries.getProfileQuery(profileId);

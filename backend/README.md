@@ -16,7 +16,7 @@ Endpoint to check if client is connected to server.
 - method: `GET`
 - url: `/flashy/`
 - body: null
-- returns: `true`if client is connected to server
+- returns: `true` if client is connected to server
 
 ### getProfile()
 Attempts to get the data from a profile with the given email and password.
@@ -63,7 +63,7 @@ Deletes a profile with the given profile_ID.
 - method: `DELETE`
 - url `/flashy/profiles/"profile_ID"`
 - body: null
-- - returns `true` if successfully updated and `false` if there exists no user with given profile_ID.
+- returns `true` if successfully updated and `false` if there exists no user with given profile_ID.
 
 
 ### updateProfile()
