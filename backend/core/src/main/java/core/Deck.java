@@ -3,16 +3,22 @@ package core;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to store data about a flashcard-deck.
+ */
 public class Deck {
 
     private String deckName;
-    private int deckID;
+    private int deckId;
 
     private List<Card> cardList;
 
-    public Deck(String deckName, int deckID) {
+    /**
+     * Constructor.
+     */
+    public Deck(String deckName, int deckId) {
         this.deckName = deckName;
-        this.deckID = deckID;
+        this.deckId = deckId;
         this.cardList = new ArrayList<>();
     }
 
@@ -32,16 +38,16 @@ public class Deck {
         return deckName;
     }
 
-    public int getDeckID() {
-        return deckID;
+    public int getDeckId() {
+        return deckId;
     }
 
     public void setDeckName(String deckName) {
         this.deckName = deckName;
     }
 
-    public void setDeckID(int deckID) {
-        this.deckID = deckID;
+    public void setDeckId(int deckId) {
+        this.deckId = deckId;
     }
 
 }

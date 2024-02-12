@@ -1,38 +1,69 @@
 package db;
 
+import core.Profile;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 
 
 /**
  * Class that handles connection to the database.
- * (This is just an example on how to communicate with the databse)
  */
 public class DbConnection {
 
-    final static String sqlFilepath = System.getProperty("user.dir") + File.separator + "backend" + File.separator + "db" + File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator + "db" + File.separator + "databaseSchema.sql";
     private static String filePath = 
         System.getProperty("user.home") + System.getProperty("file.separator") + "flashy.db";
 
+    private Connection connection;
 
+    /**
+     * Constructor. Atempts to connect to database. Creates database if not already created
+     */
+    public DbConnection() {
+        try {
+            if (dbExits()) {
+                connection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+            } else {
+                connection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+                createDb();
+            }
+
+        } catch (SQLException e) {
+            System.out.println("SQLite connection error: " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Checks if database file has been created. 
+     *
+     * @return true if db exists.
+     */
     public boolean dbExits() {
         File databaseFile = new File(filePath);
         return databaseFile.exists();
     }
 
-     /**
-     * Reads sql file
+    /**
+     * Reads the sql file.
+     *
+     * @return the file content as a String
      */
-    private static String readSqlFile(String filePath) {
+    private String readSqlFile() {
         StringBuilder content = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+        InputStream is = getClass().getResourceAsStream("databaseSchema.sql");
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 content.append(line).append("\n");
@@ -44,11 +75,11 @@ public class DbConnection {
     }
 
     /**
-     * Runs sql file
+     * Runs sql file.
      */
-    private void runSqlFile(Connection conn, String filePath) {
-        try (Statement stmt = conn.createStatement()) {
-            String[] sqlStatements = readSqlFile(filePath).split(";");
+    private void runSqlFile() {
+        try (Statement stmt = connection.createStatement()) {
+            String[] sqlStatements = readSqlFile().split(";");
             for (String sqlStatement : sqlStatements) {
                 if (!sqlStatement.trim().isEmpty()) {
                     stmt.execute(sqlStatement);
@@ -61,44 +92,36 @@ public class DbConnection {
     }
     
     /**
-     * Creates db-file if it is not already created and fills db with tables.
+     * Creates db-file and fills db with tables.
      */
-public void createDb() {
-    try {
-        System.out.println(sqlFilepath);
-        if (dbExits()) {
-            System.out.println("Database already exists");
-            return;
+    public void createDb() {
+        try {
+
+            // Run SQL file to create tables and seeds data into tables
+            runSqlFile();
+            seedData();
+
+        } catch (SQLException e) {
+            System.out.println("SQLite connection error: " + e.getMessage());
         }
-
-        Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
-        System.out.println("Connected to the SQLite database.");
-
-        // Run SQL file to create tables
-        runSqlFile(conn, sqlFilepath);
-
-        conn.close();
-
-    } catch (SQLException e) {
-        System.out.println("SQLite connection error: " + e.getMessage());
     }
-}
     /**
      * Seeds data into the tables.
-     * @throws SQLException 
+     *
+     * @throws SQLException if sql file is invalid
      */
+
     public void seedData() throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
-        seedDecks(conn);
-        seedProfiles(conn);
-        seedCards(conn);
-        seedOwners(conn);
-        seedUserLikes(conn);
-        seedFavorites(conn);
+        seedDecks();
+        seedProfiles();
+        seedCards();
+        seedOwners();
+        seedUserLikes();
+        seedFavorites();
         System.out.println("Sample data seeded successfully.");
     }
 
-    private void seedDecks(Connection connection) {
+    private void seedDecks() {
         String insertQuery = "INSERT INTO deck (name) VALUES (?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "Sample Deck 1");
@@ -111,27 +134,35 @@ public void createDb() {
         }
     }
 
-    private void seedProfiles(Connection connection) {
-        String insertQuery = "INSERT INTO profile (email, firstname, lastname, is_admin) VALUES (?, ?, ?, ?)";
+    private void seedProfiles() {
+        String insertQuery =
+            "INSERT INTO profile (email, password, firstname, lastname, school, is_admin) "
+            + "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "user1@example.com");
-            statement.setString(2, "John");
-            statement.setString(3, "Doe");
-            statement.setBoolean(4, false);
+            statement.setString(2, "password");
+            statement.setString(3, "John");
+            statement.setString(4, "Doe");
+            statement.setString(5, "NTNU");
+            statement.setBoolean(6, false);
             statement.executeUpdate();
 
             statement.setString(1, "admin@example.com");
-            statement.setString(2, "Admin");
-            statement.setString(3, "User");
-            statement.setBoolean(4, true);
+            statement.setString(2, "adminpassword");
+            statement.setString(3, "Admin");
+            statement.setString(4, "User");
+            statement.setString(5, "Admin");
+            statement.setBoolean(6, true);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    private void seedCards(Connection connection) {
-        String insertQuery = "INSERT INTO card (front_page, front_page_picture, back_page, back_page_picture, deck_id) VALUES (?, ?, ?, ?, ?)";
+    private void seedCards() {
+        String insertQuery = "INSERT INTO card"
+            + "(front_page, front_page_picture, back_page, back_page_picture, deck_id)"
+            + "VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "Sample Front Page 1");
             statement.setString(2, "front_page_picture_1.jpg");
@@ -151,7 +182,7 @@ public void createDb() {
         }
     }
 
-    private void seedOwners(Connection connection) {
+    private void seedOwners() {
         String insertQuery = "INSERT INTO owner (deck_id, profile_id) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setInt(1, 1);
@@ -166,7 +197,7 @@ public void createDb() {
         }
     }
 
-    private void seedUserLikes(Connection connection) {
+    private void seedUserLikes() {
         String insertQuery = "INSERT INTO user_like (deck_id, profile_id) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setInt(1, 1);
@@ -181,7 +212,7 @@ public void createDb() {
         }
     }
 
-    private void seedFavorites(Connection connection) {
+    private void seedFavorites() {
         String insertQuery = "INSERT INTO favorite (deck_id, profile_id) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setInt(1, 1); // Assuming deck_id 1 exists
@@ -198,12 +229,131 @@ public void createDb() {
         }
     }
 
+    /**
+     * Atempts to get a profile with the given email and password from the database. 
+     *
+     * @param email email
+     * @param password password
+     * @return the profile if found, null otherwise
+     */
+    public Profile getProfile(String email, String password) {
+        String query = SqlQueries.getProfileQuery(email, password);
+        Statement statement;
+        try {
+            statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            if (!result.next()) {
+                return null;
+            }
+            int profileId = result.getInt("profile_id");
+            String emailResult = result.getString("email");
+            String passwordResult = result.getString("password");
+            String firstname = result.getString("firstname");
+            String lastname = result.getString("lastname");
+            String school = result.getString("school");
+            boolean isAdmin = result.getBoolean("is_admin");
+            return new Profile(profileId, emailResult, passwordResult,
+                firstname, lastname, school, isAdmin);
 
-    
 
-    public static void main(String[] args) throws SQLException {
-        DbConnection db = new DbConnection();
-        db.createDb();
-        db.seedData();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Gets a list of all the emails registered in the database. 
+     *
+     * @return the list of emails
+     */
+    public List<String> getEmails() {
+        String query = "SELECT email FROM profile";
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            List<String> emails = new ArrayList<>();
+            while (result.next()) {
+                emails.add(result.getString("email"));
+            }
+            return emails;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+    }
+
+
+    /**
+     * Adds a new profile to the database. 
+     *
+     * @param p the profile to add
+     */
+    public void addProfile(Profile p) {
+        String query = SqlQueries.addProfileQuery(
+            p.getEmail(), p.getPassword(), p.getFirstname(), p.getLastname(), p.getSchool());
+
+        try {
+            Statement statement = this.connection.createStatement();
+            statement.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+    }
+
+    /**
+     * Deletes a prfile from the database. 
+     *
+     * @param profileId the id of the profile to delete
+     */
+    public void deleteProfile(int profileId) {
+        String query = SqlQueries.deleteProfileQuery(profileId);
+        try {
+            Statement statement = this.connection.createStatement();
+            statement.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Updates the profile in the database.
+     *
+     * @param p the profile
+     */
+    public void updateProfile(Profile p) {
+        String query = SqlQueries.updateProfileQuery(
+            p.getProfileId(), p.getEmail(), p.getPassword(), 
+            p.getFirstname(), p.getLastname(), p.getSchool(), p.isAdmin());
+
+        try {
+            Statement statement = this.connection.createStatement();
+            statement.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Checks if profile with given ID exists.
+     *
+     * @param profileId id.
+     * @return true if profile exists
+     */
+    public boolean profileExists(int profileId) {
+        String query = SqlQueries.getProfileQuery(profileId);
+
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            return result.next();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

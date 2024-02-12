@@ -1,7 +1,7 @@
 module db {
 
     requires transitive java.sql;
-    requires core;
+    requires transitive core;
 
     opens db to java.sql, core;
 

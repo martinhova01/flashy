@@ -4,34 +4,46 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Dummy class.
+ * Class to store data about a profile.
  */
 public class Profile {
 
+    private int profileId;
     private String email;
+    private String password;
     private String firstname;
     private String lastname;
+    private String school;
     private Boolean isAdmin;
-    private int profileID;
 
     private List<Deck> ownedDecks;
-    
 
-    public Profile(String email, String firstname, String lastname, Boolean isAdmin, int profileID) {
-        this.email=email;
-        this.firstname=firstname;
-        this.lastname=lastname;
-        this.isAdmin=isAdmin;
-        this.profileID=profileID;
+
+    public Profile() {
+
+    }
+
+    /**
+     * Constructor.
+     */
+    public Profile(int profileId, String email, String password,
+        String firstname, String lastname, String school, Boolean isAdmin) {
+        this.profileId = profileId;
+        this.email = email;
+        this.password = password;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.school = school;
+        this.isAdmin = isAdmin;
         this.ownedDecks = new ArrayList<>();
     }
 
-    public int getProfileID() {
-        return profileID;
+    public int getProfileId() {
+        return profileId;
     }
 
-    public void setProfileID(int profileID) {
-        this.profileID = profileID;
+    public void setProfileId(int profileId) {
+        this.profileId = profileId;
     }
 
     public List<Deck> getOwnedDecks() {
@@ -69,6 +81,24 @@ public class Profile {
     public void setAdmin(Boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    
 
     
 }
