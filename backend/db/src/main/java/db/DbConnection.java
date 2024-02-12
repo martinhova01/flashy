@@ -27,12 +27,16 @@ public class DbConnection {
     private Connection connection;
 
     /**
-     * Constructor. Atempts to connect to database.
+     * Constructor. Atempts to connect to database. Creates database if not already created
      */
     public DbConnection() {
         try {
-            createDb();
-            connection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+            if (dbExits()) {
+                connection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+            } else {
+                connection = DriverManager.getConnection("jdbc:sqlite:" + filePath);
+                createDb();
+            }
 
         } catch (SQLException e) {
             System.out.println("SQLite connection error: " + e.getMessage());
@@ -40,6 +44,11 @@ public class DbConnection {
     }
 
 
+    /**
+     * Checks if database file has been created. 
+     *
+     * @return true if db exists.
+     */
     public boolean dbExits() {
         File databaseFile = new File(filePath);
         return databaseFile.exists();
@@ -68,8 +77,8 @@ public class DbConnection {
     /**
      * Runs sql file.
      */
-    private void runSqlFile(Connection conn) {
-        try (Statement stmt = conn.createStatement()) {
+    private void runSqlFile() {
+        try (Statement stmt = connection.createStatement()) {
             String[] sqlStatements = readSqlFile().split(";");
             for (String sqlStatement : sqlStatements) {
                 if (!sqlStatement.trim().isEmpty()) {
@@ -83,23 +92,14 @@ public class DbConnection {
     }
     
     /**
-     * Creates db-file if it is not already created and fills db with tables.
+     * Creates db-file and fills db with tables.
      */
     public void createDb() {
         try {
-            if (dbExits()) {
-                System.out.println("Database already exists");
-                return;
-            }
-
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
-            System.out.println("Connected to the SQLite database.");
 
             // Run SQL file to create tables and seeds data into tables
-            runSqlFile(conn);
+            runSqlFile();
             seedData();
-
-            conn.close();
 
         } catch (SQLException e) {
             System.out.println("SQLite connection error: " + e.getMessage());
@@ -112,17 +112,16 @@ public class DbConnection {
      */
 
     public void seedData() throws SQLException {
-        Connection conn = DriverManager.getConnection("jdbc:sqlite:" + filePath);
-        seedDecks(conn);
-        seedProfiles(conn);
-        seedCards(conn);
-        seedOwners(conn);
-        seedUserLikes(conn);
-        seedFavorites(conn);
+        seedDecks();
+        seedProfiles();
+        seedCards();
+        seedOwners();
+        seedUserLikes();
+        seedFavorites();
         System.out.println("Sample data seeded successfully.");
     }
 
-    private void seedDecks(Connection connection) {
+    private void seedDecks() {
         String insertQuery = "INSERT INTO deck (name) VALUES (?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "Sample Deck 1");
@@ -135,7 +134,7 @@ public class DbConnection {
         }
     }
 
-    private void seedProfiles(Connection connection) {
+    private void seedProfiles() {
         String insertQuery =
             "INSERT INTO profile (email, password, firstname, lastname, school, is_admin) "
             + "VALUES (?, ?, ?, ?, ?, ?)";
@@ -160,7 +159,7 @@ public class DbConnection {
         }
     }
 
-    private void seedCards(Connection connection) {
+    private void seedCards() {
         String insertQuery = "INSERT INTO card"
             + "(front_page, front_page_picture, back_page, back_page_picture, deck_id)"
             + "VALUES (?, ?, ?, ?, ?)";
@@ -183,7 +182,7 @@ public class DbConnection {
         }
     }
 
-    private void seedOwners(Connection connection) {
+    private void seedOwners() {
         String insertQuery = "INSERT INTO owner (deck_id, profile_id) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setInt(1, 1);
@@ -198,7 +197,7 @@ public class DbConnection {
         }
     }
 
-    private void seedUserLikes(Connection connection) {
+    private void seedUserLikes() {
         String insertQuery = "INSERT INTO user_like (deck_id, profile_id) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setInt(1, 1);
@@ -213,7 +212,7 @@ public class DbConnection {
         }
     }
 
-    private void seedFavorites(Connection connection) {
+    private void seedFavorites() {
         String insertQuery = "INSERT INTO favorite (deck_id, profile_id) VALUES (?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setInt(1, 1); // Assuming deck_id 1 exists

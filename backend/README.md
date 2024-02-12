@@ -12,7 +12,7 @@
 ---
 ## REST API endpoints
 ### isRunning()
-Endpoint to check if client is sonnected to server. Also creates and seeds database if it does not already exist.
+Endpoint to check if client is connected to server.
 - method: `GET`
 - url: `/flashy/`
 - body: null
