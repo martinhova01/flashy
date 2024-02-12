@@ -39,4 +39,6 @@ next-env.d.ts
 # ignore maven build folder
 *target/
 
+*package-lock.json
+
 
