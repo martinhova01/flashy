@@ -63,6 +63,7 @@ Deletes a profile with the given profile_ID.
 - method: `DELETE`
 - url `/flashy/profiles/"profile_ID"`
 - body: null
+- - returns `true` if successfully updated and `false` if there exists no user with given profile_ID.
 
 
 ### updateProfile()

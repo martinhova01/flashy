@@ -317,4 +317,43 @@ public class DbConnection {
             e.printStackTrace();
         }
     }
+
+    /**
+     * Updates the profile in the database.
+     *
+     * @param p the profile
+     */
+    public void updateProfile(Profile p) {
+        String query = SqlQueries.updateProfileQuery(
+            p.getProfileId(), p.getEmail(), p.getPassword(), 
+            p.getFirstname(), p.getLastname(), p.getSchool(), p.isAdmin());
+
+        try {
+            Statement statement = this.connection.createStatement();
+            statement.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Checks if profile with given ID exists.
+     *
+     * @param profileId id.
+     * @return
+     */
+    public boolean profileExists(int profileId) {
+        String query = SqlQueries.getProfileQuery(profileId);
+
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            return result.next();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

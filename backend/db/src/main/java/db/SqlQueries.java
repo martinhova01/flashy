@@ -61,6 +61,7 @@ public class SqlQueries {
      *
      * @param profileId the ID of the profile to update
      * @param email email
+     * @param password password
      * @param firstName first name
      * @param lastName last name
      * @param school school
@@ -70,15 +71,19 @@ public class SqlQueries {
     public static String updateProfileQuery(
         int profileId,
         String email,
+        String password,
         String firstName,
         String lastName,
         String school,
         boolean isAdmin) {
 
         return String.format("UPDATE profile "
-            + "SET email='%s', firstname='%s', lastname='%s', school='%s', is_admin=%b "
+            + "SET email='%s', password='%s',"
+            + "firstname='%s', lastname='%s', school='%s', is_admin=%b "
             + "WHERE profile_id=%s",
-            email, firstName, lastName, school, isAdmin, Integer.toString(profileId));     
+            email, password,
+            firstName, lastName, school, isAdmin, Integer.toString(profileId));     
     }
+
     
 }

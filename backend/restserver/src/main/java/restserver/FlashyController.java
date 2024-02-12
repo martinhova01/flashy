@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,12 +74,15 @@ public class FlashyController {
      * @param profileId the id to delete
      */
     @DeleteMapping(path = "/profiles/{profileId}")
-    public void deleteProfile(@PathVariable("profileId") int profileId) {
+    public boolean deleteProfile(@PathVariable("profileId") int profileId) {
         dbConnection.deleteProfile(profileId);
+        return true;
     }
 
-    public boolean updateProfile() {
-        return false;
+    @PutMapping(path = "/profiles/{profileId}")
+    public boolean updateProfile(@PathVariable("profileId") int profileId, @RequestBody Profile profile) {
+        dbConnection.updateProfile(profile);
+        return true;
     }
     
 }
