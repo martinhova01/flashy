@@ -1,5 +1,9 @@
 package core;
 
+/**
+ * Class to store data about one flashcard-card.
+ * 
+ */
 public class Card {
     
     private int cardNumber;
@@ -8,12 +12,16 @@ public class Card {
     private String frontpagePicture;
     private String backpagePicture;
 
-    public Card(int cardNumber, String deckID, String frontpageString, String backpageString, String frontpagePicture, String backpagePicture) {
-    this.cardNumber = cardNumber;
-    this.frontpageString = frontpageString;
-    this.backpageString = backpageString;
-    this.frontpagePicture = frontpagePicture;
-    this.backpagePicture = backpagePicture;
+    /**
+     * Constructor. 
+     */
+    public Card(int cardNumber, String frontpageString,
+        String backpageString, String frontpagePicture, String backpagePicture) {
+        this.cardNumber = cardNumber;
+        this.frontpageString = frontpageString;
+        this.backpageString = backpageString;
+        this.frontpagePicture = frontpagePicture;
+        this.backpagePicture = backpagePicture;
 
     }
     
@@ -55,6 +63,6 @@ public class Card {
 
     public void setBackpagePicture(String backpagePicture) {
         this.backpagePicture = backpagePicture;
-}
+    }
 
 }

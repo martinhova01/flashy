@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Dummy class.
+ * Class to store data about a profile.
  */
 public class Profile {
 
@@ -15,7 +15,6 @@ public class Profile {
     private String lastname;
     private String school;
     private Boolean isAdmin;
-    private int profileID;
 
     private List<Deck> ownedDecks;
 
@@ -24,6 +23,9 @@ public class Profile {
 
     }
 
+    /**
+     * Constructor.
+     */
     public Profile(int profileId, String email, String password,
         String firstname, String lastname, String school, Boolean isAdmin) {
         this.profileId = profileId;
@@ -36,12 +38,12 @@ public class Profile {
         this.ownedDecks = new ArrayList<>();
     }
 
-    public int getProfileID() {
-        return profileID;
+    public int getProfileId() {
+        return profileId;
     }
 
-    public void setProfileID(int profileID) {
-        this.profileID = profileID;
+    public void setProfileId(int profileId) {
+        this.profileId = profileId;
     }
 
     public List<Deck> getOwnedDecks() {
@@ -78,14 +80,6 @@ public class Profile {
 
     public void setAdmin(Boolean isAdmin) {
         this.isAdmin = isAdmin;
-    }
-
-    public int getProfileId() {
-        return profileId;
-    }
-
-    public void setProfileId(int profileId) {
-        this.profileId = profileId;
     }
 
     public String getPassword() {
