@@ -6,33 +6,33 @@ export default function SignUpPage() {
         
         <Container>
 
-        <Typography sx={{ fontFamily: "Italic", fontSize: 80, textAlign: "center", paddingTop: "30px" }}>
+        <Typography sx={{ fontFamily: "Italic", fontSize: 80, textAlign: "center", paddingTop: "10px" }}>
         Opprett bruker
       </Typography>
       
-      <Typography sx={{ fontFamily: "Monospace", fontSize: 28, textAlign: "center", paddingTop: "30px" }}>
+      <Typography sx={{ fontFamily: "Monospace", fontSize: 28, textAlign: "center", paddingTop: "10px" }}>
         Fyll inn informasjon
       </Typography>
 
       <Grid container direction={"column"} alignContent={"center"}>
         
-        <TextField placeholder="Fornavn" sx={{ fontFamily: "Monospace", paddingTop: "40px", textAlign: "center"}}>
+        <TextField placeholder="Fornavn" sx={{ fontFamily: "Monospace", paddingTop: "15px", textAlign: "center"}}>
         
         </TextField>
        
-        <TextField placeholder="Etternavn" sx={{ fontFamily: "Monospace", paddingTop: "40px", textAlign: "center"}}>
+        <TextField placeholder="Etternavn" sx={{ fontFamily: "Monospace", paddingTop: "15px", textAlign: "center"}}>
         
         </TextField>
 
-        <TextField placeholder="E-post" sx={{ fontFamily: "Monospace", paddingTop: "40px", textAlign: "center"}}>
+        <TextField placeholder="E-post" sx={{ fontFamily: "Monospace", paddingTop: "15px", textAlign: "center"}}>
         
         </TextField>
 
-        <TextField placeholder="skole/foreleser" sx={{ fontFamily: "Monospace", paddingTop: "40px", textAlign: "center"}}>
+        <TextField placeholder="skole/foreleser" sx={{ fontFamily: "Monospace", paddingTop: "15px", textAlign: "center"}}>
         
         </TextField>
       
-        <TextField placeholder="Passord" sx={{ fontFamily: "Monospace", paddingTop: "40px", paddingBottom: "40px" }}>
+        <TextField placeholder="Passord" sx={{ fontFamily: "Monospace", paddingTop: "15px", paddingBottom: "20px" }}>
   
         </TextField>
       
