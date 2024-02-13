@@ -69,7 +69,7 @@ Deletes a profile with the given profile_ID.
 ### updateProfile()
 Updates the profile with the given profile_ID.
 - method: `PUT`
-- url `/flashy/profiles/"profile_ID"`
+- url `/flashy/profiles`
 - body: profile data as json
 - example body:
 ```json

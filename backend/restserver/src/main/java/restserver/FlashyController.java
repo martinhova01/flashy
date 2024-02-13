@@ -76,7 +76,7 @@ public class FlashyController {
      */
     @DeleteMapping(path = "/profiles/{profileId}")
     public boolean deleteProfile(@PathVariable("profileId") int profileId) {
-        if (dbConnection.profileExists(profileId)) {
+        if (!dbConnection.profileExists(profileId)) {
             return false;
         }
         dbConnection.deleteProfile(profileId);
@@ -90,9 +90,9 @@ public class FlashyController {
      * @param profile profile
      * @return true if successfully updated, false otherwise.
      */
-    @PutMapping(path = "/profiles/{profileId}")
-    public boolean updateProfile(@PathVariable("profileId") int profileId, @RequestBody Profile profile) {
-        if (dbConnection.profileExists(profileId)) {
+    @PutMapping(path = "/profiles")
+    public boolean updateProfile(@RequestBody Profile profile) {
+        if (!dbConnection.profileExists(profile.getProfileId())) {
             return false;
         }
         dbConnection.updateProfile(profile);
