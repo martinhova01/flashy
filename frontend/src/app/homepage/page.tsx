@@ -1,68 +1,119 @@
 "use client";
+
 import {
-  Grid,
-  Button,
   Typography,
-  CardContent,
-  Card,
-  CardActions,
+  Container,
+  TextField,
+  Grid,
+  Box,
+  Button,
+  Link,
 } from "@mui/material";
-import Navbar from "../components/Navbar";
-import { useAppContext } from "../Context/testContext";
+import { ChangeEvent, useState } from "react";
+import { requests } from "../utils/Api/requests";
+import { ProfileDto } from "../utils/dto/ProfileDto";
 
-const HomePage: React.FC = () => {
-  const { name, setName } = useAppContext();
+const Page = () => {
+  const [email, setemail] = useState<String>("");
+  const [password, setpassword] = useState<String>("");
 
-  const flashcardSets = [
-    { id: 1, title: "Matte", description: "Flashcards for matteemner" },
-    { id: 2, title: "Historie", description: "Flashcards for historieemner" },
-    { id: 3, title: "Engelsk", description: "Flashcards for engelskemner" },
-    { id: 4, title: "Matte", description: "Flashcards for matteemner" },
-    { id: 5, title: "Historie", description: "Flashcards for historieemner" },
-    { id: 6, title: "Engelsk", description: "Flashcards for engelskemner" },
-    // Legg til flere flashcard-sett etter behov
-  ];
+  const fetchData = async () => {
+    try {
+      // getProfile
+      const fetchedProfile = (await requests.getProfile(
+        email,
+        password
+      )) as ProfileDto;
+
+      // check if profile exists
+      if (fetchedProfile) {
+        localStorage.clear();
+        localStorage.setItem("profile", JSON.stringify(fetchedProfile));
+        window.location.href = "/homepage";
+      } else {
+        console.log("Could not get profile");
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
+
+  const handleTextFieldChangeEmail = (event: ChangeEvent<HTMLInputElement>) => {
+    setemail(event.target.value);
+  };
+
+  const handleTextFieldChangePassword = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setpassword(event.target.value);
+  };
 
   return (
     <div>
-      <Navbar />
+      <Container>
+        <Typography
+          sx={{
+            fontFamily: "Italic",
+            fontSize: 100,
+            textAlign: "center",
+            paddingTop: "30px",
+          }}
+        >
+          Flashy
+        </Typography>
 
-      <Grid
-        container
-        spacing={1}
-        sx={{
-          p: "2rem",
-          m: "1rem",
-        }}
-      >
-        {flashcardSets.map((flashcardSet) => (
-          <Grid key={flashcardSet.id} item xs={12} sm={6} md={4} lg={3}>
-            <Card>
-              <Button component="a" sx={{ m: "0rem", p: "0rem" }}>
-                <CardContent>
-                  <Typography variant="h6">{flashcardSet.title}</Typography>
-                  <Typography variant="body2">
-                    {flashcardSet.description}
-                  </Typography>
-                </CardContent>
+        <Typography
+          sx={{
+            fontFamily: "Monospace",
+            fontSize: 30,
+            textAlign: "center",
+            paddingTop: "30px",
+          }}
+        >
+          Logg inn
+        </Typography>
+
+        <Grid container direction={"column"} alignContent={"center"}>
+          <TextField
+            placeholder="E-post"
+            sx={{
+              fontFamily: "Monospace",
+              paddingTop: "40px",
+              textAlign: "center",
+            }}
+            value={email}
+            onChange={handleTextFieldChangeEmail}
+          ></TextField>
+
+          <TextField
+            placeholder="Passord"
+            sx={{
+              fontFamily: "Monospace",
+              paddingTop: "40px",
+              paddingBottom: "40px",
+            }}
+            value={password}
+            onChange={handleTextFieldChangePassword}
+          ></TextField>
+
+          <Box textAlign={"center"}>
+            <div>
+              <Button onClick={fetchData} variant="contained">
+                Logg inn
               </Button>
-              <CardActions>
-                <Button
-                  onClick={() => {
-                    console.log(name);
-                    setName("Roger");
-                  }}
-                >
-                  Rediger
+            </div>
+            <div>
+              <Link href="/signup">
+                <Button variant="text" sx={{ paddingTop: "30px" }}>
+                  Lag ny bruker
                 </Button>
-                <Button>Slett</Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+              </Link>
+            </div>
+          </Box>
+        </Grid>
+      </Container>
     </div>
   );
 };
 
-export default HomePage;
+export default Page;
