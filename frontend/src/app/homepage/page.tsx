@@ -1,119 +1,64 @@
 "use client";
-
+import React, { useContext, useEffect, useState } from "react";
 import {
-  Typography,
-  Container,
-  TextField,
   Grid,
-  Box,
   Button,
-  Link,
+  Typography,
+  CardContent,
+  Card,
+  CardActions,
 } from "@mui/material";
-import { ChangeEvent, useState } from "react";
-import { requests } from "../utils/Api/requests";
-import { ProfileDto } from "../utils/dto/ProfileDto";
+import Navbar from "../components/Navbar";
 
-const Page = () => {
-  const [email, setemail] = useState<String>("");
-  const [password, setpassword] = useState<String>("");
+const HomePage: React.FC = () => {
+  const storedProfileString = localStorage.getItem("profile");
+  const storedProfile = storedProfileString
+    ? JSON.parse(storedProfileString)
+    : null;
 
-  const fetchData = async () => {
-    try {
-      // getProfile
-      const fetchedProfile = (await requests.getProfile(
-        email,
-        password
-      )) as ProfileDto;
-
-      // check if profile exists
-      if (fetchedProfile) {
-        localStorage.clear();
-        localStorage.setItem("profile", JSON.stringify(fetchedProfile));
-        window.location.href = "/homepage";
-      } else {
-        console.log("Could not get profile");
-      }
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-    }
-  };
-
-  const handleTextFieldChangeEmail = (event: ChangeEvent<HTMLInputElement>) => {
-    setemail(event.target.value);
-  };
-
-  const handleTextFieldChangePassword = (
-    event: ChangeEvent<HTMLInputElement>
-  ) => {
-    setpassword(event.target.value);
-  };
+  const flashcardSets = [
+    { id: 1, title: "Matte", description: "Flashcards for matteemner" },
+    { id: 2, title: "Historie", description: "Flashcards for historieemner" },
+    { id: 3, title: "Engelsk", description: "Flashcards for engelskemner" },
+    { id: 4, title: "Matte", description: "Flashcards for matteemner" },
+    { id: 5, title: "Historie", description: "Flashcards for historieemner" },
+    { id: 6, title: "Engelsk", description: "Flashcards for engelskemner" },
+    // Legg til flere flashcard-sett etter behov
+  ];
 
   return (
     <div>
-      <Container>
-        <Typography
-          sx={{
-            fontFamily: "Italic",
-            fontSize: 100,
-            textAlign: "center",
-            paddingTop: "30px",
-          }}
-        >
-          Flashy
-        </Typography>
+      <Navbar />
 
-        <Typography
-          sx={{
-            fontFamily: "Monospace",
-            fontSize: 30,
-            textAlign: "center",
-            paddingTop: "30px",
-          }}
-        >
-          Logg inn
-        </Typography>
-
-        <Grid container direction={"column"} alignContent={"center"}>
-          <TextField
-            placeholder="E-post"
-            sx={{
-              fontFamily: "Monospace",
-              paddingTop: "40px",
-              textAlign: "center",
-            }}
-            value={email}
-            onChange={handleTextFieldChangeEmail}
-          ></TextField>
-
-          <TextField
-            placeholder="Passord"
-            sx={{
-              fontFamily: "Monospace",
-              paddingTop: "40px",
-              paddingBottom: "40px",
-            }}
-            value={password}
-            onChange={handleTextFieldChangePassword}
-          ></TextField>
-
-          <Box textAlign={"center"}>
-            <div>
-              <Button onClick={fetchData} variant="contained">
-                Logg inn
+      <Grid
+        container
+        spacing={1}
+        sx={{
+          p: "2rem",
+          m: "1rem",
+        }}
+      >
+        {flashcardSets.map((flashcardSet) => (
+          <Grid key={flashcardSet.id} item xs={12} sm={6} md={4} lg={3}>
+            <Card>
+              <Button component="a" sx={{ m: "0rem", p: "0rem" }}>
+                <CardContent>
+                  <Typography variant="h6">{flashcardSet.title}</Typography>
+                  <Typography variant="body2">
+                    {flashcardSet.description}
+                  </Typography>
+                </CardContent>
               </Button>
-            </div>
-            <div>
-              <Link href="/signup">
-                <Button variant="text" sx={{ paddingTop: "30px" }}>
-                  Lag ny bruker
-                </Button>
-              </Link>
-            </div>
-          </Box>
-        </Grid>
-      </Container>
+              <CardActions>
+                <Button>Rediger</Button>
+                <Button>Slett</Button>
+              </CardActions>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
     </div>
   );
 };
 
-export default Page;
+export default HomePage;
