@@ -1,6 +1,11 @@
 import { Typography, Container, TextField, Grid, Box, Button } from "@mui/material";
 
 export default function SignUpPage() {
+
+  function moveToSignUpPage() {
+    window.location.href = "/homepage"
+  }
+  
     
     return <div>
         
