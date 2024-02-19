@@ -48,22 +48,13 @@ const page = () => {
       newProfile.school = storedProfile.school;
     }
     
-    requests.updateProfile(newProfile)
-      .then(response => {
-        // Handle successful update
-        console.log("Profile updated successfully:", response);
-      })
-      .catch(error => {
-        // Handle update error
-        console.error("Error updating profile:", error);
-      });
+    await requests.updateProfile(newProfile);
 
-      localStorage.clear();
-      let profile: ProfileDto = await requests.getProfile(newProfile.email, newProfile.password);
-      console.log(profile);
-      localStorage.setItem("profile", JSON.stringify(profile));
-      
-      window.location.href= "/views";
+    localStorage.clear();
+    let profile: ProfileDto = await requests.getProfile(newProfile.email, newProfile.password);
+    localStorage.setItem("profile", JSON.stringify(profile));
+    
+    window.location.href= "/views";
   }
 
   const cancel = () => {
