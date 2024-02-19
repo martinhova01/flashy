@@ -6,6 +6,9 @@
     - [addNewProfile()](#addnewprofile)
     - [deleteProfile()](#deleteprofile)
     - [updateProfile()](#updateprofile)
+    - [addNewDeck()](#addnewdeck)
+    - [updateDeck()](#updatedeck)
+    - [deleteDeck()](#deletedeck)
   - [Modules](#modules)
   - [How to run](#how-to-run)
   - [Requirements](#requirements)
@@ -33,7 +36,28 @@ Attempts to get the data from a profile with the given email and password.
     "firstname": "John",
     "lastname": "Doe",
     "school": "NTNU",
-    "ownedDecks": [],
+    "ownedDecks": [
+      {
+        "deckName": "Sample Deck 1",
+        "deckId": 6,
+        "cardList": [
+            {
+              "cardNumber": 5,
+              "frontpageString": "Sample Front Page 1",
+              "backpageString": "Sample Back Page 1",
+              "frontpagePicture": "front_page_picture_1.jpg",
+              "backpagePicture": "back_page_picture_1.jpg"
+            },
+            {
+              "cardNumber": 6,
+              "frontpageString": "new Card",
+              "backpageString": "Sample Back Page 1",
+              "frontpagePicture": "front_page_picture_1.jpg",
+              "backpagePicture": "back_page_picture_1.jpg"
+            }
+        ]
+      }
+    ],
     "admin": false
 }
 ```
@@ -85,6 +109,56 @@ Updates the profile with the given profile_ID.
 }
 ```
 - returns `true` if successfully updated and `false` if there exists no user with given profile_ID.
+
+### addNewDeck()
+Adds a new deck with a given ownerID.
+- method: `POST`
+- url: `/flashy/decks?ownerId="ownerId"`
+- body: deck data as json
+- example body:
+```json
+{
+  "deckName": "Sample Deck 1",
+  "deckId": 6,
+  "cardList": [
+    {
+      "cardNumber": 5,
+      "frontpageString": "Sample Front Page 1",
+      "backpageString": "Sample Back Page 1",
+      "frontpagePicture": "front_page_picture_1.jpg",
+      "backpagePicture": "back_page_picture_1.jpg"
+    }
+  ]
+}
+```
+
+### updateDeck()
+Updates a deck(Deletes it and makes a new one).
+- method: `PUT`
+- url: `/flashy/decks`
+- body: deck data as json
+- example body:
+```json
+{
+  "deckName": "Sample Deck 1",
+  "deckId": 6,
+  "cardList": [
+    {
+      "cardNumber": 5,
+      "frontpageString": "Sample Front Page 1",
+      "backpageString": "Sample Back Page 1",
+      "frontpagePicture": "front_page_picture_1.jpg",
+      "backpagePicture": "back_page_picture_1.jpg"
+    }
+  ]
+}
+```
+
+### deleteDeck()
+Deletes a deck with the given ID.
+- method: `DELETE`
+- url `/flashy/decks/"deck_ID"`
+- body: null
 
 ---
 ## Modules
