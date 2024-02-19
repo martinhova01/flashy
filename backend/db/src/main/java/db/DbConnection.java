@@ -243,7 +243,7 @@ public class DbConnection {
 
             ResultSet deckResultSet = connection
                 .createStatement()
-                .executeQuery(SqlQueries.getOwnedDecks(profileId));
+                .executeQuery(SqlQueries.getOwnedDecksQuery(profileId));
             List<Deck> decks = new ArrayList<>();
             while (deckResultSet.next()) {
                 String name = deckResultSet.getString("name");
@@ -252,7 +252,7 @@ public class DbConnection {
 
                 ResultSet cardResultSet = connection
                     .createStatement()
-                    .executeQuery(SqlQueries.getCards(deckId));
+                    .executeQuery(SqlQueries.getCardsQuery(deckId));
                 while (cardResultSet.next()) {
                     int cardId = cardResultSet.getInt("card_id");
                     String frontPage = cardResultSet.getString("front_page");
@@ -376,7 +376,7 @@ public class DbConnection {
      */
     public void addNewDeck(int profileId, Deck deck) {
 
-        String query = SqlQueries.addNewDeck(profileId, deck.getDeckName());
+        String query = SqlQueries.addNewDeckQuery(profileId, deck.getDeckName());
 
         try {
             Statement statement = this.connection.createStatement();
@@ -403,7 +403,7 @@ public class DbConnection {
     }
 
     private void addCard(int deckId, Card c) {
-        String query = SqlQueries.addCard(
+        String query = SqlQueries.addCardQuery(
             deckId,
             c.getFrontpageString(),
             c.getFrontpagePicture(),
@@ -421,8 +421,38 @@ public class DbConnection {
     }
 
 
+    /**
+     * Update a deck in the database. 
+     *
+     * @param deck the deck to update
+     */
     public void updateDeck(Deck deck) {
-        
+        String getOwnerQuery = "SELECT owner_id FROM deck WHERE deck_id ="
+            + Integer.toString(deck.getDeckId()) + ";";
+        try {
+            ResultSet result = connection.createStatement().executeQuery(getOwnerQuery);
+            int ownerId = result.getInt("owner_id");
+            this.deleteDeck(deck.getDeckId());
+            this.addNewDeck(ownerId, deck);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Delete a deck with a given ID from the database. 
+     *
+     * @param deckId the id of the deck to delete
+     */
+    public void deleteDeck(int deckId) {
+        String query = SqlQueries.deleteDeckQuery(deckId);
+        try {
+            Statement statement = this.connection.createStatement();
+            statement.execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 

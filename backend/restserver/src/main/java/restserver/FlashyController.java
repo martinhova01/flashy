@@ -102,6 +102,13 @@ public class FlashyController {
         return true;
     }
 
+    /**
+     * Add a new deck.
+     *
+     * @param deck the deck to add
+     * @param ownerId the owner of the deck
+     * @return true if successfully added, false if owner does not exist
+     */
     @PostMapping(path = "/decks")
     public boolean addNewDeck(@RequestBody Deck deck, @RequestParam int ownerId) {
         if (!dbConnection.profileExists(ownerId)) {
@@ -111,12 +118,25 @@ public class FlashyController {
         return true;
     }
 
+    /**
+     * Updates a deck. 
+     *
+     * @param deck the deck to update
+     */
     @PutMapping(path = "/decks")
     public void updateDeck(@RequestBody Deck deck) {
         dbConnection.updateDeck(deck);
     }
 
-    //delete deck
+    /**
+     * Delete a deck with a given ID. 
+     *
+     * @param deckId the id of the deck to delete
+     */
+    @DeleteMapping(path = "/decks/{deck_id}")
+    public void deleteDeck(@PathVariable("deck_id") int deckId) {
+        dbConnection.deleteDeck(deckId);
+    }
     
 
     /**

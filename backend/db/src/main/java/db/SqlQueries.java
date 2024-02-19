@@ -95,7 +95,7 @@ public class SqlQueries {
      * @param profileId the id of the profile
      * @return the query as a string
      */
-    public static String getOwnedDecks(int profileId) {
+    public static String getOwnedDecksQuery(int profileId) {
         return String.format(
             "SELECT * FROM deck WHERE owner_id = %s",
             Integer.toString(profileId));
@@ -107,7 +107,7 @@ public class SqlQueries {
      * @param deckId the id of the deck
      * @return the query as a string
      */
-    public static String getCards(int deckId) {
+    public static String getCardsQuery(int deckId) {
         return String.format("SELECT * FROM card where deck_id = %s", 
             Integer.toString(deckId));
     }
@@ -119,7 +119,7 @@ public class SqlQueries {
      * @param name the name of the deck
      * @return the query as a string
      */
-    public static String addNewDeck(int profileId, String name) {
+    public static String addNewDeckQuery(int profileId, String name) {
         return String.format("INSERT INTO deck(name, owner_id)"
             + "VALUES('%s', %s)",
             name, Integer.toString(profileId));
@@ -136,7 +136,7 @@ public class SqlQueries {
      * @param backPagePic url
      * @return the query as a string.
      */
-    public static String addCard(int deckId, String frontPage, String frontPagePic,
+    public static String addCardQuery(int deckId, String frontPage, String frontPagePic,
         String backPage, String backPagePic) {
         
         return String.format(
@@ -146,23 +146,10 @@ public class SqlQueries {
             frontPage, frontPagePic, backPage, backPagePic, deckId);
     }
 
-    /**
-     * Generate SQL-query to update a deck. 
-     *
-     * @param deckId the deck to update
-     * @param name name
-     * @return the query as a string
-     */
-    public static String updateDeck(int deckId, String name) {
-        return String.format(
-            "UPDATE deck SET name = '%s WHERE deck_id = %s",
-            name, Integer.toString(deckId));
-    }
 
-    // public static String updateCard(int cardId, String frontPage, String frontPagePic,
-    //     String backPage, String backPagePic) {
-    //         return String.format("UPDATE card SET ", null)
-    //     }
+    public static String deleteDeckQuery(int deckId) {
+        return String.format("DELETE FROM deck WHERE deck_id = '%s'", Integer.toString(deckId));
+    }
 
     public static String getAllProfileIDs() {
         String query = String.format("SELECT * FROM profile");
