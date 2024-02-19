@@ -85,5 +85,80 @@ public class SqlQueries {
             firstName, lastName, school, isAdmin, Integer.toString(profileId));     
     }
 
+    /**
+     * Generate SQL-query to get all decks owned by a profile.
+     *
+     * @param profileId the id of the profile
+     * @return the query as a string
+     */
+    public static String getOwnedDecks(int profileId) {
+        return String.format(
+            "SELECT * FROM deck WHERE owner_id = %s",
+            Integer.toString(profileId));
+    }
+
+    /**
+     * Generate SQL-query to get all cards in a deck. 
+     *
+     * @param deckId the id of the deck
+     * @return the query as a string
+     */
+    public static String getCards(int deckId) {
+        return String.format("SELECT * FROM card where deck_id = %s", 
+            Integer.toString(deckId));
+    }
+
+    /**
+     * Generate SQL-query to add a new deck.
+     *
+     * @param profileId the owner of the deck
+     * @param name the name of the deck
+     * @return the query as a string
+     */
+    public static String addNewDeck(int profileId, String name) {
+        return String.format("INSERT INTO deck(name, owner_id)"
+            + "VALUES('%s', %s)",
+            name, Integer.toString(profileId));
+    }
+
+
+    /**
+     * Generate SQL-query to add a new Card. 
+     *
+     * @param deckId id
+     * @param frontPage frontpage content
+     * @param frontPagePic url
+     * @param backPage backpage content
+     * @param backPagePic url
+     * @return the query as a string.
+     */
+    public static String addCard(int deckId, String frontPage, String frontPagePic,
+        String backPage, String backPagePic) {
+        
+        return String.format(
+            "INSERT INTO CARD("
+            + "front_page, front_page_picture, back_page, back_page_picture, deck_id)"
+            + "VALUES('%s', '%s', '%s', '%s', %s)",
+            frontPage, frontPagePic, backPage, backPagePic, deckId);
+    }
+
+    /**
+     * Generate SQL-query to update a deck. 
+     *
+     * @param deckId the deck to update
+     * @param name name
+     * @return the query as a string
+     */
+    public static String updateDeck(int deckId, String name) {
+        return String.format(
+            "UPDATE deck SET name = '%s WHERE deck_id = %s",
+            name, Integer.toString(deckId));
+    }
+
+    // public static String updateCard(int cardId, String frontPage, String frontPagePic,
+    //     String backPage, String backPagePic) {
+    //         return String.format("UPDATE card SET ", null)
+    //     }
+
     
 }
