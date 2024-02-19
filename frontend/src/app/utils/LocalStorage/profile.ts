@@ -10,11 +10,13 @@ export function getProfile(): ProfileDto {
 // Returns `true` if successful.
 export async function loadProfile(email: String, password: String): Promise<ProfileDto> {
     
-    const fetchedProfile: ProfileDto = (await requests.getProfile(email, password));
+    const fetchedProfile = (await requests.getProfile(email, password)) as ProfileDto;
     
     if (fetchedProfile) {
-        localStorage.clear();
-        localStorage.setItem("profile", JSON.stringify(fetchedProfile));
+      localStorage.clear();
+      localStorage.setItem("profile", JSON.stringify(fetchedProfile));
+    } else {
+      console.log("Login failed.")
     }
     
     return fetchedProfile;
