@@ -12,6 +12,7 @@ import {
 import { ChangeEvent, useState } from "react";
 import { requests } from "./utils/Api/requests";
 import { ProfileDto } from "./utils/dto/ProfileDto";
+import { loadProfile } from "./utils/LocalStorage/profile";
 
 const Page = () => {
   const [email, setemail] = useState<String>("");
@@ -19,20 +20,8 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      // getProfile
-      const fetchedProfile = (await requests.getProfile(
-        email,
-        password
-      )) as ProfileDto;
-
-      // check if profile exists
-      if (fetchedProfile) {
-        localStorage.clear();
-        localStorage.setItem("profile", JSON.stringify(fetchedProfile));
-        window.location.href = "/homepage";
-      } else {
-        console.log("Could not get profile");
-      }
+      loadProfile(email, password);
+      window.location.href = "/homepage"
     } catch (error) {
       console.error("Error fetching profile:", error);
     }
