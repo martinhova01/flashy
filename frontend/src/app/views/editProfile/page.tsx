@@ -62,7 +62,8 @@ const page = () => {
       let profile: ProfileDto = await requests.getProfile(newProfile.email, newProfile.password);
       console.log(profile);
       localStorage.setItem("profile", JSON.stringify(profile));
-        window.location.href= "/views";
+      
+      window.location.href= "/views";
   }
 
   const cancel = () => {

@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ProfileDto } from "../utils/dto/ProfileDto";
+import Navbar from "../components/Navbar";
 
 const page = () => {
 
@@ -28,7 +29,9 @@ const page = () => {
   }
 
   return (
+    
     <Box sx={{ height: 400 }}>
+      <Navbar />
       <Typography
         variant="h5"
         component="div"
