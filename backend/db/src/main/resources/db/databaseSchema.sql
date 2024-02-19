@@ -1,7 +1,9 @@
 CREATE TABLE deck
 (
-    deck_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name    VARCHAR(50)
+    deck_id     INTEGER PRIMARY KEY AUTOINCREMENT,
+    name        VARCHAR(50),
+    owner_id    INTEGER,
+    FOREIGN KEY (owner_id) REFERENCES profile(deck_id) ON DELETE CASCADE
 );
 
 CREATE TABLE profile
@@ -24,15 +26,6 @@ CREATE TABLE card
     back_page_picture   VARCHAR(2083),
     deck_id             INTEGER,
     FOREIGN KEY (deck_id) REFERENCES deck(deck_id) ON DELETE CASCADE
-);
-
-CREATE TABLE owner 
-(
-    owner_id             INTEGER PRIMARY KEY AUTOINCREMENT,
-    deck_id              INTEGER,
-    profile_id           INTEGER,
-    FOREIGN KEY (deck_id) REFERENCES deck(deck_id) ON DELETE CASCADE,
-    FOREIGN KEY (profile_id) REFERENCES profile(profile_id) ON DELETE CASCADE
 );
 
 CREATE TABLE user_like

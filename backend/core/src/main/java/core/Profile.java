@@ -38,6 +38,12 @@ public class Profile {
         this.ownedDecks = new ArrayList<>();
     }
 
+    public Profile(int profileId, String email, String password,
+        String firstname, String lastname, String school, Boolean isAdmin, List<Deck> ownedDecks) {
+        this(profileId, email, password, firstname, lastname, school, isAdmin);
+        this.ownedDecks = ownedDecks;
+    }
+
     public int getProfileId() {
         return profileId;
     }
