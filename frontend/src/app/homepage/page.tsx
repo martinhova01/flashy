@@ -9,23 +9,21 @@ import {
   CardActions,
 } from "@mui/material";
 import Navbar from "../components/Navbar";
+import { ProfileDto } from "../utils/dto/ProfileDto";
+import { getProfile } from "../utils/LocalStorage/profile";
 
 const HomePage: React.FC = () => {
-  const storedProfileString = localStorage.getItem("profile");
-  const storedProfile = storedProfileString
-    ? JSON.parse(storedProfileString)
-    : null;
-
-  const flashcardSets = [
-    { id: 1, title: "Matte", description: "Flashcards for matteemner" },
-    { id: 2, title: "Historie", description: "Flashcards for historieemner" },
-    { id: 3, title: "Engelsk", description: "Flashcards for engelskemner" },
-    { id: 4, title: "Matte", description: "Flashcards for matteemner" },
-    { id: 5, title: "Historie", description: "Flashcards for historieemner" },
-    { id: 6, title: "Engelsk", description: "Flashcards for engelskemner" },
-    // Legg til flere flashcard-sett etter behov
-  ];
-
+  
+  let decks = getProfile().ownedDecks;
+  decks.push({deckId: 2, name: "ABC", cards: []})
+  
+  console.log(getProfile().email);
+  
+  function addNewDeck() {
+    // use API to add new deck
+    
+  }
+  
   return (
     <div>
       <Navbar />
@@ -38,14 +36,14 @@ const HomePage: React.FC = () => {
           m: "1rem",
         }}
       >
-        {flashcardSets.map((flashcardSet) => (
-          <Grid key={flashcardSet.id} item xs={12} sm={6} md={4} lg={3}>
+        {decks.map((deck) => (
+          <Grid key={deck.deckId} item xs={12} sm={6} md={4} lg={3}>
             <Card>
               <Button component="a" sx={{ m: "0rem", p: "0rem" }}>
                 <CardContent>
-                  <Typography variant="h6">{flashcardSet.title}</Typography>
+                  <Typography variant="h6">{deck.name}</Typography>
                   <Typography variant="body2">
-                    {flashcardSet.description}
+                    {deck.cards.length} kort
                   </Typography>
                 </CardContent>
               </Button>
@@ -56,6 +54,15 @@ const HomePage: React.FC = () => {
             </Card>
           </Grid>
         ))}
+        <Grid key={decks.length} item xs={6} sm={3} md={2} lg={1}>
+          <Card>
+            <Button component="a" sx={{ m: "0rem", p: "0rem", paddingTop: "10px", paddingBottom: "10px" }} onClick={addNewDeck}>
+                <CardContent>
+                  <Typography variant="h6">Nytt sett</Typography>
+                </CardContent>
+            </Button>
+          </Card>
+        </Grid>
       </Grid>
     </div>
   );
