@@ -20,8 +20,9 @@ const Page = () => {
 
   const fetchData = async () => {
     try {
-      loadProfile(email, password);
-      window.location.href = "/homepage"
+      if (await loadProfile(email, password)) {
+        window.location.href = "/homepage"
+      }
     } catch (error) {
       console.error("Error fetching profile:", error);
     }
