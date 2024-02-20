@@ -40,7 +40,7 @@ const HomePage: React.FC = () => {
   
   return (
     <div>
-      <Navbar />
+      <Navbar selected={0}/>
 
       <Grid
         container
