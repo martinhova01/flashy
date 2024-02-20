@@ -54,11 +54,11 @@ const page = () => {
     let profile: ProfileDto = await requests.getProfile(newProfile.email, newProfile.password);
     localStorage.setItem("profile", JSON.stringify(profile));
     
-    window.location.href= "/views";
+    window.location.href= "/profile";
   }
 
   const cancel = () => {
-    window.location.href= "/views";
+    window.location.href= "/profile";
   }
 
 

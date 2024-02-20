@@ -25,7 +25,7 @@ const page = () => {
   const [school, setSchool] = useState(storedProfile.school);
 
   const editProfile = () => {
-    window.location.href= "/views/editProfile";
+    window.location.href= "/profile/editProfile";
   }
 
   return (
