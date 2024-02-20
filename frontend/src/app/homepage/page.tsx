@@ -10,18 +10,16 @@ import {
 } from "@mui/material";
 import Navbar from "../components/Navbar";
 import { ProfileDto } from "../utils/dto/ProfileDto";
-import { getProfile } from "../utils/LocalStorage/profile";
+import { getProfile, loadProfile, reloadProfile } from "../utils/LocalStorage/profile";
 
 const HomePage: React.FC = () => {
   
   let decks = getProfile().ownedDecks;
-  decks.push({deckId: 2, name: "ABC", cards: []})
+  decks.push({deckId: 1, name: "ABC", cards: []});
   
-  console.log(getProfile().email);
-  
-  function addNewDeck() {
+  const addNewDeck = async () => {
     // use API to add new deck
-    
+    await reloadProfile();
   }
   
   return (
@@ -54,7 +52,7 @@ const HomePage: React.FC = () => {
             </Card>
           </Grid>
         ))}
-        <Grid key={decks.length} item xs={6} sm={3} md={2} lg={1}>
+        <Grid key={1} item xs={6} sm={3} md={2} lg={1}>
           <Card>
             <Button component="a" sx={{ m: "0rem", p: "0rem", paddingTop: "10px", paddingBottom: "10px" }} onClick={addNewDeck}>
                 <CardContent>
