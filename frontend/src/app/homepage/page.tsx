@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Grid,
   Button,
@@ -9,26 +9,38 @@ import {
   CardActions,
 } from "@mui/material";
 import Navbar from "../components/Navbar";
+import { getProfile, reloadProfile } from "../utils/LocalStorage/profile";
+import { DeckDto } from "../utils/dto/DeckDto";
+import { requests } from "../utils/Api/requests";
 
 const HomePage: React.FC = () => {
-  const storedProfileString = localStorage.getItem("profile");
-  const storedProfile = storedProfileString
-    ? JSON.parse(storedProfileString)
-    : null;
-
-  const flashcardSets = [
-    { id: 1, title: "Matte", description: "Flashcards for matteemner" },
-    { id: 2, title: "Historie", description: "Flashcards for historieemner" },
-    { id: 3, title: "Engelsk", description: "Flashcards for engelskemner" },
-    { id: 4, title: "Matte", description: "Flashcards for matteemner" },
-    { id: 5, title: "Historie", description: "Flashcards for historieemner" },
-    { id: 6, title: "Engelsk", description: "Flashcards for engelskemner" },
-    // Legg til flere flashcard-sett etter behov
-  ];
-
+  
+  const [decks, setDecks] = useState<DeckDto[]>( getProfile().ownedDecks );
+  
+  const addNewDeckButtonPressed = async () => {
+    const newDeck: DeckDto = {deckId: 0, deckName: `Nytt dekk ${Math.ceil(Math.random() * 1000)}`, cardList: []};
+    requests.addNewDeck(newDeck, getProfile().profileId );
+    await reloadProfile();
+    setDecks( getProfile().ownedDecks );
+  }
+  
+  const deleteDeckButtonPressed = async (deckId: number) => {
+    requests.deleteDeck(deckId);
+    await reloadProfile();
+    setDecks( getProfile().ownedDecks );
+  }
+  
+  const editDeckButtonPressed = (deckId: number) => {
+    window.location.href = `/edit/${deckId}`
+  }
+  
+  const viewDeckButtonPressed = (deckId: number) => {
+    window.location.href = `/view/${deckId}`
+  }
+  
   return (
     <div>
-      <Navbar />
+      <Navbar selected={0}/>
 
       <Grid
         container
@@ -38,24 +50,38 @@ const HomePage: React.FC = () => {
           m: "1rem",
         }}
       >
-        {flashcardSets.map((flashcardSet) => (
-          <Grid key={flashcardSet.id} item xs={12} sm={6} md={4} lg={3}>
+        {decks.map((deck) => (
+          <Grid key={deck.deckId} item xs={12} sm={6} md={4} lg={3}>
             <Card>
-              <Button component="a" sx={{ m: "0rem", p: "0rem" }}>
+              <Button
+                component="a" sx={{ m: "0rem", p: "0rem" }} 
+                onClick={ () => viewDeckButtonPressed(deck.deckId) }
+              >
                 <CardContent>
-                  <Typography variant="h6">{flashcardSet.title}</Typography>
+                  <Typography variant="h6">{deck.deckName}</Typography>
                   <Typography variant="body2">
-                    {flashcardSet.description}
+                    {deck.cardList.length} kort
                   </Typography>
                 </CardContent>
               </Button>
               <CardActions>
-                <Button>Rediger</Button>
-                <Button>Slett</Button>
+                <Button onClick={ () => editDeckButtonPressed(deck.deckId) }>
+                  Rediger
+                </Button>
+                <Button onClick={ () => deleteDeckButtonPressed(deck.deckId) }>
+                  Slett
+                </Button>
               </CardActions>
             </Card>
           </Grid>
         ))}
+        <Grid key={1} item xs={6} sm={3} md={2} lg={1}>
+          <Card>
+            <Button component="a" sx={{ m: "0rem", p: "0rem", paddingTop: "10px", paddingBottom: "10px" }} onClick={addNewDeckButtonPressed}>
+              <img src="https://cdn1.iconfinder.com/data/icons/basic-ui-elements-28/512/1034_Add_new_plus_sign-512.png" />
+            </Button>
+          </Card>
+        </Grid>
       </Grid>
     </div>
   );
