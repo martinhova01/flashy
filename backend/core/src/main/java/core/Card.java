@@ -24,6 +24,10 @@ public class Card {
         this.backpagePicture = backpagePicture;
 
     }
+
+    public Card() {
+        
+    }
     
     public int getCardNumber() {
         return cardNumber;

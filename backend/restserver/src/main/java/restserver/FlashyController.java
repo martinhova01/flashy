@@ -1,5 +1,6 @@
 package restserver;
 
+import core.Deck;
 import core.Profile;
 import db.DbConnection;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -86,7 +87,6 @@ public class FlashyController {
     /**
      * Updates profile with given profileID. 
      *
-     * @param profileId id
      * @param profile profile
      * @return true if successfully updated, false otherwise.
      */
@@ -97,6 +97,42 @@ public class FlashyController {
         }
         dbConnection.updateProfile(profile);
         return true;
+    }
+
+    /**
+     * Add a new deck.
+     *
+     * @param deck the deck to add
+     * @param ownerId the owner of the deck
+     * @return true if successfully added, false if owner does not exist
+     */
+    @PostMapping(path = "/decks")
+    public boolean addNewDeck(@RequestBody Deck deck, @RequestParam int ownerId) {
+        if (!dbConnection.profileExists(ownerId)) {
+            return false;
+        }
+        dbConnection.addNewDeck(ownerId, deck);
+        return true;
+    }
+
+    /**
+     * Updates a deck. 
+     *
+     * @param deck the deck to update
+     */
+    @PutMapping(path = "/decks")
+    public void updateDeck(@RequestBody Deck deck) {
+        dbConnection.updateDeck(deck);
+    }
+
+    /**
+     * Delete a deck with a given ID. 
+     *
+     * @param deckId the id of the deck to delete
+     */
+    @DeleteMapping(path = "/decks/{deck_id}")
+    public void deleteDeck(@PathVariable("deck_id") int deckId) {
+        dbConnection.deleteDeck(deckId);
     }
     
 }

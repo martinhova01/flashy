@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { requests } from "../utils/Api/requests";
 import { ProfileDto } from "../utils/dto/ProfileDto";
+import { DeckDto } from "../utils/dto/DeckDto";
+import { CardDto } from "../utils/dto/CardDto";
 
 function TestApi() {
 
@@ -78,6 +80,25 @@ function TestApi() {
                 else {
                     console.log("Profile was not updated");
                 }
+
+                const testCard: CardDto = {
+                    cardNumber: 1,
+                    frontpageString: "front",
+                    frontpagePicture: "pic",
+                    backpageString: "back",
+                    backpagePicture: "pic"
+                }
+
+                const testDeck: DeckDto = {
+                    deckName: "name",
+                    deckId: 1,
+                    cardList: [testCard]
+                } 
+
+                requests.addNewDeck(testDeck, 1);
+                requests.updateDeck(testDeck);
+
+                requests.deleteDeck(9);
 
 
             } catch (error) {

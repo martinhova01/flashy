@@ -22,6 +22,10 @@ public class Deck {
         this.cardList = new ArrayList<>();
     }
 
+    public Deck() {
+        
+    }
+
     public void addCard(Card card) {
         cardList.add(card);
     }
