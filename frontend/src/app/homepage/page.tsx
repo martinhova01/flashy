@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Grid,
   Button,
@@ -9,23 +9,38 @@ import {
   CardActions,
 } from "@mui/material";
 import Navbar from "../components/Navbar";
-import { ProfileDto } from "../utils/dto/ProfileDto";
-import { getProfile, loadProfile, reloadProfile } from "../utils/LocalStorage/profile";
+import { getProfile, reloadProfile } from "../utils/LocalStorage/profile";
 import { DeckDto } from "../utils/dto/DeckDto";
+import { requests } from "../utils/Api/requests";
 
 const HomePage: React.FC = () => {
   
-  const [decks, setDecks] = useState<DeckDto[]>( getProfile().ownedDecks );
+  const [decks, setDecks] = useState<DeckDto[]>( [ ...getProfile().ownedDecks, { deckId: 3, deckName: "abc", cardList: [] } ] );
   
-  const addNewDeck = async () => {
-    // Create a new DeckDto object.
-    const newDeck: DeckDto = {deckId: Math.ceil(Math.random() * 100), name: "NewDeck" + Math.ceil(Math.random() * 100).toString(), cards: []}
-    const updated = [...decks, newDeck];
+  const addNewDeckButtonPressed = async () => {
+    
+    console.log("Attempting to add new deck ...")
+    
+    const profileId = getProfile().profileId;
+    const newDeck: DeckDto = {deckId: 0, deckName: "Nytt dekk", cardList: []};
+    
+    console.log(`ProfileID: ${profileId} and newDeck = ${newDeck}`);
+    
+    requests.addNewDeck(newDeck, profileId);
+    
+    console.log("Now after addNewDeck");
+    
     await reloadProfile();
-    setDecks(updated); // getProfile().ownedDecks
+    
+    console.log("didReloadProfile")
+    
+    setDecks( getProfile().ownedDecks );
+    
+    console.log("finished addNewDeck");
+    
   }
   
-  const deleteDeck = async (deckId: number) => {
+  const deleteDeckButtonPressed = async (deckId: number) => {
     // Delete deck number `deckId`.
     const updated = decks.filter( deck => deck.deckId != deckId );
     await reloadProfile();
@@ -49,9 +64,9 @@ const HomePage: React.FC = () => {
             <Card>
               <Button component="a" sx={{ m: "0rem", p: "0rem" }}>
                 <CardContent>
-                  <Typography variant="h6">{deck.name}</Typography>
+                  <Typography variant="h6">{deck.deckName}</Typography>
                   <Typography variant="body2">
-                    {deck.cards.length} kort
+                    {deck.cardList.length} kort
                   </Typography>
                 </CardContent>
               </Button>
@@ -59,7 +74,7 @@ const HomePage: React.FC = () => {
                 <Button>
                   Rediger
                 </Button>
-                <Button onClick={ () => deleteDeck(deck.deckId) }>
+                <Button onClick={ () => deleteDeckButtonPressed(deck.deckId) }>
                   Slett
                 </Button>
               </CardActions>
@@ -68,7 +83,7 @@ const HomePage: React.FC = () => {
         ))}
         <Grid key={1} item xs={6} sm={3} md={2} lg={1}>
           <Card>
-            <Button component="a" sx={{ m: "0rem", p: "0rem", paddingTop: "10px", paddingBottom: "10px" }} onClick={addNewDeck}>
+            <Button component="a" sx={{ m: "0rem", p: "0rem", paddingTop: "10px", paddingBottom: "10px" }} onClick={addNewDeckButtonPressed}>
                 <CardContent>
                   <Typography variant="h6">Nytt sett</Typography>
                 </CardContent>
