@@ -71,7 +71,7 @@ export const requests = {
     const requestParams = {
       ownerId: profileId,
     };
-    api.post("/decks", deck, {params: requestParams});
+    await api.post("/decks", deck, {params: requestParams});
   },
 
   /**
@@ -79,7 +79,7 @@ export const requests = {
    * @param deck the deck to update
    */
   updateDeck: async function (deck: DeckDto): Promise<any> {
-    api.put("/decks", deck);
+    await api.put("/decks", deck);
   },
 
   /**
@@ -87,7 +87,7 @@ export const requests = {
    * @param deckId the ID of the deck to delete
    */
   deleteDeck: async function (deckId: number): Promise<any> {
-    api.delete("/decks/" + deckId);
+    await api.delete("/decks/" + deckId);
   },
     
 };

@@ -8,7 +8,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Navbar from "../../components/Navbar";
 import CircularButton from "../../components/CircularButton";
 import { CardDto } from "../../utils/dto/CardDto";
 import { DeckDto } from "../../utils/dto/DeckDto";
@@ -28,8 +27,6 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
     const [cards, setCards] = useState<CardDto[]>(oldDeck.cardList);
 
 
-    
-
     function getDeck(deckId: number): any{
         for (let deck of profile.ownedDecks) {
             if (deck.deckId == deckId) {
@@ -39,31 +36,20 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
     }
     
 
-    async function nextCard() {
+    function nextCard() {
+        updateCards();
         if (cardNr + 1 == cards.length) {
-            //create new empty card
-            let card: CardDto = {
-                cardNumber: 0,
-                frontpageString: frontPage,
-                frontpagePicture: "",
-                backpageString: backPage,
-                backpagePicture: ""
-            }
-            let newCards = cards;
-            newCards.push(card);
-            setCards(newCards);
             setFrontPage("");
             setBackPage("");
         }
         else{
-            updateCards();
             setFrontPage(cards[cardNr + 1].frontpageString);
             setBackPage(cards[cardNr + 1].backpageString);
         }
         setCardNr(cardNr + 1);
     }
 
-    async function prevCard() {
+    function prevCard() {
         updateCards()
         if (cardNr == 0) {
             return;
@@ -73,7 +59,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
         setCardNr(cardNr - 1)
     } 
 
-    async function updateCards() {
+    function updateCards() {
         let card: CardDto = {
             cardNumber: 0,
             frontpageString: frontPage,
@@ -87,9 +73,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
     }
 
     async function handleSave() {
-        await updateCards();
-
-        console.log(deckName);
+        updateCards();
 
         let deck: DeckDto = {
             deckId: oldDeck.deckId,
@@ -111,7 +95,6 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
 
 
     return (<div>
-        {/* <Navbar /> */}
         <Box sx={{alignItems: "center", display: "flex", flexDirection: "row"}}>
             <Box sx={{flex: 0.2, alignItems: "center", display: "flex", flexDirection: "column"}}>
                 <TextField id="outlined-basic" label="Tittel på sett" value={deckName} onChange={(e) => {setDeckName(e.target.value)}} variant="outlined" sx={{margin: "2rem", width: 400}} />
