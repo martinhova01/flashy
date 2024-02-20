@@ -31,13 +31,11 @@ const HomePage: React.FC = () => {
   }
   
   const editDeckButtonPressed = (deckId: number) => {
-    console.log(`Edit deck ${deckId}`);
-    // TODO: Set href to the appropriate page
+    window.location.href = `/edit/${deckId}`
   }
   
   const viewDeckButtonPressed = (deckId: number) => {
-    console.log(`View deck ${deckId}`);
-    // TODO: Set href to the appropriate page
+    window.location.href = `/view/${deckId}`
   }
   
   return (
