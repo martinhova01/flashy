@@ -11,15 +11,25 @@ import {
 import Navbar from "../components/Navbar";
 import { ProfileDto } from "../utils/dto/ProfileDto";
 import { getProfile, loadProfile, reloadProfile } from "../utils/LocalStorage/profile";
+import { DeckDto } from "../utils/dto/DeckDto";
 
 const HomePage: React.FC = () => {
   
-  let decks = getProfile().ownedDecks;
-  decks.push({deckId: 1, name: "ABC", cards: []});
+  const [decks, setDecks] = useState<DeckDto[]>( getProfile().ownedDecks );
   
   const addNewDeck = async () => {
-    // use API to add new deck
+    // Create a new DeckDto object.
+    const newDeck: DeckDto = {deckId: Math.ceil(Math.random() * 100), name: "NewDeck" + Math.ceil(Math.random() * 100).toString(), cards: []}
+    const updated = [...decks, newDeck];
     await reloadProfile();
+    setDecks(updated); // getProfile().ownedDecks
+  }
+  
+  const deleteDeck = async (deckId: number) => {
+    // Delete deck number `deckId`.
+    const updated = decks.filter( deck => deck.deckId != deckId );
+    await reloadProfile();
+    setDecks(updated); // getProfile().ownedDecks
   }
   
   return (
@@ -46,8 +56,12 @@ const HomePage: React.FC = () => {
                 </CardContent>
               </Button>
               <CardActions>
-                <Button>Rediger</Button>
-                <Button>Slett</Button>
+                <Button>
+                  Rediger
+                </Button>
+                <Button onClick={ () => deleteDeck(deck.deckId) }>
+                  Slett
+                </Button>
               </CardActions>
             </Card>
           </Grid>
