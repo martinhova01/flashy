@@ -28,7 +28,8 @@ export const requests = {
       password: passwordParam,
     };
 
-    const response = await api.get("/profiles", {params:requestParams});
+    const response = await api.get("/profiles", { params: requestParams });
+    console.log(response.data);
     return response.data;
   },
 
@@ -91,7 +92,6 @@ export const requests = {
   deleteDeck: async function (deckId: number): Promise<any> {
     api.delete("/decks/" + deckId);
   },
-    
 
   /**
    * gets all profiles.
