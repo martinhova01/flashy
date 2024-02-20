@@ -15,36 +15,29 @@ import { requests } from "../utils/Api/requests";
 
 const HomePage: React.FC = () => {
   
-  const [decks, setDecks] = useState<DeckDto[]>( [ ...getProfile().ownedDecks, { deckId: 3, deckName: "abc", cardList: [] } ] );
+  const [decks, setDecks] = useState<DeckDto[]>( getProfile().ownedDecks );
   
   const addNewDeckButtonPressed = async () => {
-    
-    console.log("Attempting to add new deck ...")
-    
-    const profileId = getProfile().profileId;
-    const newDeck: DeckDto = {deckId: 0, deckName: "Nytt dekk", cardList: []};
-    
-    console.log(`ProfileID: ${profileId} and newDeck = ${newDeck}`);
-    
-    requests.addNewDeck(newDeck, profileId);
-    
-    console.log("Now after addNewDeck");
-    
+    const newDeck: DeckDto = {deckId: 0, deckName: `Nytt dekk ${Math.ceil(Math.random() * 1000)}`, cardList: []};
+    requests.addNewDeck(newDeck, getProfile().profileId );
     await reloadProfile();
-    
-    console.log("didReloadProfile")
-    
     setDecks( getProfile().ownedDecks );
-    
-    console.log("finished addNewDeck");
-    
   }
   
   const deleteDeckButtonPressed = async (deckId: number) => {
-    // Delete deck number `deckId`.
-    const updated = decks.filter( deck => deck.deckId != deckId );
+    requests.deleteDeck(deckId);
     await reloadProfile();
-    setDecks(updated); // getProfile().ownedDecks
+    setDecks( getProfile().ownedDecks );
+  }
+  
+  const editDeckButtonPressed = (deckId: number) => {
+    console.log(`Edit deck ${deckId}`);
+    // TODO: Set href to the appropriate page
+  }
+  
+  const viewDeckButtonPressed = (deckId: number) => {
+    console.log(`View deck ${deckId}`);
+    // TODO: Set href to the appropriate page
   }
   
   return (
@@ -62,7 +55,10 @@ const HomePage: React.FC = () => {
         {decks.map((deck) => (
           <Grid key={deck.deckId} item xs={12} sm={6} md={4} lg={3}>
             <Card>
-              <Button component="a" sx={{ m: "0rem", p: "0rem" }}>
+              <Button
+                component="a" sx={{ m: "0rem", p: "0rem" }} 
+                onClick={ () => viewDeckButtonPressed(deck.deckId) }
+              >
                 <CardContent>
                   <Typography variant="h6">{deck.deckName}</Typography>
                   <Typography variant="body2">
@@ -71,7 +67,7 @@ const HomePage: React.FC = () => {
                 </CardContent>
               </Button>
               <CardActions>
-                <Button>
+                <Button onClick={ () => editDeckButtonPressed(deck.deckId) }>
                   Rediger
                 </Button>
                 <Button onClick={ () => deleteDeckButtonPressed(deck.deckId) }>
@@ -84,9 +80,7 @@ const HomePage: React.FC = () => {
         <Grid key={1} item xs={6} sm={3} md={2} lg={1}>
           <Card>
             <Button component="a" sx={{ m: "0rem", p: "0rem", paddingTop: "10px", paddingBottom: "10px" }} onClick={addNewDeckButtonPressed}>
-                <CardContent>
-                  <Typography variant="h6">Nytt sett</Typography>
-                </CardContent>
+              <img src="https://cdn1.iconfinder.com/data/icons/basic-ui-elements-28/512/1034_Add_new_plus_sign-512.png" />
             </Button>
           </Card>
         </Grid>

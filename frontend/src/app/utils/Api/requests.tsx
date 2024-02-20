@@ -27,7 +27,6 @@ export const requests = {
     };
 
     const response = await api.get("/profiles", {params:requestParams});
-    console.log(response.data);
     return response.data;
   },
 
@@ -61,7 +60,6 @@ export const requests = {
   updateProfile: async function (profile: ProfileDto): Promise<Boolean> {
     const response = await api.put("/profiles", profile);
     return response.data;
-
   },
 
   /**
@@ -89,7 +87,6 @@ export const requests = {
    * @param deckId the ID of the deck to delete
    */
   deleteDeck: async function (deckId: number): Promise<any> {
-    
     api.delete("/decks/" + deckId);
   },
     
