@@ -1,5 +1,9 @@
 package db;
 
+import java.util.ArrayList;
+
+import core.Profile;
+
 /**
  * Class that generate SQL-queries as Strings.
  */
@@ -83,6 +87,11 @@ public class SqlQueries {
             + "WHERE profile_id=%s",
             email, password,
             firstName, lastName, school, isAdmin, Integer.toString(profileId));     
+    }
+
+    public static String getAllProfileIDs() {
+        String query = String.format("SELECT * FROM profile");
+        return query;
     }
 
     

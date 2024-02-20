@@ -2,6 +2,9 @@ package restserver;
 
 import core.Profile;
 import db.DbConnection;
+
+import java.util.ArrayList;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -98,5 +101,13 @@ public class FlashyController {
         dbConnection.updateProfile(profile);
         return true;
     }
-    
+
+    /**
+     * gets all userprofiles
+     * @return true if successfully updated, false otherwise.
+     */
+    @GetMapping(path = "/allprofiles")
+    public ArrayList<Profile> getAllProfiles() {
+        return dbConnection.getAllProfiles();
+    }
 }

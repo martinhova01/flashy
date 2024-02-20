@@ -356,4 +356,30 @@ public class DbConnection {
             return false;
         }
     }
+
+    public ArrayList<Profile> getAllProfiles() {
+        ArrayList<Profile> profiles = new ArrayList<Profile>();
+        String query = SqlQueries.getAllProfileIDs();
+
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            while(result.next()){
+            int profileId = result.getInt("profile_id");
+            String emailResult = result.getString("email");
+            String passwordResult = result.getString("password");
+            String firstname = result.getString("firstname");
+            String lastname = result.getString("lastname");
+            String school = result.getString("school");
+            boolean isAdmin = result.getBoolean("is_admin");
+            Profile profile = new Profile(profileId, emailResult, passwordResult, firstname, lastname, school, isAdmin);
+            profiles.add(profile);
+            }
+            return profiles;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<Profile>();        }
+
+        
+    }
 }
