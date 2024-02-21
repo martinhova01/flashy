@@ -8,15 +8,30 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
+import { ProfileDto } from "../utils/dto/ProfileDto";
+import Navbar from "../components/Navbar";
 
 const page = () => {
-  const [fornavn, setFornavn] = useState("Nils");
-  const [etternavn, setEtternavn] = useState("123");
-  const [email, setEmail] = useState("Nils@hotmail.com");
-  const [school, setSchool] = useState("NTNU");
+
+  const storedProfileString = localStorage.getItem("profile");
+  const storedProfile: ProfileDto = storedProfileString
+  ? JSON.parse(storedProfileString)
+  : null;
+
+
+  const [fornavn, setFornavn] = useState(storedProfile.firstname);
+  const [etternavn, setEtternavn] = useState(storedProfile.lastname);
+  const [email, setEmail] = useState(storedProfile.email);
+  const [school, setSchool] = useState(storedProfile.school);
+
+  const editProfile = () => {
+    window.location.href= "/profile/editProfile";
+  }
 
   return (
+    
     <Box sx={{ height: 400 }}>
+      <Navbar />
       <Typography
         variant="h5"
         component="div"
@@ -53,7 +68,7 @@ const page = () => {
           </Typography>
         </CardContent>
         <CardActions>
-          <Button variant="outlined" size="small">
+          <Button variant="outlined" size="small" onClick={editProfile}>
             Rediger
           </Button>
         </CardActions>
