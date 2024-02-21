@@ -77,14 +77,14 @@ export default function SignUpPage() {
 
       <Box textAlign={"center"}>
       <div>
-        <Button variant="contained" onClick={handleAddUser}>
+        <Button variant="outlined" onClick={handleAddUser}>
           Registrer bruker
            
         </Button>
 
         
       </div>
-      <Button variant="outlined" onClick={handleBack}>
+      <Button variant="outlined" sx={{margin: 2}}onClick={handleBack}>
           Tilbake til Logg Inn
         </Button>
 

@@ -27,6 +27,8 @@ const Page = () => {
         } else {
           window.location.href = "/homepage";
         }
+      } else {
+        alert("feil epost eller passord.")
       }
     } catch (error) {
       console.error("Error fetching profile:", error);
@@ -93,7 +95,7 @@ const Page = () => {
 
           <Box textAlign={"center"}>
             <div>
-              <Button onClick={fetchData} variant="contained">
+              <Button onClick={fetchData} variant="outlined">
                 Logg inn
               </Button>
             </div>

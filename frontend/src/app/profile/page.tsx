@@ -31,7 +31,7 @@ const page = () => {
   return (
     
     <Box sx={{ height: 400 }}>
-      <Navbar />
+      <Navbar selected={1}/>
       <Typography
         variant="h5"
         component="div"
