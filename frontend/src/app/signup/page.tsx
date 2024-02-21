@@ -1,6 +1,8 @@
 "use client"
 import { Typography, Container, TextField, Grid, Box, Button } from "@mui/material";
 import { useState } from "react";
+import { ProfileDto } from "../utils/dto/ProfileDto";
+import { requests } from "../utils/Api/requests";
 
 export default function SignUpPage() {
 
@@ -11,21 +13,30 @@ export default function SignUpPage() {
   const [password, setPassword] = useState<String>("");
 
 
-  function moveToSignUpPage() {
-    window.location.href = "/homepage"
+
+  async function handleAddUser() {
+    let profile: ProfileDto = {
+      profileId: 0,
+      firstname: firstName,
+      lastname: lastName,
+      email: email,
+      school: school,
+      password: password,
+      ownedDecks: [],
+      admin: false
+    }
+
+    let added: Boolean = await requests.addNewProfile(profile);
+    if (added) {
+      window.location.href = "/";
+    } else {
+      alert("email is already taken!")
+    }
+
   }
 
-  function handleAddUser() {
-    // const profile: ProfileDto = {
-    //   firstName: firstName,
-    //   lastName: lastName,
-    //   email: email,
-    //   school: school,
-    //   password: password
-    // }
-
-    // await re
-
+  function handleBack() {
+    window.location.href = "/";
   }
   
     
@@ -70,7 +81,12 @@ export default function SignUpPage() {
           Registrer bruker
            
         </Button>
+
+        
       </div>
+      <Button variant="outlined" onClick={handleBack}>
+          Tilbake til Logg Inn
+        </Button>
 
       </Box>
     
