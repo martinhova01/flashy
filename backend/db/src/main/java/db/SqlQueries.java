@@ -1,9 +1,5 @@
 package db;
 
-import java.util.ArrayList;
-
-import core.Profile;
-
 /**
  * Class that generate SQL-queries as Strings.
  */
@@ -151,7 +147,12 @@ public class SqlQueries {
         return String.format("DELETE FROM deck WHERE deck_id = '%s'", Integer.toString(deckId));
     }
 
-    public static String getAllProfileIDs() {
+    /**
+     * Generate SQL-query to add a new deck.
+     *
+     * @return the query as a string
+     */
+    public static String getAllProfileIds() {
         String query = String.format("SELECT * FROM profile");
         return query;
     }
