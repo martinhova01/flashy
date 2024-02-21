@@ -12,20 +12,22 @@ import Navbar from "../components/Navbar";
 import { getProfile, reloadProfile } from "../utils/LocalStorage/profile";
 import { DeckDto } from "../utils/dto/DeckDto";
 import { requests } from "../utils/Api/requests";
+import { CardDto } from "../utils/dto/CardDto";
 
 const HomePage: React.FC = () => {
   
   const [decks, setDecks] = useState<DeckDto[]>( getProfile().ownedDecks );
   
   const addNewDeckButtonPressed = async () => {
-    const newDeck: DeckDto = {deckId: 0, deckName: `Nytt dekk ${Math.ceil(Math.random() * 1000)}`, cardList: []};
-    requests.addNewDeck(newDeck, getProfile().profileId );
+    const emptyCard: CardDto = {cardNumber: 0, frontpageString: "", frontpagePicture: "", backpageString: "", backpagePicture: ""};
+    const newDeck: DeckDto = {deckId: 0, deckName: `Nytt dekk ${Math.ceil(Math.random() * 1000)}`, cardList: [emptyCard]};
+    await requests.addNewDeck(newDeck, getProfile().profileId );
     await reloadProfile();
     setDecks( getProfile().ownedDecks );
   }
   
   const deleteDeckButtonPressed = async (deckId: number) => {
-    requests.deleteDeck(deckId);
+    await requests.deleteDeck(deckId);
     await reloadProfile();
     setDecks( getProfile().ownedDecks );
   }
