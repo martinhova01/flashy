@@ -455,6 +455,7 @@ public class DbConnection {
         }
     }
 
+<<<<<<< backend/db/src/main/java/db/DbConnection.java
 
     public ArrayList<Profile> getAllProfiles() {
         ArrayList<Profile> profiles = new ArrayList<Profile>();
@@ -549,5 +550,3 @@ public class DbConnection {
         e.printStackTrace();
         return null;
     }
-}
-}

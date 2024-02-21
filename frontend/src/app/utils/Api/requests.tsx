@@ -28,8 +28,7 @@ export const requests = {
       password: passwordParam,
     };
 
-    const response = await api.get("/profiles", { params: requestParams });
-    console.log(response.data);
+    const response = await api.get("/profiles", {params:requestParams});
     return response.data;
   },
 
@@ -87,7 +86,7 @@ export const requests = {
     const requestParams = {
       ownerId: profileId,
     };
-    api.post("/decks", deck, { params: requestParams });
+    api.post("/decks", deck, {params: requestParams});
   },
 
   /**
