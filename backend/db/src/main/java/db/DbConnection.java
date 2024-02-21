@@ -471,14 +471,83 @@ public class DbConnection {
             String lastname = result.getString("lastname");
             String school = result.getString("school");
             boolean isAdmin = result.getBoolean("is_admin");
-            Profile profile = new Profile(profileId, emailResult, passwordResult, firstname, lastname, school, isAdmin);
+
+            ResultSet deckResultSet = connection
+                .createStatement()
+                .executeQuery(SqlQueries.getOwnedDecksQuery(profileId));
+            List<Deck> decks = new ArrayList<>();
+            while (deckResultSet.next()) {
+                String name = deckResultSet.getString("name");
+                int deckId = deckResultSet.getInt("deck_id");
+                Deck d = new Deck(name, deckId);
+
+                ResultSet cardResultSet = connection
+                    .createStatement()
+                    .executeQuery(SqlQueries.getCardsQuery(deckId));
+                while (cardResultSet.next()) {
+                    int cardId = cardResultSet.getInt("card_id");
+                    String frontPage = cardResultSet.getString("front_page");
+                    String frontPagePic = cardResultSet.getString("front_page_picture");
+                    String backPage = cardResultSet.getString("back_page");
+                    String backPagePic = cardResultSet.getString("back_page_picture");
+                    d.addCard(new Card(cardId, frontPage, backPage, frontPagePic, backPagePic));
+                }
+                decks.add(d);
+            }
+            Profile profile = new Profile(profileId, emailResult, passwordResult,
+            firstname, lastname, school, isAdmin, decks);
             profiles.add(profile);
             }
             return profiles;
         } catch (SQLException e) {
             e.printStackTrace();
             return new ArrayList<Profile>();        }
-
-        
     }
+
+    public Profile getProfileById(int id) {
+        String getProfileQuery = SqlQueries.getProfileQuery(id);
+        try {
+            ResultSet profileResultSet = connection.createStatement().executeQuery(getProfileQuery);
+            if (!profileResultSet.next()) {
+                return null;
+            }
+            int profileId = profileResultSet.getInt("profile_id");
+            String emailResult = profileResultSet.getString("email");
+            String passwordResult = profileResultSet.getString("password");
+            String firstname = profileResultSet.getString("firstname");
+            String lastname = profileResultSet.getString("lastname");
+            String school = profileResultSet.getString("school");
+            boolean isAdmin = profileResultSet.getBoolean("is_admin");
+
+
+            ResultSet deckResultSet = connection
+                .createStatement()
+                .executeQuery(SqlQueries.getOwnedDecksQuery(profileId));
+            List<Deck> decks = new ArrayList<>();
+            while (deckResultSet.next()) {
+                String name = deckResultSet.getString("name");
+                int deckId = deckResultSet.getInt("deck_id");
+                Deck d = new Deck(name, deckId);
+
+                ResultSet cardResultSet = connection
+                    .createStatement()
+                    .executeQuery(SqlQueries.getCardsQuery(deckId));
+                while (cardResultSet.next()) {
+                    int cardId = cardResultSet.getInt("card_id");
+                    String frontPage = cardResultSet.getString("front_page");
+                    String frontPagePic = cardResultSet.getString("front_page_picture");
+                    String backPage = cardResultSet.getString("back_page");
+                    String backPagePic = cardResultSet.getString("back_page_picture");
+                    d.addCard(new Card(cardId, frontPage, backPage, frontPagePic, backPagePic));
+                }
+                decks.add(d);
+            }
+            System.out.println(decks + "test");
+            return new Profile(profileId, emailResult, passwordResult,
+                firstname, lastname, school, isAdmin, decks);
+    } catch(SQLException e) {
+        e.printStackTrace();
+        return null;
+    }
+}
 }

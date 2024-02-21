@@ -34,6 +34,20 @@ export const requests = {
   },
 
   /**
+   * Gets a profile dto with the given email and password.
+   * @param idparam id
+   * @returns a ProfileDto object or null
+   */
+  getProfileById: async function (id: number): Promise<ProfileDto> {
+    const requestParams = {
+      profileId: id,
+    };
+
+    const response = await api.get("/profileById", { params: requestParams });
+    return response.data;
+  },
+
+  /**
    * Adds a new profile.
    * @param profile the profile to add
    * @returns true if sucessfully added
@@ -54,7 +68,6 @@ export const requests = {
     return response.data;
   },
 
-  
   /**
    * Updates a profile.
    * @param profile the profile
@@ -74,7 +87,7 @@ export const requests = {
     const requestParams = {
       ownerId: profileId,
     };
-    api.post("/decks", deck, {params: requestParams});
+    api.post("/decks", deck, { params: requestParams });
   },
 
   /**

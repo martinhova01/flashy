@@ -53,7 +53,17 @@ public class FlashyController {
     @GetMapping(path = "/profiles")
     public Profile getProfile(@RequestParam String email, @RequestParam String password) {
         return dbConnection.getProfile(email, password);
+    }
 
+    /**
+     * Gets a profile with the given id from the database. 
+     *
+     * @param profileId id
+     * @return the profile or null if profile does not exist
+     */
+    @GetMapping(path = "/profileById")
+    public Profile getProfileById(@RequestParam int profileId){
+        return dbConnection.getProfileById(profileId);
     }
 
     /**
