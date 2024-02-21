@@ -8,7 +8,7 @@ const Navbar = (props: {selected: number}) => {
   const menuItems = [
     { text: "Flashy", link: "/homepage" },
     { text: "Profil", link: "/profile" },
-    { text: "Favoritter", link: "/favourites" },
+    { text: "Logg ut", link: "/" },
   ]
   
   const reactElements = menuItems.map( item => {
