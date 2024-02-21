@@ -1,64 +1,109 @@
 "use client";
 
-import { Typography, Container, TextField, Grid, Box, Button } from "@mui/material";
+import {
+  Typography,
+  Container,
+  TextField,
+  Grid,
+  Box,
+  Button,
+  Link,
+} from "@mui/material";
+import { ChangeEvent, useState } from "react";
+import { requests } from "./utils/Api/requests";
+import { ProfileDto } from "./utils/dto/ProfileDto";
+import { loadProfile } from "./utils/LocalStorage/profile";
 
-export default function Home() {
-  
-  
-  function moveToSignUpPage() {
-    window.location.href = "/signup"
-  }
-  
-  
-  return <div>
-    
-    <Container>
-        
-      <Typography sx={{ fontFamily: "Italic", fontSize: 100, textAlign: "center", paddingTop: "30px" }}>
-        Flashy
-      </Typography>
-      
-      <Typography sx={{ fontFamily: "Monospace", fontSize: 30, textAlign: "center", paddingTop: "30px" }}>
-        Logg inn
-      </Typography>
+const Page = () => {
+  const [email, setemail] = useState<String>("");
+  const [password, setpassword] = useState<String>("");
 
-      <Grid container direction={"column"} alignContent={"center"}>
-        
-        <TextField placeholder="E-post" sx={{ fontFamily: "Monospace", paddingTop: "40px", textAlign: "center"}}>
-        
-        </TextField>
-       
-      
-      
-        <TextField placeholder="Passord" sx={{ fontFamily: "Monospace", paddingTop: "40px", paddingBottom: "40px" }}>
-  
-        </TextField>
-      
+  const fetchData = async () => {
+    try {
+      if (await loadProfile(email, password)) {
+        window.location.href = "/homepage"
+      }
+    } catch (error) {
+      console.error("Error fetching profile:", error);
+    }
+  };
 
-      <Box textAlign={"center"}>
-      <div>
-        <Button variant="contained">
+  const handleTextFieldChangeEmail = (event: ChangeEvent<HTMLInputElement>) => {
+    setemail(event.target.value);
+  };
+
+  const handleTextFieldChangePassword = (
+    event: ChangeEvent<HTMLInputElement>
+  ) => {
+    setpassword(event.target.value);
+  };
+
+  return (
+    <div>
+      <Container>
+        <Typography
+          sx={{
+            fontFamily: "Italic",
+            fontSize: 100,
+            textAlign: "center",
+            paddingTop: "30px",
+          }}
+        >
+          Flashy
+        </Typography>
+
+        <Typography
+          sx={{
+            fontFamily: "Monospace",
+            fontSize: 30,
+            textAlign: "center",
+            paddingTop: "30px",
+          }}
+        >
           Logg inn
-           
-        </Button>
-      </div>
-      <div>
-        <Button variant="text" sx={{paddingTop: "30px"}} onClick={moveToSignUpPage}>
-          Lag ny bruker
-           
-        </Button>
-      </div>
-      </Box>
-    
+        </Typography>
 
-      </Grid>
+        <Grid container direction={"column"} alignContent={"center"}>
+          <TextField
+            placeholder="E-post"
+            sx={{
+              fontFamily: "Monospace",
+              paddingTop: "40px",
+              textAlign: "center",
+            }}
+            value={email}
+            onChange={handleTextFieldChangeEmail}
+          ></TextField>
 
-      
-      
-      
-    </Container>
-    
-  </div>
-  
-}
+          <TextField
+            placeholder="Passord"
+            sx={{
+              fontFamily: "Monospace",
+              paddingTop: "40px",
+              paddingBottom: "40px",
+            }}
+            value={password}
+            onChange={handleTextFieldChangePassword}
+          ></TextField>
 
+          <Box textAlign={"center"}>
+            <div>
+              <Button onClick={fetchData} variant="contained">
+                Logg inn
+              </Button>
+            </div>
+            <div>
+              <Link href="/signup">
+                <Button variant="text" sx={{ paddingTop: "30px" }}>
+                  Lag ny bruker
+                </Button>
+              </Link>
+            </div>
+          </Box>
+        </Grid>
+      </Container>
+    </div>
+  );
+};
+
+export default Page;
