@@ -1,3 +1,4 @@
+import { DeckDto } from "../dto/DeckDto";
 import { ProfileDto } from "../dto/ProfileDto";
 import { api } from "./api";
 import { AxiosResponse } from "axios";
@@ -26,7 +27,6 @@ export const requests = {
     };
 
     const response = await api.get("/profiles", {params:requestParams});
-    console.log(response.data);
     return response.data;
   },
 
@@ -60,6 +60,34 @@ export const requests = {
   updateProfile: async function (profile: ProfileDto): Promise<Boolean> {
     const response = await api.put("/profiles", profile);
     return response.data;
+  },
 
-  }
+  /**
+   * Adds a new deck.
+   * @param deck the deck to add
+   * @param profileId the owner of the deck
+   */
+  addNewDeck: async function (deck: DeckDto, profileId: number): Promise<any> {
+    const requestParams = {
+      ownerId: profileId,
+    };
+    api.post("/decks", deck, {params: requestParams});
+  },
+
+  /**
+   * Updates a deck.
+   * @param deck the deck to update
+   */
+  updateDeck: async function (deck: DeckDto): Promise<any> {
+    api.put("/decks", deck);
+  },
+
+  /**
+   * Deletes a deck with a given deckID.
+   * @param deckId the ID of the deck to delete
+   */
+  deleteDeck: async function (deckId: number): Promise<any> {
+    api.delete("/decks/" + deckId);
+  },
+    
 };
