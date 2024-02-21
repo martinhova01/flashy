@@ -3,6 +3,7 @@ package restserver;
 import core.Deck;
 import core.Profile;
 import db.DbConnection;
+import java.util.ArrayList;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 
 
 
@@ -50,7 +52,17 @@ public class FlashyController {
     @GetMapping(path = "/profiles")
     public Profile getProfile(@RequestParam String email, @RequestParam String password) {
         return dbConnection.getProfile(email, password);
+    }
 
+    /**
+     * Gets a profile with the given id from the database. 
+     *
+     * @param profileId id
+     * @return the profile or null if profile does not exist
+     */
+    @GetMapping(path = "/profileById")
+    public Profile getProfileById(@RequestParam int profileId) {
+        return dbConnection.getProfileById(profileId);
     }
 
     /**
@@ -135,4 +147,14 @@ public class FlashyController {
         dbConnection.deleteDeck(deckId);
     }
     
+
+    /**
+     * gets all userprofiles.
+     *
+     * @return true if successfully updated, false otherwise.
+     */
+    @GetMapping(path = "/allprofiles")
+    public ArrayList<Profile> getAllProfiles() {
+        return dbConnection.getAllProfiles();
+    }
 }
