@@ -147,5 +147,15 @@ public class SqlQueries {
         return String.format("DELETE FROM deck WHERE deck_id = '%s'", Integer.toString(deckId));
     }
 
+    /**
+     * Generate SQL-query to add a new deck.
+     *
+     * @return the query as a string
+     */
+    public static String getAllProfileIds() {
+        String query = String.format("SELECT * FROM profile");
+        return query;
+    }
+
     
 }

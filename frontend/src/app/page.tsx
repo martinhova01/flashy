@@ -12,7 +12,7 @@ import {
 import { ChangeEvent, useState } from "react";
 import { requests } from "./utils/Api/requests";
 import { ProfileDto } from "./utils/dto/ProfileDto";
-import { loadProfile } from "./utils/LocalStorage/profile";
+import { getProfile, loadProfile } from "./utils/LocalStorage/profile";
 
 const Page = () => {
   const [email, setemail] = useState<String>("");
@@ -21,7 +21,12 @@ const Page = () => {
   const fetchData = async () => {
     try {
       if (await loadProfile(email, password)) {
-        window.location.href = "/homepage"
+        const profile = getProfile();
+        if (profile.admin) {
+          window.location.href = "/admin";
+        } else {
+          window.location.href = "/homepage";
+        }
       }
     } catch (error) {
       console.error("Error fetching profile:", error);

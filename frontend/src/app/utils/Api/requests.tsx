@@ -13,20 +13,36 @@ export const requests = {
     return response.data;
   },
 
-
   /**
    * Gets a profile dto with the given email and password.
    * @param emailParam email
    * @param passwordParam password
    * @returns a ProfileDto object or null
    */
-  getProfile: async function (emailParam: String, passwordParam: String): Promise<ProfileDto> {
+  getProfile: async function (
+    emailParam: String,
+    passwordParam: String
+  ): Promise<ProfileDto> {
     const requestParams = {
       email: emailParam,
-      password: passwordParam
+      password: passwordParam,
     };
 
     const response = await api.get("/profiles", {params:requestParams});
+    return response.data;
+  },
+
+  /**
+   * Gets a profile dto with the given email and password.
+   * @param idparam id
+   * @returns a ProfileDto object or null
+   */
+  getProfileById: async function (id: number): Promise<ProfileDto> {
+    const requestParams = {
+      profileId: id,
+    };
+
+    const response = await api.get("/profileById", { params: requestParams });
     return response.data;
   },
 
@@ -51,7 +67,6 @@ export const requests = {
     return response.data;
   },
 
-  
   /**
    * Updates a profile.
    * @param profile the profile
@@ -89,5 +104,13 @@ export const requests = {
   deleteDeck: async function (deckId: number): Promise<any> {
     await api.delete("/decks/" + deckId);
   },
-    
+
+  /**
+   * gets all profiles.
+   * @returns all profiles
+   */
+  getAllProfiles: async function (): Promise<ProfileDto[]> {
+    const response = await api.get("/allprofiles");
+    return response.data;
+  },
 };
