@@ -7,7 +7,8 @@ const Navbar = (props: {selected: number}) => {
   
   // Legg til flere meny-elementer her
   const menuItems = [
-    { text: "Flashy", link: "/homepage", function: null },
+    { text: "Flashy", link: "/browse", function: null },
+    { text: "Mine dekk", link: "/homepage", function: null },
     { text: "Profil", link: "/profile", function: null },
     { text: "Logg ut", link: "/", function: logOut },
   ]
@@ -29,13 +30,8 @@ const Navbar = (props: {selected: number}) => {
   
   return (
     <div>
-      <Box
-        sx={{ alignItems: "center", display: "flex", flexDirection: "column" }}
-      >
-        <ButtonGroup
-          aria-label="Large buttom group"
-          size="large"
-        >
+      <Box padding={"10px"} sx={{ alignItems: "center", display: "flex", flexDirection: "column" }}>
+        <ButtonGroup aria-label="Large buttom group" size="large">
           {reactElements}
         </ButtonGroup>
       </Box>
