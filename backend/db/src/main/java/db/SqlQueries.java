@@ -102,12 +102,13 @@ public class SqlQueries {
      *
      * @param profileId the owner of the deck
      * @param name the name of the deck
+     * @param isPublic is deck public
      * @return the query as a string
      */
-    public static String addNewDeckQuery(int profileId, String name) {
-        return String.format("INSERT INTO deck(name, owner_id)"
-            + "VALUES('%s', %s)",
-            name, Integer.toString(profileId));
+    public static String addNewDeckQuery(int profileId, String name, boolean isPublic) {
+        return String.format("INSERT INTO deck(name, owner_id, is_public)"
+            + "VALUES('%s', %s, %s)",
+            name, Integer.toString(profileId), isPublic);
     }
 
 

@@ -230,7 +230,6 @@ public class DbConnection {
     public Profile getProfile(String email, String password) {
 
         String query = SqlQueries.getProfileIdQuery(email, password);
-        System.out.println(query);
 
         try {
             Statement statement = this.connection.createStatement();
@@ -350,7 +349,8 @@ public class DbConnection {
      */
     public void addNewDeck(int profileId, Deck deck) {
 
-        String query = SqlQueries.addNewDeckQuery(profileId, deck.getDeckName());
+        String query = SqlQueries.addNewDeckQuery(profileId,
+            deck.getDeckName(), deck.getVisibility());
 
         try {
             Statement statement = this.connection.createStatement();

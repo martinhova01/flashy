@@ -5,6 +5,9 @@ import {
   Button,
   Card,
   CardContent,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
 } from "@mui/material";
@@ -25,6 +28,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
     const [frontPage, setFrontPage] = useState<String>(oldDeck.cardList[0].frontpageString);
     const [backPage, setBackPage] = useState<String>(oldDeck.cardList[0].backpageString);
     const [cards, setCards] = useState<CardDto[]>(oldDeck.cardList);
+    const [visibility, setVisbility] = useState<boolean>(oldDeck.visibility);
 
 
     function getDeck(deckId: number): any{
@@ -78,7 +82,8 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
         let deck: DeckDto = {
             deckId: oldDeck.deckId,
             deckName: deckName,
-            cardList: cards
+            cardList: cards,
+            visibility: visibility,
         }
 
         await requests.updateDeck(deck);
@@ -99,6 +104,15 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
             <Box sx={{flex: 0.2, alignItems: "center", display: "flex", flexDirection: "column"}}>
                 <TextField id="outlined-basic" label="Tittel på sett" value={deckName} onChange={(e) => {setDeckName(e.target.value)}} variant="outlined" sx={{margin: "2rem", width: 400}} />
 
+                <RadioGroup
+                    aria-label="synlighet"
+                    name="synlighet"
+                    value={visibility}
+                    onChange={(e) => {setVisbility(!visibility)}}
+                >
+                    <FormControlLabel value={true} control={<Radio />} label="offentlig" />
+                    <FormControlLabel value={false} control={<Radio />} label="privat" />
+                </RadioGroup>
                 <Button variant="outlined" size="large" onClick={handleSave} sx={{margin: "1rem"}}>
                     Lagre Sett
                 </Button>
