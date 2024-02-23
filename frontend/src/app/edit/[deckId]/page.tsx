@@ -85,11 +85,11 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
 
         await reloadProfile();
 
-        window.location.href = "/homepage";
+        window.location.href = "/mydecks";
     }
 
     function handleBack(){
-        window.location.href = "/homepage";
+        window.location.href = "/mydecks";
     }
 
 
