@@ -123,14 +123,16 @@ public class DbConnection {
     }
 
     private void seedDecks() {
-        String insertQuery = "INSERT INTO deck (name, owner_id) VALUES (?, ?)";
+        String insertQuery = "INSERT INTO deck (name, owner_id, is_public) VALUES (?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "Sample Deck 1");
             statement.setInt(2, 1);
+            statement.setBoolean(3, true);
             statement.executeUpdate();
 
             statement.setString(1, "Sample Deck 2");
             statement.setInt(2, 2);
+            statement.setBoolean(3, false);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -226,47 +228,19 @@ public class DbConnection {
      * @return the profile if found, null otherwise
      */
     public Profile getProfile(String email, String password) {
-        String getProfileQuery = SqlQueries.getProfileQuery(email, password);
+
+        String query = SqlQueries.getProfileIdQuery(email, password);
+        System.out.println(query);
+
         try {
-            ResultSet profileResultSet = connection.createStatement().executeQuery(getProfileQuery);
-            if (!profileResultSet.next()) {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            if (!result.next()) {
                 return null;
             }
-            int profileId = profileResultSet.getInt("profile_id");
-            String emailResult = profileResultSet.getString("email");
-            String passwordResult = profileResultSet.getString("password");
-            String firstname = profileResultSet.getString("firstname");
-            String lastname = profileResultSet.getString("lastname");
-            String school = profileResultSet.getString("school");
-            boolean isAdmin = profileResultSet.getBoolean("is_admin");
-
-
-            ResultSet deckResultSet = connection
-                .createStatement()
-                .executeQuery(SqlQueries.getOwnedDecksQuery(profileId));
-            List<Deck> decks = new ArrayList<>();
-            while (deckResultSet.next()) {
-                String name = deckResultSet.getString("name");
-                int deckId = deckResultSet.getInt("deck_id");
-                Deck d = new Deck(name, deckId);
-
-                ResultSet cardResultSet = connection
-                    .createStatement()
-                    .executeQuery(SqlQueries.getCardsQuery(deckId));
-                while (cardResultSet.next()) {
-                    int cardId = cardResultSet.getInt("card_id");
-                    String frontPage = cardResultSet.getString("front_page");
-                    String frontPagePic = cardResultSet.getString("front_page_picture");
-                    String backPage = cardResultSet.getString("back_page");
-                    String backPagePic = cardResultSet.getString("back_page_picture");
-                    d.addCard(new Card(cardId, frontPage, backPage, frontPagePic, backPagePic));
-                }
-                decks.add(d);
-
-            }
-            return new Profile(profileId, emailResult, passwordResult,
-                firstname, lastname, school, isAdmin, decks);
-
+            int id = result.getInt("profile_id");
+            return getProfileById(id);
+            
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -315,7 +289,7 @@ public class DbConnection {
     }
 
     /**
-     * Deletes a prfile from the database. 
+     * Deletes a profile from the database. 
      *
      * @param profileId the id of the profile to delete
      */
@@ -456,59 +430,27 @@ public class DbConnection {
     }
 
     /**
-     * Delete a deck with a given ID from the database. 
+     * Get all profiles from the database.
      */
     public ArrayList<Profile> getAllProfiles() {
         ArrayList<Profile> profiles = new ArrayList<Profile>();
         String query = SqlQueries.getAllProfileIds();
 
         try {
-            Statement statement = this.connection.createStatement();
-            ResultSet result = statement.executeQuery(query);
+            ResultSet result = connection.createStatement().executeQuery(query);
             while (result.next()) {
-                int profileId = result.getInt("profile_id");
-                String emailResult = result.getString("email");
-                String passwordResult = result.getString("password");
-                String firstname = result.getString("firstname");
-                String lastname = result.getString("lastname");
-                String school = result.getString("school");
-                boolean isAdmin = result.getBoolean("is_admin");
-
-                ResultSet deckResultSet = connection
-                    .createStatement()
-                    .executeQuery(SqlQueries.getOwnedDecksQuery(profileId));
-                List<Deck> decks = new ArrayList<>();
-                while (deckResultSet.next()) {
-                    String name = deckResultSet.getString("name");
-                    int deckId = deckResultSet.getInt("deck_id");
-                    Deck d = new Deck(name, deckId);
-
-                    ResultSet cardResultSet = connection
-                        .createStatement()
-                        .executeQuery(SqlQueries.getCardsQuery(deckId));
-                    while (cardResultSet.next()) {
-                        int cardId = cardResultSet.getInt("card_id");
-                        String frontPage = cardResultSet.getString("front_page");
-                        String frontPagePic = cardResultSet.getString("front_page_picture");
-                        String backPage = cardResultSet.getString("back_page");
-                        String backPagePic = cardResultSet.getString("back_page_picture");
-                        d.addCard(new Card(cardId, frontPage, backPage, frontPagePic, backPagePic));
-                    }
-                    decks.add(d);
-                }
-                Profile profile = new Profile(profileId, emailResult, passwordResult,
-                    firstname, lastname, school, isAdmin, decks);
-                profiles.add(profile);
+                int id = result.getInt("profile_id");
+                profiles.add(getProfileById(id));
             }
-            return profiles;
+
         } catch (SQLException e) {
             e.printStackTrace();
-            return new ArrayList<Profile>();       
         }
+        return profiles;
     }
 
     /**
-     * Delete a deck with a given ID from the database. 
+     * Get a Profile with a given ID from the database. 
      */
     public Profile getProfileById(int id) {
         String getProfileQuery = SqlQueries.getProfileQuery(id);
@@ -533,7 +475,8 @@ public class DbConnection {
             while (deckResultSet.next()) {
                 String name = deckResultSet.getString("name");
                 int deckId = deckResultSet.getInt("deck_id");
-                Deck d = new Deck(name, deckId);
+                boolean isPublic = deckResultSet.getBoolean("is_public");
+                Deck d = new Deck(name, deckId, isPublic);
 
                 ResultSet cardResultSet = connection
                     .createStatement()
@@ -548,7 +491,6 @@ public class DbConnection {
                 }
                 decks.add(d);
             }
-            System.out.println(decks + "test");
             return new Profile(profileId, emailResult, passwordResult,
                 firstname, lastname, school, isAdmin, decks);
         } catch (SQLException e) {

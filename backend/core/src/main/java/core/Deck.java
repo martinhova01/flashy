@@ -10,15 +10,17 @@ public class Deck {
 
     private String deckName;
     private int deckId;
+    private boolean isPublic;
 
     private List<Card> cardList;
 
     /**
      * Constructor.
      */
-    public Deck(String deckName, int deckId) {
+    public Deck(String deckName, int deckId, boolean isPublic) {
         this.deckName = deckName;
         this.deckId = deckId;
+        this.isPublic = isPublic;
         this.cardList = new ArrayList<>();
     }
 
@@ -53,5 +55,14 @@ public class Deck {
     public void setDeckId(int deckId) {
         this.deckId = deckId;
     }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
+    
 
 }
