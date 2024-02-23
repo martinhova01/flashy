@@ -8,7 +8,7 @@ const Navbar = (props: {selected: number}) => {
   // Legg til flere meny-elementer her
   const menuItems = [
     { text: "Flashy", link: "/browse", function: null },
-    { text: "Mine dekk", link: "/homepage", function: null },
+    { text: "Mine dekk", link: "/mydecks", function: null },
     { text: "Profil", link: "/profile", function: null },
     { text: "Logg ut", link: "/", function: logOut },
   ]

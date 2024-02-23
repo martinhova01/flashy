@@ -14,7 +14,7 @@ import { DeckDto } from "../utils/dto/DeckDto";
 import { requests } from "../utils/Api/requests";
 import { CardDto } from "../utils/dto/CardDto";
 
-const HomePage: React.FC = () => {
+const MyDecksPage: React.FC = () => {
   
   const [decks, setDecks] = useState<DeckDto[]>( getProfile().ownedDecks );
   
@@ -89,4 +89,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default MyDecksPage;
