@@ -10,15 +10,17 @@ public class Deck {
 
     private String deckName;
     private int deckId;
+    private boolean visibility;
 
     private List<Card> cardList;
 
     /**
      * Constructor.
      */
-    public Deck(String deckName, int deckId) {
+    public Deck(String deckName, int deckId, boolean visibility) {
         this.deckName = deckName;
         this.deckId = deckId;
+        this.visibility = visibility;
         this.cardList = new ArrayList<>();
     }
 
@@ -53,5 +55,14 @@ public class Deck {
     public void setDeckId(int deckId) {
         this.deckId = deckId;
     }
+
+    public boolean getVisibility() {
+        return visibility;
+    }
+
+    public void setPublic(boolean visibility) {
+        this.visibility = visibility;
+    }
+    
 
 }
