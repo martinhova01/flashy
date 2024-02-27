@@ -420,6 +420,41 @@ public class DbConnection {
         
     }
 
+    public ArrayList<Card> getDeckById(int deckId) {
+        ArrayList<Card> cards = new ArrayList<Card>();
+        String query = SqlQueries.getCardsQuery(deckId);
+        try {
+            ResultSet cardResultSet = connection.createStatement().executeQuery(query);
+            while (cardResultSet.next()) {
+                int cardId = cardResultSet.getInt("card_id");
+                String frontPage = cardResultSet.getString("front_page");
+                String frontPagePic = cardResultSet.getString("front_page_picture");
+                String backPage = cardResultSet.getString("back_page");
+                String backPagePic = cardResultSet.getString("back_page_picture");
+                cards.add(new Card(cardId, frontPage, backPage, frontPagePic, backPagePic));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return cards;
+    }
+
+    public Boolean deckExist(int deckId) {
+        String query = SqlQueries.getCardsQuery(deckId);
+
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            return result.next();
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     /**
      * Update a deck in the database. 
