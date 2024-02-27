@@ -3,6 +3,7 @@
 import { Typography, Container, TextField, Grid, Box, Button, Card, CardContent} from "@mui/material";
 import { transform } from "next/dist/build/swc";
 import { useState } from "react";
+import ReactCardFlip from 'react-card-flip';
 
 
 
@@ -16,9 +17,12 @@ export default function flashcard() {
     return (
         <Grid container justifyContent={"center"} alignItems={"center"} style={{height: "100vh"}}>
             <Grid item>
-                <Card className={isFlipped ? "flipped" : ""} onClick={handleFlip} sx = {{ width: 500, height: 350, perspective: "1000px", position: "relative", transition: "transform 0.8s", transformStyle: "preserve-3d" , cursor: "pointer", transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"}}>
+                <ReactCardFlip flipDirection="horizontal" isFlipped={isFlipped}>
 
-                    <CardContent sx={{ height: "100%", width:"100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "absolute", backfaceVisibility: "hidden", transform: isFlipped ? "rotateY(180deg)" : "rotateY(0deg)"}}>
+                
+                <Card className={"card"} onClick={handleFlip} >
+
+                    <CardContent sx={{width:"35rem" , height:"25rem", display:"flex", justifyContent:"center", alignItems:"center"}}>
                         <Typography variant="h5" component="h2">
 
                             Front side
@@ -26,8 +30,11 @@ export default function flashcard() {
                         </Typography>
                         
                     </CardContent>
+                        
+                    </Card>
                     
-                    <CardContent sx={{ height: "100%", width: "100%" ,display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "absolute", backfaceVisibility: "hidden" ,transform: isFlipped ? "rotateY(0deg)" : "rotateY(-180deg)", }}>
+                    <Card className="card card-back" onClick={handleFlip}>
+                    <CardContent sx={{width:"35rem" , height:"25rem", display:"flex", justifyContent:"center", alignItems:"center"}}>
                         <Typography variant="h5" component="h2">
 
                             back side
@@ -36,7 +43,7 @@ export default function flashcard() {
                         
                     </CardContent>
                 </Card>
-
+                </ReactCardFlip>
             </Grid>
 
         </Grid>
