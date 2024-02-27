@@ -14,12 +14,17 @@ export default function flashcard() {
         setIsFlipped(!isFlipped);
     };
 
+    function handleBack() {
+        window.location.href = "/homepage"
+    };
+
+
     return (
 
         <Grid container>
 
             <Grid item>
-                 <Button variant="outlined" style={{margin: "1rem"}}>
+                 <Button variant="outlined" style={{margin: "1rem"}} onClick={handleBack}>
                 Tilbake
             </Button>
             </Grid>

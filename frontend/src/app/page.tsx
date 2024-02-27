@@ -84,6 +84,7 @@ const Page = () => {
 
           <TextField
             placeholder="Passord"
+            type="password"
             sx={{
               fontFamily: "Monospace",
               paddingTop: "40px",
