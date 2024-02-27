@@ -113,4 +113,10 @@ export const requests = {
     const response = await api.get("/allprofiles");
     return response.data;
   },
+
+  getAllPublicDecks: async function (): Promise<DeckDto[]> {
+    const response = await api.get("/decks");
+    return response.data;
+    
+  },
 };
