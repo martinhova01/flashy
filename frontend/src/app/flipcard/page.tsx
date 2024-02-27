@@ -1,9 +1,9 @@
 "use client";
 
-import { Typography, Container, TextField, Grid, Box, Button, Card, CardContent} from "@mui/material";
-import { transform } from "next/dist/build/swc";
+import { Typography, Grid, Card, CardContent, Button} from "@mui/material";
 import { useState } from "react";
 import ReactCardFlip from 'react-card-flip';
+import Navbar from "../components/Navbar";
 
 
 
@@ -15,8 +15,18 @@ export default function flashcard() {
     };
 
     return (
-        <Grid container justifyContent={"center"} alignItems={"center"} style={{height: "100vh"}}>
+
+        <Grid container>
+
             <Grid item>
+                 <Button variant="outlined" style={{margin: "1rem"}}>
+                Tilbake
+            </Button>
+            </Grid>
+
+           
+
+            <Grid item marginTop={"1rem"}>
                 <ReactCardFlip flipDirection="horizontal" isFlipped={isFlipped}>
 
                 
@@ -35,6 +45,7 @@ export default function flashcard() {
                     
                     <Card className="card card-back" onClick={handleFlip}>
                     <CardContent sx={{width:"35rem" , height:"25rem", display:"flex", justifyContent:"center", alignItems:"center"}}>
+
                         <Typography variant="h5" component="h2">
 
                             back side
@@ -44,9 +55,20 @@ export default function flashcard() {
                     </CardContent>
                 </Card>
                 </ReactCardFlip>
+
+                <Button variant="outlined" color="error" style={{margin:"1rem"}}>
+                    Vanskelig
+                </Button>
+
+                <Button variant="outlined" color="success" style={{marginLeft:"20rem"}}>
+                    Lett
+                </Button>
+
             </Grid>
 
         </Grid>
+
+        
 
         
 
