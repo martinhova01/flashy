@@ -107,6 +107,7 @@ public class SqlQueries {
         return String.format("SELECT * FROM card where deck_id = %s", 
             Integer.toString(deckId));
     }
+    
 
     /**
      * Generate SQL-query to add a new deck.
