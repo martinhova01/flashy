@@ -20,6 +20,10 @@ import { getProfile, reloadProfile } from "@/app/utils/LocalStorage/profile";
 
 export default function EditDeck({params} : {params: {deckId: number}}) {
 
+    const categories = ["Kunst og Musikk", "Historie og Religion",
+        "IT", "Matematikk og Naturfag", "Medisin og Helse", "Samfunnsfag",
+        "Språk og Litteratur", "Økonomi"];
+
     const profile: ProfileDto = getProfile();
     const oldDeck: DeckDto = getDeck(params.deckId);
 
@@ -29,6 +33,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
     const [backPage, setBackPage] = useState<String>(oldDeck.cardList[0].backpageString);
     const [cards, setCards] = useState<CardDto[]>(oldDeck.cardList);
     const [visibility, setVisbility] = useState<boolean>(oldDeck.visibility);
+    const [category, setCategory] = useState<String>(oldDeck.category);
 
 
     function getDeck(deckId: number): any{
@@ -84,6 +89,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
             deckName: deckName,
             cardList: cards,
             visibility: visibility,
+            category: category,
         }
 
         await requests.updateDeck(deck);
@@ -104,7 +110,15 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
             <Box sx={{flex: 0.2, alignItems: "center", display: "flex", flexDirection: "column"}}>
                 <TextField id="outlined-basic" label="Tittel på sett" value={deckName} onChange={(e) => {setDeckName(e.target.value)}} variant="outlined" sx={{margin: "2rem", width: 400}} />
 
+                <Typography
+                    variant="h5"
+                    component="div"
+                    sx={{textDecoration: "underline", marginLeft: "1rem", marginTop: "1rem", fontSize: "1.5rem"}}
+                >
+                    Synlighet:
+                </Typography>
                 <RadioGroup
+                    row
                     aria-label="synlighet"
                     name="synlighet"
                     value={visibility}
@@ -112,6 +126,23 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
                 >
                     <FormControlLabel value={true} control={<Radio />} label="offentlig" />
                     <FormControlLabel value={false} control={<Radio />} label="privat" />
+                </RadioGroup>
+                <Typography
+                    variant="h5"
+                    component="div"
+                    sx={{textDecoration: "underline", marginLeft: "1rem", marginTop: "1rem", fontSize: "1.5rem"}}
+                >
+                    Kategori:
+                </Typography>
+                <RadioGroup
+                    aria-label="category"
+                    name="category"
+                    value={category}
+                    onChange={(e) => {setCategory(e.target.value)}}
+                >
+                    {categories.map(c => (
+                        <FormControlLabel value={c} control={<Radio />} label={c} />
+                    ))}
                 </RadioGroup>
                 <Button variant="outlined" size="large" onClick={handleSave} sx={{margin: "1rem"}}>
                     Lagre Sett
