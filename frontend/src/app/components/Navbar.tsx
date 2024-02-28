@@ -9,6 +9,7 @@ const Navbar = (props: {selected: number}) => {
     { text: "Flashy", link: "/homepage" },
     { text: "Profil", link: "/profile" },
     { text: "Favoritter", link: "/favourites" },
+    { text: "Logg ut", link: "/"},
   ]
   
   const reactElements = menuItems.map( item => {
@@ -33,6 +34,7 @@ const Navbar = (props: {selected: number}) => {
         <ButtonGroup
           aria-label="Large buttom group"
           size="large"
+          sx={{marginTop: "1rem"}}
         >
           {reactElements}
         </ButtonGroup>
