@@ -37,7 +37,7 @@ const HomePage: React.FC = () => {
   }
   
   const viewDeckButtonPressed = (deckId: number) => {
-    window.location.href = `/view/${deckId}`
+    window.location.href = `/flipcard/${deckId}`
   }
   
   return (

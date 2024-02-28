@@ -1,3 +1,4 @@
+import { CardDto } from "../dto/CardDto";
 import { DeckDto } from "../dto/DeckDto";
 import { ProfileDto } from "../dto/ProfileDto";
 import { api } from "./api";
@@ -113,4 +114,11 @@ export const requests = {
     const response = await api.get("/allprofiles");
     return response.data;
   },
+
+  getCardsByDeckId: async function (deckId: number): Promise<CardDto[]> {
+    const response = await api.get("/cardsByDeckId/" + deckId);
+    return response.data;
+    
+  }
+
 };
