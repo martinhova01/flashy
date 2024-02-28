@@ -6,40 +6,45 @@ import { Typography, Grid, Card, CardContent, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReactCardFlip from "react-card-flip";
 
-export default function flashcard({params} : {params: {deckId: number}}) {
+export default function flashcard({ params }: { params: { deckId: number } }) {
   const [isFlipped, setIsFlipped] = useState(false);
+  const [card, setCard] = useState(0);
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
   };
 
-  const [cards, setCards] = useState<CardDto[]>([]);
+  const [cards, setCards] = useState<CardDto[]>();
 
   function handleBack() {
-    window.location.href = "/homepage"
-};
+    window.location.href = "/homepage";
+  }
   const fetchCard = async () => {
-    console.log(params)
-    const request = await requests.getCardsByDeckId(Number(params.deckId))
-    console.log(request)
-  if(request){setCards(request) 
-    console.log(cards)}
-  else {
-    console.log ("error fetching cards")
+    try {
+      const request = await requests.getCardsByDeckId(Number(params.deckId));
+
+      // Use optional chaining to check for undefined
+      setCards(request);
+    } catch (error) {
+      console.error("Error fetching cards:", error);
     }
-  } 
+  };
 
   useEffect(() => {
-    fetchCard()
-  
-   
+    fetchCard();
   }, []);
-  
-  
+
+  const changeCard = () => {
+    
+  }
 
   return (
     <Grid container>
       <Grid item>
-        <Button variant="outlined" style={{ margin: "1rem" }} onClick={handleBack}>
+        <Button
+          variant="outlined"
+          style={{ margin: "1rem" }}
+          onClick={handleBack}
+        >
           Tilbake
         </Button>
       </Grid>
@@ -57,7 +62,9 @@ export default function flashcard({params} : {params: {deckId: number}}) {
               }}
             >
               <Typography variant="h5" component="h2">
-                front side
+                {cards && cards.length > 0
+                  ? cards[card]!.frontpageString
+                  : "Loading"}
               </Typography>
             </CardContent>
           </Card>
@@ -73,7 +80,9 @@ export default function flashcard({params} : {params: {deckId: number}}) {
               }}
             >
               <Typography variant="h5" component="h2">
-                back side
+                {cards && cards.length > 0
+                  ? cards[card]!.backpageString
+                  : "Loading"}
               </Typography>
             </CardContent>
           </Card>
