@@ -14,16 +14,19 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   };
 
   const [cards, setCards] = useState<CardDto[]>();
+  const [originalCards, setOriginalCards] = useState<CardDto[]>();
 
   function handleBack() {
     window.location.href = "/homepage";
   }
+
   const fetchCard = async () => {
     try {
       const request = await requests.getCardsByDeckId(Number(params.deckId));
 
       // Use optional chaining to check for undefined
       setCards(request);
+      setOriginalCards(request); //kopi av orginal kortene
     } catch (error) {
       console.error("Error fetching cards:", error);
     }
@@ -33,9 +36,40 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
     fetchCard();
   }, []);
 
-  const changeCard = () => {
+  const handleShuffleOnly = () => {
+    if (originalCards && originalCards.length > 0) {
+        const shuffled = shuffleCards([...originalCards]);
+        setCards(shuffled);
+        setCard(0);
+        setIsFlipped(false);
+    }
+  };
+  const handleNextCard = () => {
+    if(cards && cards.length > 0) {
+      setCard(prevCard => (prevCard + 1) % cards.length); // Går til neste kort, og looper tilbake til start
+    setIsFlipped(false); 
+    }
     
-  }
+  };
+
+  const handleResetOrder = () => {
+    if(originalCards && originalCards.length > 0) {
+      setCards([...originalCards]); 
+    setCard(0); 
+    setIsFlipped(false); 
+    }
+    
+  };
+
+  function shuffleCards(cardsArray: CardDto[]) {
+    for (let i = cardsArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [cardsArray[i], cardsArray[j]] = [cardsArray[j], cardsArray[i]];
+    }
+    return cardsArray;
+}
+
+  
 
   return (
     <Grid container>
@@ -95,10 +129,29 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
         <Button
           variant="outlined"
           color="success"
-          style={{ marginLeft: "20rem" }}
+          style={{ marginLeft: "1rem" }}
+          onClick={handleNextCard}
         >
           Lett
         </Button>
+
+        <Button
+          variant="outlined"
+          style={{ margin: "1rem"}}
+          onClick={handleShuffleOnly}
+          >
+            Stokk kort
+        </Button>
+
+        <Button
+          variant="outlined"
+          style={{ margin : "1rem"}}
+          onClick={handleResetOrder}
+          >
+          Tilbakestill rekkefølge
+        </Button>
+          
+         
       </Grid>
     </Grid>
   );
