@@ -2,7 +2,14 @@
 
 import { requests } from "@/app/utils/Api/requests";
 import { CardDto } from "@/app/utils/dto/CardDto";
-import { Typography, Grid, Card, CardContent, Button } from "@mui/material";
+import {
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  Button,
+  LinearProgress,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import ReactCardFlip from "react-card-flip";
 
@@ -15,6 +22,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
 
   const [cards, setCards] = useState<CardDto[]>();
   const [originalCards, setOriginalCards] = useState<CardDto[]>();
+  const [progress, setProgress] = useState(0);
 
   function handleBack() {
     window.location.href = "/homepage";
@@ -46,8 +54,10 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   };
   const handleNextCard = () => {
     if (cards && cards.length > 0) {
-      setCard((prevCard) => (prevCard + 1) % cards.length); // Går til neste kort, og looper tilbake til start
+      setCard((prevCard) => (prevCard + 1) % cards.length);
       setIsFlipped(false);
+      const newProgress = ((card + 1) / cards.length) * 100;
+      setProgress(newProgress);
     }
   };
 
@@ -89,6 +99,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
       </Grid>
 
       <Grid item marginTop={"1rem"}>
+        <LinearProgress variant="determinate" value={progress} />
         <ReactCardFlip flipDirection="horizontal" isFlipped={isFlipped}>
           <Card className={"card"} onClick={handleFlip}>
             <CardContent
