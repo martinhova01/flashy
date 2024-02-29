@@ -69,7 +69,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
 
     function updateCards() {
         let card: CardDto = {
-            cardNumber: 0,
+            cardNumber: cardNr,
             frontpageString: frontPage,
             frontpagePicture: "",
             backpageString: backPage,

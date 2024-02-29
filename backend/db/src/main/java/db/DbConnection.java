@@ -171,21 +171,23 @@ public class DbConnection {
 
     private void seedCards() {
         String insertQuery = "INSERT INTO card"
-            + "(front_page, front_page_picture, back_page, back_page_picture, deck_id)"
-            + "VALUES (?, ?, ?, ?, ?)";
+            + "(card_id, front_page, front_page_picture, back_page, back_page_picture, deck_id)"
+            + "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-            statement.setString(1, "Sample Front Page 1");
-            statement.setString(2, "front_page_picture_1.jpg");
-            statement.setString(3, "Sample Back Page 1");
-            statement.setString(4, "back_page_picture_1.jpg");
-            statement.setInt(5, 1);
+            statement.setInt(1, 0);
+            statement.setString(2, "Sample Front Page 1");
+            statement.setString(3, "front_page_picture_1.jpg");
+            statement.setString(4, "Sample Back Page 1");
+            statement.setString(5, "back_page_picture_1.jpg");
+            statement.setInt(6, 1);
             statement.executeUpdate();
 
-            statement.setString(1, "Sample Front Page 2");
-            statement.setString(2, "front_page_picture_2.jpg");
-            statement.setString(3, "Sample Back Page 2");
-            statement.setString(4, "back_page_picture_2.jpg");
-            statement.setInt(5, 2);
+            statement.setInt(1, 0);
+            statement.setString(2, "Sample Front Page 2");
+            statement.setString(3, "front_page_picture_2.jpg");
+            statement.setString(4, "Sample Back Page 2");
+            statement.setString(5, "back_page_picture_2.jpg");
+            statement.setInt(6, 2);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -408,6 +410,7 @@ public class DbConnection {
 
     private void addCard(int deckId, Card c) {
         String query = SqlQueries.addCardQuery(
+            c.getCardNumber(),
             deckId,
             c.getFrontpageString(),
             c.getFrontpagePicture(),
@@ -474,20 +477,51 @@ public class DbConnection {
     /**
      * Update a deck in the database. 
      *
-     * @param deck the deck to update
+     * @param d the deck to update
      */
-    public void updateDeck(Deck deck) {
-        String getOwnerQuery = "SELECT owner_id FROM deck WHERE deck_id ="
-            + Integer.toString(deck.getDeckId()) + ";";
+    public void updateDeck(Deck d) {
+        String updateDeckQuery = SqlQueries.updateDeckQuery(
+            d.getDeckId(), d.getDeckName(), d.getVisibility(), d.getCategory());
         try {
-            ResultSet result = connection.createStatement().executeQuery(getOwnerQuery);
-            int ownerId = result.getInt("owner_id");
-            this.deleteDeck(deck.getDeckId());
-            this.addNewDeck(ownerId, deck);
+            Statement statement = connection.createStatement();
+            statement.execute(updateDeckQuery);
+
+            for (Card c : d.getCardList()) {
+
+                if (cardExists(c.getCardNumber(), d.getDeckId())) {
+                    String query = SqlQueries.updateCardQuery(
+                        c.getCardNumber(),
+                        d.getDeckId(),
+                        c.getFrontpageString(),
+                        c.getFrontpagePicture(),
+                        c.getBackpageString(),
+                        c.getBackpagePicture()
+                    );
+                    statement.execute(query);
+                } else {
+                    addCard(d.getDeckId(), c);
+                }
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean cardExists(int cardNumber, int deckId) {
+        String query = String.format(
+            "SELECT * FROM card WHERE card_id = %s AND deck_id = %s",
+            Integer.toString(cardNumber), Integer.toString(deckId));
+
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            return result.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 
     /**
