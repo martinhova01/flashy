@@ -17,12 +17,11 @@ import { DeckDto } from "../../utils/dto/DeckDto";
 import { requests } from "../../utils/Api/requests";
 import { ProfileDto } from "../../utils/dto/ProfileDto";
 import { getProfile, reloadProfile } from "@/app/utils/LocalStorage/profile";
+import { categories } from "@/app/utils/dto/Categories";
 
 export default function EditDeck({params} : {params: {deckId: number}}) {
 
-    const categories = ["Kunst og Musikk", "Historie og Religion",
-        "IT", "Matematikk og Naturfag", "Medisin og Helse", "Samfunnsfag",
-        "Språk og Litteratur", "Økonomi"];
+    
 
     const profile: ProfileDto = getProfile();
     const oldDeck: DeckDto = getDeck(params.deckId);
