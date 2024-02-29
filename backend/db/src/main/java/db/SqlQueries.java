@@ -116,21 +116,22 @@ public class SqlQueries {
     /**
      * Generate SQL-query to add a new Card. 
      *
-     * @param deckId id
+     * @param cardNumber card number
+     * @param deckId deckId
      * @param frontPage frontpage content
      * @param frontPagePic url
      * @param backPage backpage content
      * @param backPagePic url
      * @return the query as a string.
      */
-    public static String addCardQuery(int deckId, String frontPage, String frontPagePic,
-        String backPage, String backPagePic) {
+    public static String addCardQuery(int cardNumber, int deckId, String frontPage,
+        String frontPagePic, String backPage, String backPagePic) {
         
         return String.format(
             "INSERT INTO CARD("
-            + "front_page, front_page_picture, back_page, back_page_picture, deck_id)"
-            + "VALUES('%s', '%s', '%s', '%s', %s)",
-            frontPage, frontPagePic, backPage, backPagePic, deckId);
+            + "card_id, front_page, front_page_picture, back_page, back_page_picture, deck_id)"
+            + "VALUES(%s, '%s', '%s', '%s', '%s', %s)",
+            cardNumber, frontPage, frontPagePic, backPage, backPagePic, deckId);
     }
 
 
@@ -159,6 +160,41 @@ public class SqlQueries {
         return String.format("SELECT profile_id FROM profile"
         + " WHERE email = '%s' AND password = '%s'",
         email, password);
+    }
+
+    /**
+     * Generate SQL-query to update a deck. 
+     *
+     * @param deckId id
+     * @param deckName name
+     * @param visibility visibility
+     * @param category category
+     * @return the query as a string.
+     */
+    public static String updateDeckQuery(int deckId,
+        String deckName, boolean visibility, String category) {
+        return String.format("UPDATE deck SET name = '%s', is_public = %s, category = '%s'"
+            + "WHERE deck_id = %s",
+            deckName, visibility, category, Integer.toString(deckId));
+    }
+
+    /**
+     * Generate SQL-query to update a card. 
+     *
+     * @param cardNumber id
+     * @param frontPage front page
+     * @param frontPagePic front page pic
+     * @param backPage back page
+     * @param backPagePic back page pic
+     * @return the query as a string
+     */
+    public static String updateCardQuery(int cardNumber, int deckId, String frontPage,
+        String frontPagePic, String backPage, String backPagePic) {
+        return String.format("UPDATE card "
+            + "SET front_page='%s', front_page_picture='%s', back_page='%s', back_page_picture='%s'"
+            + "WHERE card_id = %s AND deck_id = %s",
+            frontPage, frontPagePic, backPage, backPagePic,
+            Integer.toString(cardNumber), Integer.toString(deckId));
     }
 
     
