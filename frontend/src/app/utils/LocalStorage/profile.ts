@@ -13,7 +13,7 @@ export async function loadProfile(email: String, password: String): Promise<Prof
   const fetchedProfile = (await requests.getProfile(email, password)) as ProfileDto;
   
   if (fetchedProfile) {
-    localStorage.clear();
+    logOut();
     localStorage.setItem("profile", JSON.stringify(fetchedProfile) );
   } else {
     console.log("Login failed.")
@@ -23,7 +23,13 @@ export async function loadProfile(email: String, password: String): Promise<Prof
   
 }
 
+// Refreshes the currently loaded profile.
 export async function reloadProfile() {
   let profile = getProfile();
   await loadProfile(profile.email, profile.password);
+}
+
+// Logs out of the currently loaded profile by clearing localStorage.
+export function logOut() {
+  localStorage.clear();
 }
