@@ -14,9 +14,11 @@ import {
   Avatar,
   Divider,
 } from "@mui/material";
+import { getProfile } from "@/app/utils/LocalStorage/profile";
 
 import { useEffect, useState } from "react";
 import ReactCardFlip from "react-card-flip";
+import { ProfileDto } from "@/app/utils/dto/ProfileDto";
 
 export default function flashcard({ params }: { params: { deckId: number } }) {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -24,7 +26,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
   };
-
+  const profile = getProfile();
   const [cards, setCards] = useState<CardDto[]>();
   const [originalCards, setOriginalCards] = useState<CardDto[]>();
   const [progress, setProgress] = useState(0);
@@ -43,7 +45,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   }
 
   function handleBack() {
-    window.location.href = "/homepage";
+    window.location.href = "/mydecks";
   }
 
   const fetchCard = async () => {
@@ -273,9 +275,8 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
           <Paper key={index} style={{ padding: "1rem 1rem", marginBottom: '1rem' }}>
             <Grid container wrap="nowrap" spacing={2}>
               <Grid item xs>
-                <h4 style={{ margin: 0, textAlign: "left" }}>Bruker</h4> {/* Bytt ut med brukerens navn om nødvendig */}
+                <h4 style={{ margin: 0, textAlign: "left" }}>{`${profile.firstname} ${profile.lastname}`}</h4> {/* Bytt ut med brukerens navn om nødvendig */}
                 <p style={{ textAlign: "left" }}>{comment}</p>
-                <p style={{ textAlign: "left", color: "gray" }}>postet for 1 minutt siden</p> {/* Oppdater med faktisk tidspunkt om nødvendig */}
               </Grid>
             </Grid>
             {index < comments.length - 1 && <Divider variant="fullWidth" style={{ margin: "30px 0" }} />}
