@@ -1,3 +1,4 @@
+import { CardDto } from "../dto/CardDto";
 import { DeckDto } from "../dto/DeckDto";
 import { ProfileDto } from "../dto/ProfileDto";
 import { api } from "./api";
@@ -28,7 +29,7 @@ export const requests = {
       password: passwordParam,
     };
 
-    const response = await api.get("/profiles", {params:requestParams});
+    const response = await api.get("/profiles", { params: requestParams });
     return response.data;
   },
 
@@ -86,7 +87,7 @@ export const requests = {
     const requestParams = {
       ownerId: profileId,
     };
-    await api.post("/decks", deck, {params: requestParams});
+    await api.post("/decks", deck, { params: requestParams });
   },
 
   /**
@@ -111,6 +112,20 @@ export const requests = {
    */
   getAllProfiles: async function (): Promise<ProfileDto[]> {
     const response = await api.get("/allprofiles");
+    return response.data;
+  },
+
+
+  getCardsByDeckId: async function (deckId: number): Promise<CardDto[]> {
+    const requestParams = {
+      deckId: Number(deckId),
+    };
+    const response = await api.get("/cardsByDeckId", { params: requestParams });
+    return response.data;
+  },
+  
+  getAllPublicDecks: async function (): Promise<DeckDto[]> {
+    const response = await api.get("/decks");
     return response.data;
   },
 };

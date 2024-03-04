@@ -16,17 +16,6 @@ public class SqlQueries {
             Integer.toString(profileId));
     }
 
-    /**
-     * Generate SQL-query for getting a profile with given email and password.
-     *
-     * @param email email
-     * @param password password
-     * @return the SQL-query as a String
-     */
-    public static String getProfileQuery(String email, String password) {
-        return String.format("SELECT * FROM profile WHERE email='%s' and password='%s'",
-            email, password);
-    }
 
     /**
      * Generate SQL-query for adding a new profile.
@@ -107,18 +96,21 @@ public class SqlQueries {
         return String.format("SELECT * FROM card where deck_id = %s", 
             Integer.toString(deckId));
     }
+    
 
     /**
      * Generate SQL-query to add a new deck.
      *
      * @param profileId the owner of the deck
      * @param name the name of the deck
+     * @param isPublic is deck public
      * @return the query as a string
      */
-    public static String addNewDeckQuery(int profileId, String name) {
-        return String.format("INSERT INTO deck(name, owner_id)"
-            + "VALUES('%s', %s)",
-            name, Integer.toString(profileId));
+    public static String addNewDeckQuery(int profileId,
+        String name, boolean isPublic, String category) {
+        return String.format("INSERT INTO deck(name, owner_id, is_public, category)"
+            + "VALUES('%s', %s, %s, '%s')",
+            name, Integer.toString(profileId), isPublic, category);
     }
 
 
@@ -148,13 +140,26 @@ public class SqlQueries {
     }
 
     /**
-     * Generate SQL-query to add a new deck.
+     * Generate SQL-query to get all profile IDs.
      *
      * @return the query as a string
      */
     public static String getAllProfileIds() {
-        String query = String.format("SELECT * FROM profile");
-        return query;
+        return String.format("SELECT profile_id FROM profile");
+    }
+
+
+    /**
+     * Generate SQL-query to get profile ID with email and password. 
+     *
+     * @param email email
+     * @param password password
+     * @return the query as a string
+     */
+    public static String getProfileIdQuery(String email, String password) {
+        return String.format("SELECT profile_id FROM profile"
+        + " WHERE email = '%s' AND password = '%s'",
+        email, password);
     }
 
     

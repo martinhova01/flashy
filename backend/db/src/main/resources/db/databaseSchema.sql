@@ -3,6 +3,8 @@ CREATE TABLE deck
     deck_id     INTEGER PRIMARY KEY AUTOINCREMENT,
     name        VARCHAR(50),
     owner_id    INTEGER,
+    is_public   BOOLEAN,
+    category    VARCHAR(50),
     FOREIGN KEY (owner_id) REFERENCES profile(deck_id) ON DELETE CASCADE
 );
 

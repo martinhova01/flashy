@@ -1,9 +1,11 @@
 package restserver;
 
+import core.Card;
 import core.Deck;
 import core.Profile;
 import db.DbConnection;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -64,6 +66,12 @@ public class FlashyController {
     public Profile getProfileById(@RequestParam int profileId) {
         return dbConnection.getProfileById(profileId);
     }
+
+    @GetMapping (path = "/cardsByDeckId")
+    public ArrayList<Card> getCardsByDeckId(@RequestParam int deckId) {
+        return dbConnection.getDeckById(deckId);
+    }
+    
 
     /**
      * Add a new profile to the database.
@@ -156,5 +164,10 @@ public class FlashyController {
     @GetMapping(path = "/allprofiles")
     public ArrayList<Profile> getAllProfiles() {
         return dbConnection.getAllProfiles();
+    }
+
+    @GetMapping(path = "/decks")
+    public List<Deck> getAllPublicDecks() {
+        return dbConnection.getAllPublicDecks();
     }
 }
