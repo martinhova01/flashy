@@ -9,7 +9,12 @@ import {
   CardContent,
   Button,
   LinearProgress,
+  TextField,
+  Paper,
+  Avatar,
+  Divider,
 } from "@mui/material";
+
 import { useEffect, useState } from "react";
 import ReactCardFlip from "react-card-flip";
 
@@ -23,6 +28,19 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   const [cards, setCards] = useState<CardDto[]>();
   const [originalCards, setOriginalCards] = useState<CardDto[]>();
   const [progress, setProgress] = useState(0);
+  const [comment, setComment] = useState(''); //Nåværende kommentar
+  const [comments, setComments] = useState<string[]>([]); //lagrer kommentar
+
+  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setComment(event.target.value);
+  }
+
+  const handleAddComment = () => {
+    if (comment.trim()) {
+      setComments([...comments, comment]);
+      setComment(""); //nullstiller kommentarfelt
+    }
+  }
 
   function handleBack() {
     window.location.href = "/homepage";
@@ -85,10 +103,25 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
       handleNextCard();
     }
   };
+  
+  
 
   return (
-    <Grid container>
-      <Grid item>
+    <Grid 
+      container 
+      spacing={2}
+      style={{
+        padding: "1rem"
+      }}
+      >
+      <Grid 
+      item xs={12}
+      style={{ 
+        display: "flex", 
+        justifyContent: "flex-end",
+        
+      }}
+      >
         <Button
           variant="outlined"
           style={{ margin: "1rem" }}
@@ -98,10 +131,33 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
         </Button>
       </Grid>
 
-      <Grid item marginTop={"1rem"}>
-        <LinearProgress variant="determinate" value={progress} />
-        <ReactCardFlip flipDirection="horizontal" isFlipped={isFlipped}>
-          <Card className={"card"} onClick={handleFlip}>
+      <Grid 
+        item xs= {12}
+        md={7}
+        style={{ 
+          display: "flex", 
+          flexDirection: "column", 
+          alignContent: "center", 
+          justifyContent: "center" }}
+        >
+        <LinearProgress 
+        variant="determinate" 
+        value={progress}
+        style={{ width: "35rem"}}  
+        />
+
+
+        <ReactCardFlip 
+          flipDirection="horizontal" 
+          isFlipped={isFlipped}>
+
+          <Card 
+            className={"card"} 
+            onClick={handleFlip}
+            style={{ 
+              width: "35rem", 
+              height: "25rem", 
+              marginBottom: "1rem"}}>
             <CardContent
               sx={{
                 width: "35rem",
@@ -116,10 +172,19 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
                   ? cards[card]!.frontpageString
                   : "Loading"}
               </Typography>
+
             </CardContent>
           </Card>
 
-          <Card className="card card-back" onClick={handleFlip}>
+          <Card 
+            className="card card-back" 
+            onClick={handleFlip}
+            style={{
+              width: "35rem",
+              height: "25rem",
+              marginBottom: "1rem"
+            }}
+            >
             <CardContent
               sx={{
                 width: "35rem",
@@ -137,6 +202,8 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
             </CardContent>
           </Card>
         </ReactCardFlip>
+
+        <div>
 
         <Button
           variant="outlined"
@@ -171,6 +238,71 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
         >
           Tilbakestill rekkefølge
         </Button>
+
+        </div>
+      </Grid>
+
+
+      <Grid style={{paddingTop: "2rem"}}>
+      <Paper 
+        style={{
+          height: "30rem",
+          maxHeight: 300,
+          overflow: "auto",
+          width:"23rem"
+        }}>
+          <Typography  
+            style={{ marginBottom: '1rem' }}>
+                Kommentarer
+          </Typography>
+        {comments.map((comment, index) => (
+          <Paper key={index} style={{ padding: "1rem 1rem", marginBottom: '1rem' }}>
+            <Grid container wrap="nowrap" spacing={2}>
+              <Grid item xs>
+                <h4 style={{ margin: 0, textAlign: "left" }}>Bruker</h4> {/* Bytt ut med brukerens navn om nødvendig */}
+                <p style={{ textAlign: "left" }}>{comment}</p>
+                <p style={{ textAlign: "left", color: "gray" }}>postet for 1 minutt siden</p> {/* Oppdater med faktisk tidspunkt om nødvendig */}
+              </Grid>
+            </Grid>
+            {index < comments.length - 1 && <Divider variant="fullWidth" style={{ margin: "30px 0" }} />}
+          </Paper>
+        ))}
+
+      </Paper>
+
+      <Grid container spacing={1}>
+        <Grid>
+
+        
+        <TextField
+          label="Legg til en kommentar"
+          variant="outlined"
+          value={comment}
+          multiline
+          rows={2}
+          fullWidth
+          onChange={handleCommentChange}
+          style={{
+            marginTop: "1rem",
+            width: "20rem",
+          }}
+          >
+          
+        </TextField>
+        </Grid>
+
+        <Grid item style={{display: "flex", alignItems:"center"}} > 
+        <Button
+          variant="outlined"
+          color="primary"
+          style={{marginTop: "1rem"}}
+          onClick={handleAddComment}
+        >
+          Send
+        
+        </Button>
+      </Grid>
+      </Grid>
       </Grid>
     </Grid>
   );
