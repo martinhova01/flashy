@@ -70,7 +70,7 @@ export default function SignUpPage() {
         
         </TextField>
       
-        <TextField placeholder="Passord" onChange={(e) => {setPassword(e.target.value)}} sx={{ fontFamily: "Monospace", paddingTop: "15px", paddingBottom: "20px" }}>
+        <TextField placeholder="Passord" type="password" onChange={(e) => {setPassword(e.target.value)}} sx={{ fontFamily: "Monospace", paddingTop: "15px", paddingBottom: "20px" }}>
   
         </TextField>
       
