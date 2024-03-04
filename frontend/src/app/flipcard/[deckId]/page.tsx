@@ -74,7 +74,8 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
     if (cards && cards.length > 0) {
       setCard((prevCard) => (prevCard + 1) % cards.length);
       setIsFlipped(false);
-      const newProgress = ((card + 1) / cards.length) * 100;
+      const newProgress =
+        card === cards.length - 1 ? 0 : ((card + 1) / cards.length) * 100;
       setProgress(newProgress);
     }
   };
@@ -96,12 +97,25 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   }
 
   const handleHard = () => {
-    if (cards == undefined) {
+    if (cards === undefined || cards.length === 0) {
       console.log("Ingen kort :/");
-    } else {
-      cards.push(cards[card]);
-      handleNextCard();
+      return;
     }
+
+    const updatedCards = [...cards];
+    const tempCard = updatedCards[card];
+
+    // Remove the card at the current index
+    updatedCards.splice(card, 1);
+
+    // Add the removed card to the end of the array
+    updatedCards.push(tempCard);
+
+    // Update the state with the new array
+    setCards(updatedCards);
+
+    const newProgress = (card / updatedCards.length) * 100;
+    setProgress(newProgress);
   };
   
   

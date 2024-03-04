@@ -25,7 +25,7 @@ const Page = () => {
         if (profile.admin) {
           window.location.href = "/admin";
         } else {
-          window.location.href = "/homepage";
+          window.location.href = "/browse";
         }
       } else {
         alert("feil epost eller passord.")

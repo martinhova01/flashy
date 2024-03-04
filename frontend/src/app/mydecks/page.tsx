@@ -14,13 +14,13 @@ import { DeckDto } from "../utils/dto/DeckDto";
 import { requests } from "../utils/Api/requests";
 import { CardDto } from "../utils/dto/CardDto";
 
-const HomePage: React.FC = () => {
+const MyDecksPage: React.FC = () => {
   
   const [decks, setDecks] = useState<DeckDto[]>( getProfile().ownedDecks );
   
   const addNewDeckButtonPressed = async () => {
     const emptyCard: CardDto = {cardNumber: 0, frontpageString: "", frontpagePicture: "", backpageString: "", backpagePicture: ""};
-    const newDeck: DeckDto = {deckId: 0, deckName: `Nytt dekk ${Math.ceil(Math.random() * 1000)}`, cardList: [emptyCard]};
+    const newDeck: DeckDto = {deckId: 0, deckName: `Nytt dekk ${Math.ceil(Math.random() * 1000)}`, cardList: [emptyCard], visibility: false};
     await requests.addNewDeck(newDeck, getProfile().profileId );
     await reloadProfile();
     setDecks( getProfile().ownedDecks );
@@ -42,7 +42,7 @@ const HomePage: React.FC = () => {
   
   return (
     <div>
-      <Navbar selected={0}/>
+      <Navbar selected={1}/>
 
       <Grid
         container
@@ -89,4 +89,4 @@ const HomePage: React.FC = () => {
   );
 };
 
-export default HomePage;
+export default MyDecksPage;
