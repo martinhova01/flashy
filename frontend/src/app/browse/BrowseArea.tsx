@@ -15,7 +15,7 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
     
     return (
         <Grid item padding={props.itemPadding} xs={12} sm={6} md={6} lg={4}>
-            <Button sx={{width: "100%"}} onClick={ () => { window.location.href = `/view/${props.deck.deckId}` } }>
+            <Button sx={{width: "100%"}} onClick={ () => { window.location.href = `/flipcard/${props.deck.deckId}` } }>
                 
                 <Grid container direction={"column"} spacing="10px">
                     

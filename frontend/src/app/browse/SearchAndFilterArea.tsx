@@ -1,18 +1,28 @@
 import { Box, Grid, TextField, Typography } from "@mui/material";
-import { getProfile } from "../utils/LocalStorage/profile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DeckDto } from "../utils/dto/DeckDto";
+import { requests } from "../utils/Api/requests";
 
-export function SearchAndFilterArea(props: {itemPadding: string, filterWidth: number, setDecks: any}) {
+export function SearchAndFilterArea(props: {itemPadding: string, filterWidth: number, decks: DeckDto[], setDecks: any}) {
     
     // Bruk `setDecks` til å oppdatere hvilke decks som vises i browsing-siden :)
     const setDecks = props.setDecks;
+    const decks = props.decks;
     
-    // Når API-endepunktet er definert, må denne oppdateres for å få inn alle relevante decks.
-    const [alldecks, setAllDecks] = useState<DeckDto[]>( getProfile().ownedDecks );
+    const [alldecks, setAllDecks] = useState<DeckDto[]>();
 
 
-    const search = (searchWord: string) => {
+    const search = async (searchWord: string) => {
+        
+            //check if alldecks have been set
+        if (alldecks == undefined) {
+            return;
+        }
+
+        if (searchWord == "") {
+            setDecks(alldecks)
+            return;
+        }
 
         const foundDecks: DeckDto[] = [];
 
@@ -21,13 +31,26 @@ export function SearchAndFilterArea(props: {itemPadding: string, filterWidth: nu
             if (deck.deckName.toLowerCase().startsWith(searchWord.toLowerCase())) {
 
                 foundDecks.push(deck);
-
             }
         }
 
         setDecks(foundDecks);
         
     }
+
+    const resetAllDecks = async () => {
+        try {
+          const request = await requests.getAllPublicDecks();
+    
+          setAllDecks(request);
+        } catch (error) {
+          console.error("Error fetching decks:", error);
+        }
+      };
+
+    useEffect(() => {
+        resetAllDecks();
+    }, []);
     
     return (
         
