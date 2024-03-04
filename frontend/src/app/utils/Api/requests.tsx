@@ -115,11 +115,17 @@ export const requests = {
     return response.data;
   },
 
+
   getCardsByDeckId: async function (deckId: number): Promise<CardDto[]> {
     const requestParams = {
       deckId: Number(deckId),
     };
     const response = await api.get("/cardsByDeckId", { params: requestParams });
+    return response.data;
+  },
+  
+  getAllPublicDecks: async function (): Promise<DeckDto[]> {
+    const response = await api.get("/decks");
     return response.data;
   },
 };

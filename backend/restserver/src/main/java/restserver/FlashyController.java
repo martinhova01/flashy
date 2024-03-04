@@ -5,6 +5,7 @@ import core.Deck;
 import core.Profile;
 import db.DbConnection;
 import java.util.ArrayList;
+import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -163,5 +164,10 @@ public class FlashyController {
     @GetMapping(path = "/allprofiles")
     public ArrayList<Profile> getAllProfiles() {
         return dbConnection.getAllProfiles();
+    }
+
+    @GetMapping(path = "/decks")
+    public List<Deck> getAllPublicDecks() {
+        return dbConnection.getAllPublicDecks();
     }
 }

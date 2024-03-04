@@ -6,4 +6,5 @@ export type DeckDto = {
     deckName: String;
     cardList: CardDto[];
     visibility: boolean;
+    category: String;
 }
