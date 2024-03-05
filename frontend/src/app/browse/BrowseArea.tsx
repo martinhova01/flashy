@@ -1,12 +1,13 @@
 import { Button, ButtonBase, Card, Grid, IconButton, Typography } from "@mui/material";
 import { DeckDto } from "../utils/dto/DeckDto";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import { getProfile } from "@/app/utils/LocalStorage/profile";
 import { yellow } from '@mui/material/colors';
+import { requests } from "../utils/Api/requests";
 
 
 export function BrowseArea(props: {decks: DeckDto[], browseWidth: number, itemPadding: string}) {
@@ -19,15 +20,36 @@ export function BrowseArea(props: {decks: DeckDto[], browseWidth: number, itemPa
 
 
 function DeckCard(props: {deck: DeckDto, itemPadding: string}) {   
-    const [liked, setLiked] = useState(false);
-    const [likesCount, setLikesCount] = useState(0);
-    const [favorited, setFavorited] = useState(false);
+    const [liked, setLiked] = useState<boolean>(false);
+    const [likesCount, setLikesCount] = useState<number>(0);
+    const [favorited, setFavorited] = useState<boolean>(false);
     const profile = getProfile();
+
     const handleLikeClick = (event: any) => {
         event.stopPropagation(); 
         setLiked(!liked);
         setLikesCount(liked ? likesCount - 1 : likesCount + 1); 
     };
+
+    const handleFavoriteClick = async (event: any) => {
+        event.stopPropagation();
+        const response: boolean = await requests.favorite(profile.profileId, props.deck.deckId);
+        setFavorited(response);
+    };
+
+    const fetchFavorite = async () => {
+        try {
+            const response: boolean = await requests.favoriteExists(profile.profileId, props.deck.deckId);
+            setFavorited(response);
+        } catch (error) {
+            console.error("Error fetching favorite:", error);
+        }
+    };
+  
+    useEffect(() => {
+        fetchFavorite();
+    }, []);
+
     
     return (
         <Grid item padding={props.itemPadding} xs={12} sm={6} md={6} lg={4}>
@@ -58,7 +80,6 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
                     
                     <Grid item container direction={"row"} alignContent={"center"} justifyContent={"space-between"} alignItems={"center"}>
                         
-                        {/* Change these when the API gets updated. */}
                         
                             <Typography variant="body1" textAlign={"left"} color="gray">
                                 {`${profile.firstname} ${profile.lastname}`}
@@ -73,7 +94,7 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
                                         {liked ? <FavoriteIcon color="error"/> : <FavoriteBorderIcon/>}
                                 </IconButton>
 
-                                <IconButton onClick={(event) => {event?.stopPropagation(); setFavorited(!favorited)}} 
+                                <IconButton onClick={handleFavoriteClick} 
                                     sx={{ color: favorited ? yellow[700] : 'action.active'}}>
                                         {favorited ? <StarIcon/> : <StarBorderIcon/>}
                                 </IconButton>
