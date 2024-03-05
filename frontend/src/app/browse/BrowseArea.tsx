@@ -23,7 +23,7 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
     const [likesCount, setLikesCount] = useState(0);
     const [favorited, setFavorited] = useState(false);
     const profile = getProfile();
-    const handleLikeClick = (event) => {
+    const handleLikeClick = (event: any) => {
         event.stopPropagation(); 
         setLiked(!liked);
         setLikesCount(liked ? likesCount - 1 : likesCount + 1); 
