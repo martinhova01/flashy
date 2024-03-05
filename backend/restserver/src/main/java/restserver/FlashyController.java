@@ -1,5 +1,6 @@
 package restserver;
 
+import core.Card;
 import core.Deck;
 import core.Profile;
 import db.DbConnection;
@@ -65,6 +66,12 @@ public class FlashyController {
     public Profile getProfileById(@RequestParam int profileId) {
         return dbConnection.getProfileById(profileId);
     }
+
+    @GetMapping (path = "/cardsByDeckId")
+    public ArrayList<Card> getCardsByDeckId(@RequestParam int deckId) {
+        return dbConnection.getDeckById(deckId);
+    }
+    
 
     /**
      * Add a new profile to the database.

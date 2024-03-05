@@ -2,23 +2,38 @@
 
 import { Grid, Container, Typography } from "@mui/material";
 import Navbar from "../components/Navbar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DeckDto } from "../utils/dto/DeckDto";
-import { getProfile } from "../utils/LocalStorage/profile";
 import { BrowseArea } from "./BrowseArea";
 import { SearchAndFilterArea } from "./SearchAndFilterArea";
+import { requests } from "../utils/Api/requests";
+import { getProfile } from "../utils/LocalStorage/profile";
 
 export default function BrowsePage() {
     
-    // TODO: Akkurat nå starter vi med bare brukerens egne decks.
-    // Når API-endepunktet er definert, må denne oppdateres for å få inn alle relevante decks.
-    const [decks, setDecks] = useState<DeckDto[]>( getProfile().ownedDecks );
+    //start med brukerens egne sett som dummy verdi
+    const [decks, setDecks] = useState<DeckDto[]>(getProfile().ownedDecks);
     
     const filterWidth = 3;
     const browseWidth = 12 - filterWidth;
     
     const itemPaddingNumber = 5;
     const itemPaddingString = `${itemPaddingNumber}px`;
+
+
+    const fetchDecks = async () => {
+        try {
+            const request = await requests.getAllPublicDecks();
+
+            setDecks(request);
+        } catch (error) {
+            console.error("Error fetching decks:", error);
+        }
+    };
+    
+    useEffect(() => {
+        fetchDecks();
+    }, []);
     
     return <div>
         
@@ -36,7 +51,7 @@ export default function BrowsePage() {
                 
                 <Grid item container direction={"row"}>
                     
-                    <SearchAndFilterArea itemPadding={itemPaddingString} filterWidth={filterWidth} setDecks={setDecks} />
+                    <SearchAndFilterArea itemPadding={itemPaddingString} filterWidth={filterWidth} decks={decks} setDecks={setDecks} />
                     
                     <BrowseArea decks={decks} browseWidth={browseWidth} itemPadding={itemPaddingString} />
                     
