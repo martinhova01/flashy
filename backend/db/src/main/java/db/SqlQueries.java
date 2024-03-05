@@ -198,5 +198,54 @@ public class SqlQueries {
             Integer.toString(cardNumber), Integer.toString(deckId));
     }
 
+    /**
+     * Generate query to check if a profile has favorited a deck.
+     *
+     * @param profileId profileID
+     * @param deckId deckId
+     * @return the query as a string
+     */
+    public static String getFavoriteQuery(int profileId, int deckId) {
+        return String.format("SELECT * FROM favorite WHERE deck_id = %s AND profile_id = %s",
+            Integer.toString(deckId), Integer.toString(profileId));
+    }
+
+    /**
+     * Generate query to delete a row from the favorite table. 
+     *
+     * @param profileId profileID
+     * @param deckId deckId
+     * @return the query as a String
+     */
+    public static String deleteFavoriteQuery(int profileId, int deckId) {
+        return String.format("DELETE FROM favorite WHERE deck_id = %s AND profile_id = %s",
+        Integer.toString(deckId), Integer.toString(profileId));
+    }
+
+    /**
+     * Generate query to adda row to the favorite table.
+     *
+     * @param profileId profileID
+     * @param deckId deckId
+     * @return the query as a String
+     */
+    public static String addFavoriteQuery(int profileId, int deckId) {
+        return String.format("INSERT INTO favorite (deck_id, profile_id) VALUES (%s, %s)",
+            Integer.toString(deckId), Integer.toString(profileId));
+    }
+
+    /**
+     * Generates query to get all decks favorited by a profile. 
+     *
+     * @param profileId the profile
+     * @return the query as a string
+     */
+    public static String getFavoriteDecksQuery(int profileId) {
+        return String.format("SELECT deck.deck_id, deck.name, deck.category, deck.is_public "
+            + "FROM favorite INNER JOIN deck ON (favorite.deck_id = deck.deck_id) "
+            + "WHERE favorite.profile_id = %s",
+            Integer.toString(profileId));
+    }
+
     
 }
