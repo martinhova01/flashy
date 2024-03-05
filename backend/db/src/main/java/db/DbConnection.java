@@ -696,4 +696,78 @@ public class DbConnection {
         return comments;
 
     }
+
+
+    /**
+     * If favorite row exists, delete row. Else add row 
+     *
+     * @param profileId the profile that favorites
+     * @param deckId the deck to favorite
+     * @return true if row was added, false if row was deleted
+     */
+    public boolean favorite(int profileId, int deckId) {
+        String query = "";
+        boolean ret = false;
+        if (favoriteExists(profileId, deckId)) {
+            query = SqlQueries.deleteFavoriteQuery(profileId, deckId);
+            ret = false;
+        } else {
+            query = SqlQueries.addFavoriteQuery(profileId, deckId);
+            ret = true;
+        }
+
+        try {
+            connection.createStatement().execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
+    }
+
+    private boolean favoriteExists(int profileId, int deckId) {
+        String query = SqlQueries.getFavoriteQuery(profileId, deckId);
+
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            return result.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    /**
+     * Get all decks favorited by this profile.
+     *
+     * @param profileId the profile
+     * @return the list of favorite decks
+     */
+    public List<Deck> getFavoriteDecks(int profileId) {
+        String query = SqlQueries.getFavoriteDecksQuery(profileId);
+
+        List<Deck> deckList = new ArrayList<>();
+        
+        try {
+            ResultSet result = connection.createStatement().executeQuery(query);
+            while (result.next()) {
+                String name = result.getString("name");
+                int deckId = result.getInt("deck_id");
+                boolean isPublic = result.getBoolean("is_public");
+                String category = result.getString("category");
+                Deck d = new Deck(name, deckId, isPublic, category);
+
+                this.addCardsToDeck(d);
+                
+                deckList.add(d);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return deckList;
+    }
 }

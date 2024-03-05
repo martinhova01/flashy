@@ -167,6 +167,11 @@ public class FlashyController {
         return dbConnection.getAllProfiles();
     }
 
+    /**
+     * Gets all public decks.
+     *
+     * @return the list of public decks
+     */
     @GetMapping(path = "/decks")
     public List<Deck> getAllPublicDecks() {
         return dbConnection.getAllPublicDecks();
@@ -204,4 +209,29 @@ public class FlashyController {
         }
     }
 
+
+    /**
+     * If the profile already favorites the deck, remove the favorite.
+     * Else add the deck as a favorite.
+     *
+     * @param profileId the profile
+     * @param deckId the deck
+     * @return true if favorite was added, false if favorite was deleted
+     */
+    @PutMapping(path = "/favorite")
+    public boolean favorite(@RequestParam int profileId, @RequestParam int deckId) {
+        return dbConnection.favorite(profileId, deckId);
+    }
+
+
+    /**
+     * Gets all decks favorited by the profile.
+     *
+     * @param profileId the profile
+     * @return the list of favorite decks
+     */
+    @GetMapping(path = "profiles/{profileId}/favorites")
+    public List<Deck> getFavoriteDecks(@PathVariable("profileId") int profileId) {
+        return dbConnection.getFavoriteDecks(profileId);
+    }
 }
