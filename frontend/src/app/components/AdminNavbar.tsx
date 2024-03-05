@@ -7,9 +7,9 @@ const AdminNavbar = (props: {selected: number}) => {
   
   // Legg til flere meny-elementer her
   const menuItems = [
-    { text: "Offentlige dekk", link: "/deck", function: null },
     { text: "Brukere", link: "/admin", function: null},
-    { text: "Logg ut", link: "/", function: null },
+    { text: "Offentlige dekk", link: "/deck", function: null },
+    { text: "Logg ut", link: "/", function: logOut },
   ]
   
   const reactElements = menuItems.map( item => {

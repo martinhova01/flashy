@@ -48,7 +48,7 @@ const page = () => {
 
   return (
     <Box sx={{ flexGrow: 1, padding: 3 }}>
-      <AdminNavbar selected={3} />
+      <AdminNavbar selected={1} />
       <Typography variant="h4" gutterBottom>
         Administrer offentlige dekk
       </Typography>
@@ -57,18 +57,11 @@ const page = () => {
       {decks && decks.length > 0 ? (
         <Grid container spacing={2} marginTop={2}>
           {decks.map((deck) => (
-            <Grid key={deck.deckId} item xs={12}>
+            <Grid key={deck.deckId} item xs={4}>
               <Paper elevation={3} sx={{ padding: 2 }}>
                 <Typography variant="h6">{deck.deckName}</Typography>
                 <Typography>{`Category: ${deck.category}`}</Typography>
                 <Typography>{`Deck ID: ${deck.deckId}`}</Typography>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => handleEdit(deck.deckId)}
-                >
-                  Edit
-                </Button>
                 <Button
                   variant="outlined"
                   color="error"
