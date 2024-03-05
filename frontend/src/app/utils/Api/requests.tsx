@@ -150,8 +150,23 @@ export const requests = {
     const requestParams = {
       profileId: profileId,
       deckId: deckId
-    }
-    const response = await api.put("/favorite", {params: requestParams})
+    };
+    const response = await api.put("/favorite", {}, {params: requestParams})
     return response.data;
-  }
+  },
+
+  /**
+   * Check if a profile has favorited a deck.
+   * @param profileId the profile
+   * @param deckId the deck
+   * @returns true if the profile has favorited the deck
+   */
+  favoriteExists: async function (profileId: number, deckId: number): Promise<boolean> {
+    const requestParams = {
+      profileId: profileId,
+      deckId: deckId
+    };
+    const response = await api.get("/favoriteExists", {params: requestParams});
+    return response.data;
+  },
 };

@@ -223,6 +223,18 @@ public class FlashyController {
         return dbConnection.favorite(profileId, deckId);
     }
 
+    /**
+     * Checks if a profile has favorited a deck. 
+     *
+     * @param profileId the profile
+     * @param deckId the deck
+     * @return true id profile has favorited the deck
+     */
+    @GetMapping(path = "/favoriteExists")
+    public boolean hasFavorited(@RequestParam int profileId, @RequestParam int deckId) {
+        return dbConnection.favoriteExists(profileId, deckId);
+    }
+
 
     /**
      * Gets all decks favorited by the profile.

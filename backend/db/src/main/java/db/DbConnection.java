@@ -725,7 +725,14 @@ public class DbConnection {
         return ret;
     }
 
-    private boolean favoriteExists(int profileId, int deckId) {
+    /**
+     * Checks if a row in favorite exists. 
+     *
+     * @param profileId the profile
+     * @param deckId the deck
+     * @return true if row exists
+     */
+    public boolean favoriteExists(int profileId, int deckId) {
         String query = SqlQueries.getFavoriteQuery(profileId, deckId);
 
         try {
