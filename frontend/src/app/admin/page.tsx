@@ -50,7 +50,7 @@ const page = () => {
     <Box sx={{ flexGrow: 1, padding: 3 }}>
       <AdminNavbar selected={0} />
       <Typography variant="h4" gutterBottom>
-        Admin
+        Administrer brukere
       </Typography>
       <Divider />
 
