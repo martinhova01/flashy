@@ -169,4 +169,9 @@ export const requests = {
     const response = await api.get("/favoriteExists", {params: requestParams});
     return response.data;
   },
+
+  getOwner: async function (deckId: number) {
+    const response = await api.get("/decks/" + deckId + "/owner");
+    return response.data;
+  },
 };
