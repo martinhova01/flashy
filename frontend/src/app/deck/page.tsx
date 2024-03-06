@@ -36,11 +36,6 @@ const page = () => {
     fetchDecks();
   }, []);
 
-  const handleEdit = (profileId: number) => {
-    // Redirect to the edit page
-    window.location.href = `/admin/${profileId}`;
-  };
-
   const handleDelete = (deckId: number) => {
     deleteDeck(deckId);
     setDecks(decks.filter((deck) => deck.deckId !== deckId));
