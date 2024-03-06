@@ -162,5 +162,9 @@ public class SqlQueries {
         email, password);
     }
 
+    public static String addComment(User userId,Deck deckId, String comment) {
+        
+    }
+
     
 }

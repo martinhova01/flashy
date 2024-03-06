@@ -47,3 +47,13 @@ CREATE TABLE favorite
     FOREIGN KEY (deck_id) REFERENCES deck(deck_id) ON DELETE CASCADE,
     FOREIGN KEY (profile_id) REFERENCES profile(profile_id) ON DELETE CASCADE
 );
+
+CREATE TABLE comments
+(   
+    profile_id            INTEGER,
+    deck_id               INTEGER,
+    comment             VARCHAR(2083),
+    FOREIGN KEY (profile_id) REFERENCES profile(profile_id) ON DELETE CASCADE,
+    FOREIGN KEY (deck_id) REFERENCES deck(deck_id) ON DELETE CASCADE,
+    PRIMARY KEY (profile_id, deck_id, comment)
+);
