@@ -250,7 +250,7 @@ public class SqlQueries {
     public static String getOwnerQuery(int deckId) {
         return String.format("SELECT profile.firstname, profile.lastname "
         + "FROM deck INNER JOIN profile ON (profile.profile_id = deck.owner_id) "
-        + "WHERE deck.owner_id = %s", Integer.toString(deckId));
+        + "WHERE deck.deck_id = %s", Integer.toString(deckId));
     }
 
 
