@@ -1,6 +1,6 @@
 "use client";
 
-import { Grid, Container, Typography } from "@mui/material";
+import { Grid, Container, Typography, Box } from "@mui/material";
 import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
 import { DeckDto } from "../utils/dto/DeckDto";
@@ -8,6 +8,7 @@ import { BrowseArea } from "./BrowseArea";
 import { SearchAndFilterArea } from "./SearchAndFilterArea";
 import { requests } from "../utils/Api/requests";
 import { getProfile } from "../utils/LocalStorage/profile";
+import DarkmodeSwitch from "../components/DarkmodeSwitch";
 
 export default function BrowsePage() {
     
@@ -60,6 +61,9 @@ export default function BrowsePage() {
             </Grid>
             
         </Container>
+        <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
+        <DarkmodeSwitch />
+      </Box>
         
     </div>
     
