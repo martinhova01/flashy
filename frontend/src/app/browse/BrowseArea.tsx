@@ -23,6 +23,7 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
     const [liked, setLiked] = useState<boolean>(false);
     const [likesCount, setLikesCount] = useState<number>(0);
     const [favorited, setFavorited] = useState<boolean>(false);
+    const [owner, setOwner] = useState<String>("");
     const profile = getProfile();
 
     const handleLikeClick = (event: any) => {
@@ -37,18 +38,20 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
         setFavorited(response);
     };
 
-    const fetchFavorite = async () => {
+    const fetch = async () => {
         try {
-            const response: boolean = await requests.favoriteExists(profile.profileId, props.deck.deckId);
-            setFavorited(response);
+            const fav: boolean = await requests.favoriteExists(profile.profileId, props.deck.deckId);
+            setFavorited(fav);
+            const o: String = await requests.getOwner(props.deck.deckId);
+            setOwner(o);
         } catch (error) {
             console.error("Error fetching favorite:", error);
         }
     };
   
     useEffect(() => {
-        fetchFavorite();
-    }, []);
+        fetch();
+    }, [props]);
 
     
     return (
@@ -82,7 +85,7 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
                         
                         
                             <Typography variant="body1" textAlign={"left"} color="gray">
-                                {`${profile.firstname} ${profile.lastname}`}
+                                {owner}
                             </Typography>
                         
                             <Grid item>
