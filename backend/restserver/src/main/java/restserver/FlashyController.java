@@ -246,4 +246,9 @@ public class FlashyController {
     public List<Deck> getFavoriteDecks(@PathVariable("profileId") int profileId) {
         return dbConnection.getFavoriteDecks(profileId);
     }
+
+    @GetMapping(path = "decks/{deckId}/owner")
+    public String getOwner(@PathVariable("deckId") int deckId) {
+        return dbConnection.getOwner(deckId);
+    }
 }

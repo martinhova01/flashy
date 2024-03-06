@@ -5,7 +5,7 @@ CREATE TABLE deck
     owner_id    INTEGER,
     is_public   BOOLEAN,
     category    VARCHAR(50),
-    FOREIGN KEY (owner_id) REFERENCES profile(deck_id) ON DELETE CASCADE
+    FOREIGN KEY (owner_id) REFERENCES profile(profile_id) ON DELETE CASCADE
 );
 
 CREATE TABLE profile

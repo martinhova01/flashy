@@ -247,6 +247,12 @@ public class SqlQueries {
             Integer.toString(profileId));
     }
 
+    public static String getOwnerQuery(int deckId) {
+        return String.format("SELECT profile.firstname, profile.lastname "
+        + "FROM deck INNER JOIN profile ON (profile.profile_id = deck.owner_id) "
+        + "WHERE deck.owner_id = %s", Integer.toString(deckId));
+    }
+
 
     /**
      * Generate SQL-query to get profile ID with email and password. 

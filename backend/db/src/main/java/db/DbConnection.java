@@ -777,4 +777,22 @@ public class DbConnection {
 
         return deckList;
     }
+
+
+    public String getOwner(int deckId) {
+        String query = SqlQueries.getOwnerQuery(deckId);
+
+        try {
+            ResultSet result = connection.createStatement().executeQuery(query);
+            result.next();
+            String firstName = result.getString("firstname");
+            String lastName = result.getString("lastname");
+
+            return firstName + " " + lastName;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
