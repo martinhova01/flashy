@@ -13,12 +13,14 @@ import {
   Paper,
   Avatar,
   Divider,
+  Box,
 } from "@mui/material";
 import { getProfile } from "@/app/utils/LocalStorage/profile";
 
 import { useEffect, useState } from "react";
 import ReactCardFlip from "react-card-flip";
 import { ProfileDto } from "@/app/utils/dto/ProfileDto";
+import DarkmodeSwitch from "@/app/components/DarkmodeSwitch";
 
 export default function flashcard({ params }: { params: { deckId: number } }) {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -319,6 +321,9 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
       </Grid>
       </Grid>
       </Grid>
+      <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
+        <DarkmodeSwitch />
+      </Box>
     </Grid>
   );
 }

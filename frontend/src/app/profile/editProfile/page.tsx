@@ -1,4 +1,5 @@
 'use client'
+import DarkmodeSwitch from '@/app/components/DarkmodeSwitch';
 import { requests } from '@/app/utils/Api/requests';
 import { ProfileDto } from '@/app/utils/dto/ProfileDto';
 import { Box, Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material'
@@ -218,6 +219,9 @@ const page = () => {
       </Button>
         </CardActions>
       </Card>
+      <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
+        <DarkmodeSwitch />
+      </Box>
     </Box>
 
     

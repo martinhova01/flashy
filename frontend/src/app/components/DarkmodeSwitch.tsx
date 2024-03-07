@@ -8,6 +8,7 @@ const DarkModeSwitch = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
     document.documentElement.style.backgroundColor = newDarkMode ? '#000' : '#fff';
+    document.documentElement.style.color = newDarkMode ? '#fff' : '#000';
   };
 
   return (

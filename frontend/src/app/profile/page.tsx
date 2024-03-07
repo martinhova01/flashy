@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { ProfileDto } from "../utils/dto/ProfileDto";
 import Navbar from "../components/Navbar";
+import DarkmodeSwitch from "../components/DarkmodeSwitch";
 
 const page = () => {
 
@@ -73,6 +74,9 @@ const page = () => {
           </Button>
         </CardActions>
       </Card>
+      <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
+        <DarkmodeSwitch />
+      </Box>
     </Box>
   );
 };
