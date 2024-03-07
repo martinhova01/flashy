@@ -5,7 +5,7 @@ CREATE TABLE deck
     owner_id    INTEGER,
     is_public   BOOLEAN,
     category    VARCHAR(50),
-    FOREIGN KEY (owner_id) REFERENCES profile(deck_id) ON DELETE CASCADE
+    FOREIGN KEY (owner_id) REFERENCES profile(profile_id) ON DELETE CASCADE
 );
 
 CREATE TABLE profile
@@ -21,29 +21,30 @@ CREATE TABLE profile
 
 CREATE TABLE card
 (
-    card_id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    card_id             INTEGER,
     front_page          VARCHAR(2000),
     front_page_picture  VARCHAR(2083),
     back_page           VARCHAR(2000),
     back_page_picture   VARCHAR(2083),
     deck_id             INTEGER,
+    PRIMARY KEY (card_id, deck_id)
     FOREIGN KEY (deck_id) REFERENCES deck(deck_id) ON DELETE CASCADE
 );
 
 CREATE TABLE user_like
 (
-    like_id              INTEGER PRIMARY KEY AUTOINCREMENT,
     deck_id              INTEGER,
     profile_id           INTEGER,
+    PRIMARY KEY (deck_id, profile_id),
     FOREIGN KEY (deck_id) REFERENCES deck(deck_id) ON DELETE CASCADE,
     FOREIGN KEY (profile_id) REFERENCES profile(profile_id) ON DELETE CASCADE
 );
 
 CREATE TABLE favorite
 (
-    favorite_id          INTEGER PRIMARY KEY AUTOINCREMENT,
     deck_id              INTEGER,
     profile_id           INTEGER,
+    PRIMARY KEY (deck_id, profile_id),
     FOREIGN KEY (deck_id) REFERENCES deck(deck_id) ON DELETE CASCADE,
     FOREIGN KEY (profile_id) REFERENCES profile(profile_id) ON DELETE CASCADE
 );

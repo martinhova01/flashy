@@ -10,6 +10,7 @@ const Navbar = (props: {selected: number}) => {
     { text: "Flashy", link: "/browse", function: null },
     { text: "Mine dekk", link: "/mydecks", function: null },
     { text: "Profil", link: "/profile", function: null },
+    { text: "Mine Favoritter", link: "/myFavorites", function: null },
     { text: "Logg ut", link: "/", function: logOut },
   ]
   

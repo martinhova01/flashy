@@ -169,21 +169,23 @@ public class DbConnection {
 
     private void seedCards() {
         String insertQuery = "INSERT INTO card"
-            + "(front_page, front_page_picture, back_page, back_page_picture, deck_id)"
-            + "VALUES (?, ?, ?, ?, ?)";
+            + "(card_id, front_page, front_page_picture, back_page, back_page_picture, deck_id)"
+            + "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
-            statement.setString(1, "Sample Front Page 1");
-            statement.setString(2, "front_page_picture_1.jpg");
-            statement.setString(3, "Sample Back Page 1");
-            statement.setString(4, "back_page_picture_1.jpg");
-            statement.setInt(5, 1);
+            statement.setInt(1, 0);
+            statement.setString(2, "Sample Front Page 1");
+            statement.setString(3, "front_page_picture_1.jpg");
+            statement.setString(4, "Sample Back Page 1");
+            statement.setString(5, "back_page_picture_1.jpg");
+            statement.setInt(6, 1);
             statement.executeUpdate();
 
-            statement.setString(1, "Sample Front Page 2");
-            statement.setString(2, "front_page_picture_2.jpg");
-            statement.setString(3, "Sample Back Page 2");
-            statement.setString(4, "back_page_picture_2.jpg");
-            statement.setInt(5, 2);
+            statement.setInt(1, 0);
+            statement.setString(2, "Sample Front Page 2");
+            statement.setString(3, "front_page_picture_2.jpg");
+            statement.setString(4, "Sample Back Page 2");
+            statement.setString(5, "back_page_picture_2.jpg");
+            statement.setInt(6, 2);
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -381,6 +383,7 @@ public class DbConnection {
 
     private void addCard(int deckId, Card c) {
         String query = SqlQueries.addCardQuery(
+            c.getCardNumber(),
             deckId,
             c.getFrontpageString(),
             c.getFrontpagePicture(),
@@ -436,20 +439,51 @@ public class DbConnection {
     /**
      * Update a deck in the database. 
      *
-     * @param deck the deck to update
+     * @param d the deck to update
      */
-    public void updateDeck(Deck deck) {
-        String getOwnerQuery = "SELECT owner_id FROM deck WHERE deck_id ="
-            + Integer.toString(deck.getDeckId()) + ";";
+    public void updateDeck(Deck d) {
+        String updateDeckQuery = SqlQueries.updateDeckQuery(
+            d.getDeckId(), d.getDeckName(), d.getVisibility(), d.getCategory());
         try {
-            ResultSet result = connection.createStatement().executeQuery(getOwnerQuery);
-            int ownerId = result.getInt("owner_id");
-            this.deleteDeck(deck.getDeckId());
-            this.addNewDeck(ownerId, deck);
+            Statement statement = connection.createStatement();
+            statement.execute(updateDeckQuery);
+
+            for (Card c : d.getCardList()) {
+
+                if (cardExists(c.getCardNumber(), d.getDeckId())) {
+                    String query = SqlQueries.updateCardQuery(
+                        c.getCardNumber(),
+                        d.getDeckId(),
+                        c.getFrontpageString(),
+                        c.getFrontpagePicture(),
+                        c.getBackpageString(),
+                        c.getBackpagePicture()
+                    );
+                    statement.execute(query);
+                } else {
+                    addCard(d.getDeckId(), c);
+                }
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean cardExists(int cardNumber, int deckId) {
+        String query = String.format(
+            "SELECT * FROM card WHERE card_id = %s AND deck_id = %s",
+            Integer.toString(cardNumber), Integer.toString(deckId));
+
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            return result.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+
     }
 
     /**
@@ -576,5 +610,104 @@ public class DbConnection {
         }
 
         return deckList;
+    }
+
+
+    /**
+     * If favorite row exists, delete row. Else add row 
+     *
+     * @param profileId the profile that favorites
+     * @param deckId the deck to favorite
+     * @return true if row was added, false if row was deleted
+     */
+    public boolean favorite(int profileId, int deckId) {
+        String query = "";
+        boolean ret = false;
+        if (favoriteExists(profileId, deckId)) {
+            query = SqlQueries.deleteFavoriteQuery(profileId, deckId);
+            ret = false;
+        } else {
+            query = SqlQueries.addFavoriteQuery(profileId, deckId);
+            ret = true;
+        }
+
+        try {
+            connection.createStatement().execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
+    }
+
+    /**
+     * Checks if a row in favorite exists. 
+     *
+     * @param profileId the profile
+     * @param deckId the deck
+     * @return true if row exists
+     */
+    public boolean favoriteExists(int profileId, int deckId) {
+        String query = SqlQueries.getFavoriteQuery(profileId, deckId);
+
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            return result.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+
+    /**
+     * Get all decks favorited by this profile.
+     *
+     * @param profileId the profile
+     * @return the list of favorite decks
+     */
+    public List<Deck> getFavoriteDecks(int profileId) {
+        String query = SqlQueries.getFavoriteDecksQuery(profileId);
+
+        List<Deck> deckList = new ArrayList<>();
+        
+        try {
+            ResultSet result = connection.createStatement().executeQuery(query);
+            while (result.next()) {
+                String name = result.getString("name");
+                int deckId = result.getInt("deck_id");
+                boolean isPublic = result.getBoolean("is_public");
+                String category = result.getString("category");
+                Deck d = new Deck(name, deckId, isPublic, category);
+
+                this.addCardsToDeck(d);
+                
+                deckList.add(d);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return deckList;
+    }
+
+
+    public String getOwner(int deckId) {
+        String query = SqlQueries.getOwnerQuery(deckId);
+
+        try {
+            ResultSet result = connection.createStatement().executeQuery(query);
+            result.next();
+            String firstName = result.getString("firstname");
+            String lastName = result.getString("lastname");
+
+            return firstName + " " + lastName;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

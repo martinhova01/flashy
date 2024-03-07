@@ -128,4 +128,50 @@ export const requests = {
     const response = await api.get("/decks");
     return response.data;
   },
+
+  /**
+   * Get all decks favorited by the profile.
+   * @param profileId the id of the profile
+   * @returns the list of decks
+   */
+  getFavoriteDecks: async function (profileId: number): Promise<DeckDto[]> {
+    const response = await api.get("/profiles/" + profileId + "/favorites");
+    return response.data;
+  },
+
+  /**
+   * Add / remove favorite.
+   * 
+   * @param profileId the profile that favorites
+   * @param deckId the deck to favorite
+   * @returns true if favorite was added, false if favorite was removed
+   */
+  favorite: async function (profileId: number, deckId: number): Promise<boolean> {
+    const requestParams = {
+      profileId: profileId,
+      deckId: deckId
+    };
+    const response = await api.put("/favorite", {}, {params: requestParams})
+    return response.data;
+  },
+
+  /**
+   * Check if a profile has favorited a deck.
+   * @param profileId the profile
+   * @param deckId the deck
+   * @returns true if the profile has favorited the deck
+   */
+  favoriteExists: async function (profileId: number, deckId: number): Promise<boolean> {
+    const requestParams = {
+      profileId: profileId,
+      deckId: deckId
+    };
+    const response = await api.get("/favoriteExists", {params: requestParams});
+    return response.data;
+  },
+
+  getOwner: async function (deckId: number) {
+    const response = await api.get("/decks/" + deckId + "/owner");
+    return response.data;
+  },
 };
