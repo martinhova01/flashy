@@ -118,6 +118,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
 
     const newProgress = (card / updatedCards.length) * 100;
     setProgress(newProgress);
+    setIsFlipped(false);
   };
   
   
