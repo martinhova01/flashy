@@ -694,6 +694,12 @@ public class DbConnection {
     }
 
 
+    /**
+     * Get the name of the owner of a deck.
+     *
+     * @param deckId the deck
+     * @return the name as a string
+     */
     public String getOwner(int deckId) {
         String query = SqlQueries.getOwnerQuery(deckId);
 
@@ -708,6 +714,54 @@ public class DbConnection {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+
+    /**
+     * If user_like row exists, delete row. Else add row 
+     *
+     * @param profileId the profile that likes
+     * @param deckId the deck to like
+     * @return true if row was added, false if row was deleted
+     */
+    public boolean like(int profileId, int deckId) {
+        String query = "";
+        boolean ret = false;
+        if (likeExists(profileId, deckId)) {
+            query = SqlQueries.deleteLikeQuery(profileId, deckId);
+            ret = false;
+        } else {
+            query = SqlQueries.addLikeQuery(profileId, deckId);
+            ret = true;
+        }
+
+        try {
+            connection.createStatement().execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
+    }
+
+    /**
+     * Checks if a row in user_like exists. 
+     *
+     * @param profileId the profile
+     * @param deckId the deck
+     * @return true if row exists
+     */
+    public boolean likeExists(int profileId, int deckId) {
+        String query = SqlQueries.getLikeQuery(profileId, deckId);
+
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            return result.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }

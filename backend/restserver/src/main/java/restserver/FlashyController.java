@@ -217,4 +217,15 @@ public class FlashyController {
     public String getOwner(@PathVariable("deckId") int deckId) {
         return dbConnection.getOwner(deckId);
     }
+
+    @PutMapping(path = "like")
+    public boolean like(@RequestParam int profileId, @RequestParam int deckId) {
+        return dbConnection.like(profileId, deckId);
+    }
+
+    @GetMapping(path = "/likeExists")
+    public boolean likeExists(@RequestParam int profileId, @RequestParam int deckId) {
+        return dbConnection.likeExists(profileId, deckId);
+    }
+
 }

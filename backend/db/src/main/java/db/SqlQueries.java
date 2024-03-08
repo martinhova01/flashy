@@ -247,10 +247,52 @@ public class SqlQueries {
             Integer.toString(profileId));
     }
 
+    /**
+     * generate a query to get the owner name of a deck.
+     *
+     * @param deckId the deck id 
+     * @return the query as a string
+     */
     public static String getOwnerQuery(int deckId) {
         return String.format("SELECT profile.firstname, profile.lastname "
         + "FROM deck INNER JOIN profile ON (profile.profile_id = deck.owner_id) "
         + "WHERE deck.deck_id = %s", Integer.toString(deckId));
+    }
+
+    /**
+     * Generate query to check if a profile has liked a deck.
+     *
+     * @param profileId profileID
+     * @param deckId deckId
+     * @return the query as a string
+     */
+    public static String getLikeQuery(int profileId, int deckId) {
+        return String.format("SELECT * FROM user_like WHERE deck_id = %s AND profile_id = %s",
+            Integer.toString(deckId), Integer.toString(profileId));
+    }
+
+    /**
+     * Generate query to delete a row from the like table. 
+     *
+     * @param profileId profileID
+     * @param deckId deckId
+     * @return the query as a String
+     */
+    public static String deleteLikeQuery(int profileId, int deckId) {
+        return String.format("DELETE FROM user_like WHERE deck_id = %s AND profile_id = %s",
+        Integer.toString(deckId), Integer.toString(profileId));
+    }
+
+    /**
+     * Generate query to add a row to the like table.
+     *
+     * @param profileId profileID
+     * @param deckId deckId
+     * @return the query as a String
+     */
+    public static String addLikeQuery(int profileId, int deckId) {
+        return String.format("INSERT INTO user_like (deck_id, profile_id) VALUES (%s, %s)",
+            Integer.toString(deckId), Integer.toString(profileId));
     }
 
     
