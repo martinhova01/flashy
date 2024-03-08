@@ -295,5 +295,16 @@ public class SqlQueries {
             Integer.toString(deckId), Integer.toString(profileId));
     }
 
+    /**
+     * Generate query to get number of likes on a deck.
+     *
+     * @param deckId the deck
+     * @return the query as a string
+     */
+    public static String getNumberOfLikesQuery(int deckId) {
+        return String.format("SELECT count(*) as likes FROM user_like "
+            + "WHERE deck_id = %s", Integer.toString(deckId));
+    }
+
     
 }

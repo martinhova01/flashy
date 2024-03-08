@@ -549,7 +549,8 @@ public class DbConnection {
                 int deckId = deckResultSet.getInt("deck_id");
                 boolean isPublic = deckResultSet.getBoolean("is_public");
                 String category = deckResultSet.getString("category");
-                Deck d = new Deck(name, deckId, isPublic, category);
+                int likes = this.getNumberOfLikes(deckId);
+                Deck d = new Deck(name, deckId, isPublic, category, likes);
 
                 this.addCardsToDeck(d);
                 decks.add(d);
@@ -559,6 +560,22 @@ public class DbConnection {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    private int getNumberOfLikes(int deckId) {
+        String query = SqlQueries.getNumberOfLikesQuery(deckId);
+
+        try {
+            ResultSet result = connection.createStatement().executeQuery(query);
+            result.next();
+            int likes = result.getInt("likes");
+
+            return likes;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 
@@ -598,7 +615,8 @@ public class DbConnection {
                 int deckId = result.getInt("deck_id");
                 boolean isPublic = result.getBoolean("is_public");
                 String category = result.getString("category");
-                Deck d = new Deck(name, deckId, isPublic, category);
+                int likes = getNumberOfLikes(deckId);
+                Deck d = new Deck(name, deckId, isPublic, category, likes);
 
                 this.addCardsToDeck(d);
                 
@@ -679,7 +697,8 @@ public class DbConnection {
                 int deckId = result.getInt("deck_id");
                 boolean isPublic = result.getBoolean("is_public");
                 String category = result.getString("category");
-                Deck d = new Deck(name, deckId, isPublic, category);
+                int likes = this.getNumberOfLikes(deckId);
+                Deck d = new Deck(name, deckId, isPublic, category, likes);
 
                 this.addCardsToDeck(d);
                 
