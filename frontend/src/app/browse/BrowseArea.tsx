@@ -30,8 +30,7 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
         event.stopPropagation(); 
         const response: boolean = await requests.like(profile.profileId, props.deck.deckId);
         setLiked(response);
-
-        // setLikesCount(liked ? likesCount - 1 : likesCount + 1); 
+        setLikesCount(liked ? likesCount - 1 : likesCount + 1); 
     };
 
     const handleFavoriteClick = async (event: any) => {
@@ -42,6 +41,7 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
 
     const fetch = async () => {
         try {
+            setLikesCount(props.deck.likes);
             const fav: boolean = await requests.favoriteExists(profile.profileId, props.deck.deckId);
             setFavorited(fav);
             const like: boolean = await requests.likeExists(profile.profileId, props.deck.deckId);
