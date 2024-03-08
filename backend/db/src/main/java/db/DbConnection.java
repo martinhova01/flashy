@@ -627,6 +627,7 @@ public class DbConnection {
             e.printStackTrace();
         }
 
+        deckList.sort((d1, d2) -> d2.getLikes() - d1.getLikes());
         return deckList;
     }
 
