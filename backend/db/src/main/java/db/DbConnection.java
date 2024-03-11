@@ -1,6 +1,7 @@
 package db;
 
 import core.Card;
+import core.Comment;
 import core.Deck;
 import core.Profile;
 import java.io.BufferedReader;
@@ -119,6 +120,7 @@ public class DbConnection {
         seedCards();
         seedUserLikes();
         seedFavorites();
+        seedComments();
         System.out.println("Sample data seeded successfully.");
     }
 
@@ -223,6 +225,31 @@ public class DbConnection {
             e.printStackTrace();
         }
     }
+
+    private void seedComments() {
+        String insertQuery = 
+            "INSERT INTO comments (profile_id, deck_id, comment) VALUES (?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
+            // Comment for profile_id 1, deck_id 1
+            statement.setInt(1, 1);
+            statement.setInt(2, 1);
+            statement.setString(3, "Comment for profile_id 1, deck_id 1");
+            statement.executeUpdate();
+    
+            // Comment for profile_id 2, deck_id 2
+            statement.setInt(1, 2);
+            statement.setInt(2, 2);
+            statement.setString(3, "Comment for profile_id 2, deck_id 2");
+            statement.executeUpdate();
+    
+            // Add more comments as needed
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+
 
     /**
      * Atempts to get a profile with the given email and password from the database.
@@ -400,6 +427,12 @@ public class DbConnection {
         
     }
 
+
+    /**
+     * gets a deck to the database.
+     *
+     * @param deckId the deck to get
+     */
     public ArrayList<Card> getDeckById(int deckId) {
         ArrayList<Card> cards = new ArrayList<Card>();
         String query = SqlQueries.getCardsQuery(deckId);
@@ -420,6 +453,11 @@ public class DbConnection {
         return cards;
     }
 
+    /**
+     * checks if deck exsists.
+     *
+     * @param deckId the deck to add
+     */
     public Boolean deckExist(int deckId) {
         String query = SqlQueries.getCardsQuery(deckId);
 
@@ -610,6 +648,53 @@ public class DbConnection {
         }
 
         return deckList;
+    }
+
+
+    /**
+     * add comment to database.
+
+     * @param userId userId
+     * @param deckId deckId
+     * @param comment comment to deck
+     */
+    public void addComment(Integer userId, Integer deckId, String comment) {
+        String query = SqlQueries.addComment(userId, deckId, comment);
+
+        try {
+            connection.createStatement().executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * add comment to database.
+
+     * @param deckId deckId
+     */
+    public List<Comment> getDeckComments(Integer deckId) {
+        String query = SqlQueries.getDeckComments(deckId);
+
+        List<Comment> comments = new ArrayList<>();
+        
+        try {
+            ResultSet result = connection.createStatement().executeQuery(query);
+            while (result.next()) {
+                String firstname = result.getString("firstname");
+                String lastname = result.getString("lastname");
+                String comment = result.getString("comment");
+
+                Comment commentObj = new Comment(firstname, lastname, comment);
+
+                comments.add(commentObj);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return comments;
+
     }
 
 
