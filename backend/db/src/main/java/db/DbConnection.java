@@ -1,6 +1,7 @@
 package db;
 
 import core.Card;
+import core.Comment;
 import core.Deck;
 import core.Profile;
 import java.io.BufferedReader;
@@ -423,6 +424,12 @@ public class DbConnection {
         
     }
 
+
+    /**
+     * gets a deck to the database.
+     *
+     * @param deckId the deck to get
+     */
     public ArrayList<Card> getDeckById(int deckId) {
         ArrayList<Card> cards = new ArrayList<Card>();
         String query = SqlQueries.getCardsQuery(deckId);
@@ -443,6 +450,11 @@ public class DbConnection {
         return cards;
     }
 
+    /**
+     * checks if deck exsists.
+     *
+     * @param deckId the deck to add
+     */
     public Boolean deckExist(int deckId) {
         String query = SqlQueries.getCardsQuery(deckId);
 
@@ -602,5 +614,52 @@ public class DbConnection {
         }
 
         return deckList;
+    }
+
+
+    /**
+     * add comment to database.
+
+     * @param userId userId
+     * @param deckId deckId
+     * @param comment comment to deck
+     */
+    public void addComment(Integer userId, Integer deckId, String comment) {
+        String query = SqlQueries.addComment(userId, deckId, comment);
+
+        try {
+            connection.createStatement().executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * add comment to database.
+
+     * @param deckId deckId
+     */
+    public List<Comment> getDeckComments(Integer deckId) {
+        String query = SqlQueries.getDeckComments(deckId);
+
+        List<Comment> comments = new ArrayList<>();
+        
+        try {
+            ResultSet result = connection.createStatement().executeQuery(query);
+            while (result.next()) {
+                String firstname = result.getString("firstname");
+                String lastname = result.getString("lastname");
+                String comment = result.getString("comment");
+
+                Comment commentObj = new Comment(firstname, lastname, comment);
+
+                comments.add(commentObj);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return comments;
+
     }
 }

@@ -57,3 +57,4 @@ CREATE TABLE comments
     FOREIGN KEY (deck_id) REFERENCES deck(deck_id) ON DELETE CASCADE,
     PRIMARY KEY (profile_id, deck_id, comment)
 );
+

@@ -1,6 +1,7 @@
 package restserver;
 
 import core.Card;
+import core.Comment;
 import core.Deck;
 import core.Profile;
 import db.DbConnection;
@@ -170,4 +171,37 @@ public class FlashyController {
     public List<Deck> getAllPublicDecks() {
         return dbConnection.getAllPublicDecks();
     }
+
+    /**
+     * Updates a deck. 
+     *
+     * @param profileId profile_id
+     * @param deckId deck id
+     * @param comment comment
+     */
+    @PutMapping(path = "/comment")
+    public boolean addComment(@RequestParam int profileId,
+        @RequestParam int deckId, @RequestParam String comment) {
+        if (!dbConnection.profileExists(profileId) || !dbConnection.deckExist(deckId)){
+            return false;
+        } else {
+            dbConnection.addComment(profileId, deckId, comment);
+            return true;
+        }
+    }
+
+    /**
+     * gets all comments to specific deck.
+     *
+     * @return List with the comments
+     */
+    @GetMapping(path = "/deckComments")
+    public List<Comment> getCommentsByDeckId(@RequestParam int deckId) {
+        if (!dbConnection.deckExist(deckId)) {
+            return new ArrayList<Comment>();
+        } else {
+            return dbConnection.getDeckComments(deckId);
+        }
+    }
+
 }
