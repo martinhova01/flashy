@@ -1,5 +1,12 @@
-import { Button, ButtonBase, Card, Grid, Typography } from "@mui/material";
+import { Button, ButtonBase, Card, Grid, IconButton, Typography } from "@mui/material";
 import { DeckDto } from "../utils/dto/DeckDto";
+import { useState } from "react";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
+import { getProfile } from "@/app/utils/LocalStorage/profile";
+import { yellow } from '@mui/material/colors';
 
 
 export function BrowseArea(props: {decks: DeckDto[], browseWidth: number, itemPadding: string}) {
@@ -7,15 +14,24 @@ export function BrowseArea(props: {decks: DeckDto[], browseWidth: number, itemPa
     return <Grid container item xs={props.browseWidth} spacing="20px">
         {props.decks.map( deck => <DeckCard deck={deck} itemPadding={props.itemPadding} /> )}
     </Grid>
-    
+
 }
 
 
-function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
+function DeckCard(props: {deck: DeckDto, itemPadding: string}) {   
+    const [liked, setLiked] = useState(false);
+    const [likesCount, setLikesCount] = useState(0);
+    const [favorited, setFavorited] = useState(false);
+    const profile = getProfile();
+    const handleLikeClick = (event: any) => {
+        event.stopPropagation(); 
+        setLiked(!liked);
+        setLikesCount(liked ? likesCount - 1 : likesCount + 1); 
+    };
     
     return (
         <Grid item padding={props.itemPadding} xs={12} sm={6} md={6} lg={4}>
-            <Button sx={{width: "100%"}} onClick={ () => { window.location.href = `/view/${props.deck.deckId}` } }>
+            <Button sx={{width: "100%"}} onClick={ () => { window.location.href = `/flipcard/${props.deck.deckId}` } }>
                 
                 <Grid container direction={"column"} spacing="10px">
                     
@@ -39,21 +55,28 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
                         </Card>
                     </Grid>
                     
-                    <Grid item container direction={"row"}>
+                    <Grid item container direction={"row"} alignContent={"center"} justifyContent={"space-between"} alignItems={"center"}>
                         
                         {/* Change these when the API gets updated. */}
                         
-                        <Grid item xs={8}>
                             <Typography variant="body1" textAlign={"left"} color="gray">
-                                Brukernavn ...
+                                {`${profile.firstname} ${profile.lastname}`}
                             </Typography>
-                        </Grid>
                         
-                        <Grid item xs={4}>
-                            <Typography variant="body1" textAlign={"right"} color="red">
-                                0 likes
-                            </Typography>
-                        </Grid>
+                            <Grid item>
+                                <Typography variant="body2" sx={{ display: 'inline', marginRight: "8px" }}>
+                                        {likesCount}
+                                </Typography>
+
+                                <IconButton onClick={handleLikeClick} color="inherit">
+                                        {liked ? <FavoriteIcon color="error"/> : <FavoriteBorderIcon/>}
+                                </IconButton>
+
+                                <IconButton onClick={(event) => {event?.stopPropagation(); setFavorited(!favorited)}} 
+                                    sx={{ color: favorited ? yellow[700] : 'action.active'}}>
+                                        {favorited ? <StarIcon/> : <StarBorderIcon/>}
+                                </IconButton>
+                            </Grid>
                         
                     </Grid>
                     
