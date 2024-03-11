@@ -101,7 +101,11 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
                                         {favorited ? <StarIcon/> : <StarBorderIcon/>}
                                 </IconButton>
                             </Grid>
-                        
+
+                            <Typography variant="body1" textAlign={"left"} color="gray"> 
+                                {profile.school}
+                            </Typography>
+
                     </Grid>
                     
                 </Grid>

@@ -45,7 +45,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   }
 
   function handleBack() {
-    window.location.href = "/mydecks";
+    window.location.href = "/browse";
   }
 
   const fetchCard = async () => {
