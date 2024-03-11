@@ -1,11 +1,11 @@
-import { Button, ButtonBase, Card, Grid, Typography } from "@mui/material";
+import { Button, Card, Grid, Typography } from "@mui/material";
 import { DeckDto } from "../utils/dto/DeckDto";
 
 
 export function BrowseArea(props: {decks: DeckDto[], browseWidth: number, itemPadding: string}) {
     
     return <Grid container item xs={props.browseWidth} spacing="20px">
-        {props.decks.map( deck => <DeckCard deck={deck} itemPadding={props.itemPadding} /> )}
+        {props.decks.map( deck => <DeckCard deck={deck} itemPadding={props.itemPadding} key={deck.deckId} /> )}
     </Grid>
     
 }

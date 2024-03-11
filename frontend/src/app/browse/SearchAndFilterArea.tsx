@@ -3,34 +3,51 @@ import { useEffect, useState } from "react";
 import { DeckDto } from "../utils/dto/DeckDto";
 import { requests } from "../utils/Api/requests";
 import React from "react";
+import { categoryNames } from "../utils/dto/Categories";
 
 export function SearchAndFilterArea(props: {itemPadding: string, filterWidth: number, decks: DeckDto[], setDecks: any}) {
+    
     const setDecks = props.setDecks;
-    const decks = props.decks;
-    const [alldecks, setAllDecks] = useState<DeckDto[]>();
     const [searchWord, setSearchWord] = useState<string>("");
-    const [categories, setCategories] = useState<boolean[]>(new Array(9).fill(false)); // Endret til 9 da vi har fjernet en kategori
-
-
+    const [categories, setCategories] = useState<boolean[]>(new Array(categoryNames.length).fill(false)); // Endret til 9 da vi har fjernet en kategori
+    
     const search = async (searchWord: string, categories: boolean[]) => {
-        if (alldecks === undefined) {
+        if (props.decks === undefined) {
             return;
         }
-    
+        
+        const allDecks = await requests.getAllPublicDecks();
+        
         // Hvis søkeordet er tomt og ingen kategorier er valgt, vis alle dekkene
         if (searchWord === "" && categories.every(category => !category)) {
-            await setDecks(alldecks);
+            await setDecks(allDecks);
             return;
         }
-    
+        
         const foundDecks: DeckDto[] = [];
-    
-        for (var deck of alldecks) {
-            if (searchWord !== "" && deck.deckName.toLowerCase().startsWith(searchWord.toLowerCase())) {
-                if (categories.every((value, index) => value === false || (value === true && deck.category[index]))) {
+        
+        for (var deck of allDecks) {
+            
+            if (deck.deckName.toLowerCase().startsWith(searchWord.toLowerCase())) {
+                
+                const anyCategory = categories.every(category => !category);
+                
+                let isChecked = false;
+                
+                for (let index = 0; index < categories.length; index++) {
+                    
+                    if (deck.category === categoryNames[index]) {
+                        isChecked = categories[index];
+                    }
+                    
+                }
+                
+                if (anyCategory || isChecked) {
                     foundDecks.push(deck);
                 }
+                
             }
+            
         }
     
         await setDecks(foundDecks);
@@ -40,7 +57,7 @@ export function SearchAndFilterArea(props: {itemPadding: string, filterWidth: nu
     const resetAllDecks = async () => {
         try {
             const request = await requests.getAllPublicDecks();
-            setAllDecks(request);
+            setDecks(request);
         } catch (error) {
             console.error("Error fetching decks:", error);
         }
@@ -50,14 +67,14 @@ export function SearchAndFilterArea(props: {itemPadding: string, filterWidth: nu
         resetAllDecks();
     }, []);
 
-    const handleCategoryChange = (index: number, value: boolean) => {
+    const handleCategoryChange = async (index: number, value: boolean) => {
+        
         const updatedCategories = [...categories];
         updatedCategories[index] = value;
         setCategories(updatedCategories);
-
-        if (searchWord !== "") {
-            search(searchWord, updatedCategories);
-        }
+        
+        await search(searchWord, updatedCategories);
+        
     }
 
     return (
@@ -80,7 +97,7 @@ export function SearchAndFilterArea(props: {itemPadding: string, filterWidth: nu
                             sx={{ margin: '2rem' }}
                         />
                         <FormGroup sx={{marginLeft: "2rem"}}>
-                            {["Kunst og Musikk", "Historie og Religion", "IT", "Matematikk og Naturfag", "Medisin og Helse", "Samfunnsfag", "Språk og Litteratur", "Økonomi", "Annet"].map((category, index) => (
+                            {categoryNames.map((category, index) => (
                                 <FormControlLabel 
                                     key={index}
                                     control={<Checkbox checked={categories[index]} onChange={(event) => handleCategoryChange(index, event.target.checked)}/>} 

@@ -17,7 +17,8 @@ import { DeckDto } from "../../utils/dto/DeckDto";
 import { requests } from "../../utils/Api/requests";
 import { ProfileDto } from "../../utils/dto/ProfileDto";
 import { getProfile, reloadProfile } from "@/app/utils/LocalStorage/profile";
-import { categories } from "@/app/utils/dto/Categories";
+import { categoryNames } from "@/app/utils/dto/Categories";
+
 
 export default function EditDeck({params} : {params: {deckId: number}}) {
 
@@ -139,7 +140,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
                     value={category}
                     onChange={(e) => {setCategory(e.target.value)}}
                 >
-                    {categories.map(c => (
+                    {categoryNames.map(c => (
                         <FormControlLabel value={c} control={<Radio />} label={c} />
                     ))}
                 </RadioGroup>
