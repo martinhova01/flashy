@@ -304,7 +304,36 @@ public class SqlQueries {
     public static String getNumberOfLikesQuery(int deckId) {
         return String.format("SELECT count(*) as likes FROM user_like "
             + "WHERE deck_id = %s", Integer.toString(deckId));
+
+
+    /**
+     * Generate SQL-query to get profile ID with email and password. 
+     *
+     * @param userId userID
+     * @param deckId deckId
+     * @param comment comment from user on deck
+     * @return the query as a string
+     */
+    public static String addComment(Integer userId, Integer deckId, String comment) {
+        return String.format(
+            "INSERT INTO comments("
+            + "profile_id,deck_id,comment)"
+            + "VALUES('%s', '%s', '%s')", 
+            userId, deckId, comment);
     }
 
+    /**
+     * Query getting all comments to specific deck.
+     *
+     * @param deckId deckId
+     * @return the query as a string
+     */
+    public static String getDeckComments(Integer deckId) {
+        return String.format("SELECT firstname, lastname, comment FROM comments "
+                + "INNER JOIN profile ON comments.profile_id = profile.profile_id "
+                + "WHERE deck_id = '%s'", deckId);
+    }
+
+    
     
 }
