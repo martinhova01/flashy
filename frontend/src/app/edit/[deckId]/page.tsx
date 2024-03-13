@@ -19,9 +19,8 @@ import { ProfileDto } from "../../utils/dto/ProfileDto";
 import { getProfile, reloadProfile } from "@/app/utils/LocalStorage/profile";
 import { categories } from "@/app/utils/dto/Categories";
 
-export default function EditDeck({params} : {params: {deckId: number}}) {
 
-    
+export default function EditDeck({params} : {params: {deckId: number}}) {
 
     const profile: ProfileDto = getProfile();
     const oldDeck: DeckDto = getDeck(params.deckId);
@@ -33,6 +32,44 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
     const [cards, setCards] = useState<CardDto[]>(oldDeck.cardList);
     const [visibility, setVisbility] = useState<boolean>(oldDeck.visibility);
     const [category, setCategory] = useState<String>(oldDeck.category);
+    const [frontBaseImage, setFrontBaseImage] = useState("");
+    const [backBaseImage, setBackBaseImage] = useState("");
+
+
+    const uploadFrontImage = async (e : any) => {
+        const file = e.target.files[0];
+        const base64 = await convertBase64(file);
+        if (typeof base64 === 'string') {
+            setFrontBaseImage(base64);
+        }
+        console.log(frontBaseImage);
+      };
+      const uploadBackImage = async (e : any) => {
+        const file = e.target.files[0];
+        const base64 = await convertBase64(file);
+        if (typeof base64 === 'string') {
+            setBackBaseImage(base64);
+        }
+        console.log(backBaseImage);
+      };
+
+
+      const convertBase64 = (file : any) => {
+        return new Promise((resolve, reject) => {
+          const fileReader = new FileReader();
+          fileReader.readAsDataURL(file);
+    
+          fileReader.onload = () => {
+            resolve(fileReader.result);
+          };
+    
+          fileReader.onerror = (error) => {
+            reject(error);
+          };
+        });
+    };
+
+
 
 
     function getDeck(deckId: number): any{
@@ -49,10 +86,14 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
         if (cardNr + 1 == cards.length) {
             setFrontPage("");
             setBackPage("");
+            setBackBaseImage("");
+            setFrontBaseImage("");
         }
         else{
             setFrontPage(cards[cardNr + 1].frontpageString);
             setBackPage(cards[cardNr + 1].backpageString);
+            setBackBaseImage(`${cards[cardNr + 1].backpagePicture}`);
+            setFrontBaseImage(`${cards[cardNr + 1].frontpagePicture}`);
         }
         setCardNr(cardNr + 1);
     }
@@ -71,9 +112,9 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
         let card: CardDto = {
             cardNumber: 0,
             frontpageString: frontPage,
-            frontpagePicture: "",
+            frontpagePicture: frontBaseImage,
             backpageString: backPage,
-            backpagePicture: ""
+            backpagePicture: backBaseImage
         }
         let newCards = cards;
         newCards[cardNr] = card;
@@ -101,6 +142,8 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
     function handleBack(){
         window.location.href = "/mydecks";
     }
+
+
 
 
 
@@ -169,6 +212,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
                     }}
                     >
                         <CardContent>
+                            
                             <Typography
                             variant="h5"
                             component="div"
@@ -181,8 +225,19 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
                             >
                                 Forside
                             </Typography>
+                            <div className="App">
+      <input
+        type="file"
+        onChange={(e) => {
+          uploadFrontImage(e);
+        }}
+      />
+      <br></br>
+      <img src={frontBaseImage} height="200px" />
+    </div>
                             <TextField
                                 id="outlined-basic" label="skriv spørsmål her" value={frontPage} onChange={(e) => {setFrontPage(e.target.value)}} multiline rows={3} variant="outlined" sx={{margin: "2rem", width: 300}}/>  <br/>
+                                
                         </CardContent>
                     </Card>
 
@@ -207,9 +262,20 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
                         }}
                     >
                         Bakside
-                    </Typography>
+                    </Typography> 
+                    <div className="App">
+      <input
+        type="file"
+        onChange={(e) => {
+          uploadBackImage(e);
+        }}
+      />
+      <br></br>
+      <img src={backBaseImage} height="200px" />
+    </div>
                         <TextField
                             id="outlined-basic" label="skriv svar her" value={backPage} onChange={(e) => {setBackPage(e.target.value)}} multiline rows={3} variant="outlined" sx={{margin: "2rem", width: 300}}/>  <br/>
+                           
                     </CardContent>
                     </Card>
 
@@ -235,6 +301,9 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
 
             </Box>
         </Box>
+        <Typography>
+            tekst {backBaseImage}
+        </Typography>
     </div>
         
     )
