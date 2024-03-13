@@ -89,6 +89,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
             cardList: cards,
             visibility: visibility,
             category: category,
+            likes: 0,
         }
 
         await requests.updateDeck(deck);

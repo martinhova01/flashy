@@ -26,9 +26,10 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
     const [owner, setOwner] = useState<String>("");
     const profile = getProfile();
 
-    const handleLikeClick = (event: any) => {
+    const handleLikeClick = async (event: any) => {
         event.stopPropagation(); 
-        setLiked(!liked);
+        const response: boolean = await requests.like(profile.profileId, props.deck.deckId);
+        setLiked(response);
         setLikesCount(liked ? likesCount - 1 : likesCount + 1); 
     };
 
@@ -40,8 +41,11 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
 
     const fetch = async () => {
         try {
+            setLikesCount(props.deck.likes);
             const fav: boolean = await requests.favoriteExists(profile.profileId, props.deck.deckId);
             setFavorited(fav);
+            const like: boolean = await requests.likeExists(profile.profileId, props.deck.deckId);
+            setLiked(like);
             const o: String = await requests.getOwner(props.deck.deckId);
             setOwner(o);
         } catch (error) {

@@ -174,4 +174,35 @@ export const requests = {
     const response = await api.get("/decks/" + deckId + "/owner");
     return response.data;
   },
+
+  /**
+   * Check if a profile has liked a deck.
+   * @param profileId the profile
+   * @param deckId the deck
+   * @returns true if the profile has liked the deck
+   */
+  likeExists: async function (profileId: number, deckId: number): Promise<boolean> {
+    const requestParams = {
+      profileId: profileId,
+      deckId: deckId
+    };
+    const response = await api.get("/likeExists", {params: requestParams});
+    return response.data;
+  },
+
+  /**
+   * Add / remove like.
+   * 
+   * @param profileId the profile that likes
+   * @param deckId the deck to like
+   * @returns true if like was added, false if like was removed
+   */
+  like: async function (profileId: number, deckId: number): Promise<boolean> {
+    const requestParams = {
+      profileId: profileId,
+      deckId: deckId
+    };
+    const response = await api.put("/like", {}, {params: requestParams})
+    return response.data;
+  },
 };

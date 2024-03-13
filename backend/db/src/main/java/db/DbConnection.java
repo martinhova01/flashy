@@ -587,7 +587,8 @@ public class DbConnection {
                 int deckId = deckResultSet.getInt("deck_id");
                 boolean isPublic = deckResultSet.getBoolean("is_public");
                 String category = deckResultSet.getString("category");
-                Deck d = new Deck(name, deckId, isPublic, category);
+                int likes = this.getNumberOfLikes(deckId);
+                Deck d = new Deck(name, deckId, isPublic, category, likes);
 
                 this.addCardsToDeck(d);
                 decks.add(d);
@@ -597,6 +598,22 @@ public class DbConnection {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+    private int getNumberOfLikes(int deckId) {
+        String query = SqlQueries.getNumberOfLikesQuery(deckId);
+
+        try {
+            ResultSet result = connection.createStatement().executeQuery(query);
+            result.next();
+            int likes = result.getInt("likes");
+
+            return likes;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
         }
     }
 
@@ -636,7 +653,8 @@ public class DbConnection {
                 int deckId = result.getInt("deck_id");
                 boolean isPublic = result.getBoolean("is_public");
                 String category = result.getString("category");
-                Deck d = new Deck(name, deckId, isPublic, category);
+                int likes = getNumberOfLikes(deckId);
+                Deck d = new Deck(name, deckId, isPublic, category, likes);
 
                 this.addCardsToDeck(d);
                 
@@ -647,6 +665,7 @@ public class DbConnection {
             e.printStackTrace();
         }
 
+        deckList.sort((d1, d2) -> d2.getLikes() - d1.getLikes());
         return deckList;
     }
 
@@ -764,7 +783,8 @@ public class DbConnection {
                 int deckId = result.getInt("deck_id");
                 boolean isPublic = result.getBoolean("is_public");
                 String category = result.getString("category");
-                Deck d = new Deck(name, deckId, isPublic, category);
+                int likes = this.getNumberOfLikes(deckId);
+                Deck d = new Deck(name, deckId, isPublic, category, likes);
 
                 this.addCardsToDeck(d);
                 
@@ -779,6 +799,12 @@ public class DbConnection {
     }
 
 
+    /**
+     * Get the name of the owner of a deck.
+     *
+     * @param deckId the deck
+     * @return the name as a string
+     */
     public String getOwner(int deckId) {
         String query = SqlQueries.getOwnerQuery(deckId);
 
@@ -793,6 +819,54 @@ public class DbConnection {
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
+        }
+    }
+
+
+    /**
+     * If user_like row exists, delete row. Else add row 
+     *
+     * @param profileId the profile that likes
+     * @param deckId the deck to like
+     * @return true if row was added, false if row was deleted
+     */
+    public boolean like(int profileId, int deckId) {
+        String query = "";
+        boolean ret = false;
+        if (likeExists(profileId, deckId)) {
+            query = SqlQueries.deleteLikeQuery(profileId, deckId);
+            ret = false;
+        } else {
+            query = SqlQueries.addLikeQuery(profileId, deckId);
+            ret = true;
+        }
+
+        try {
+            connection.createStatement().execute(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
+    }
+
+    /**
+     * Checks if a row in user_like exists. 
+     *
+     * @param profileId the profile
+     * @param deckId the deck
+     * @return true if row exists
+     */
+    public boolean likeExists(int profileId, int deckId) {
+        String query = SqlQueries.getLikeQuery(profileId, deckId);
+
+        try {
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            return result.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         }
     }
 }
