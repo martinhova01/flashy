@@ -187,7 +187,7 @@ public class FlashyController {
     @PutMapping(path = "/comment")
     public boolean addComment(@RequestParam int profileId,
         @RequestParam int deckId, @RequestParam String comment) {
-        if (!dbConnection.profileExists(profileId) || !dbConnection.deckExist(deckId)){
+        if (!dbConnection.profileExists(profileId) || !dbConnection.deckExist(deckId)) {
             return false;
         } else {
             dbConnection.addComment(profileId, deckId, comment);
@@ -242,17 +242,17 @@ public class FlashyController {
      * @param profileId the profile
      * @return the list of favorite decks
      */
-    @GetMapping(path = "profiles/{profileId}/favorites")
+    @GetMapping(path = "/profiles/{profileId}/favorites")
     public List<Deck> getFavoriteDecks(@PathVariable("profileId") int profileId) {
         return dbConnection.getFavoriteDecks(profileId);
     }
 
-    @GetMapping(path = "decks/{deckId}/owner")
+    @GetMapping(path = "/decks/{deckId}/owner")
     public String getOwner(@PathVariable("deckId") int deckId) {
         return dbConnection.getOwner(deckId);
     }
 
-    @PutMapping(path = "like")
+    @PutMapping(path = "/like")
     public boolean like(@RequestParam int profileId, @RequestParam int deckId) {
         return dbConnection.like(profileId, deckId);
     }

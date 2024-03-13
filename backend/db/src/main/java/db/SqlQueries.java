@@ -304,6 +304,7 @@ public class SqlQueries {
     public static String getNumberOfLikesQuery(int deckId) {
         return String.format("SELECT count(*) as likes FROM user_like "
             + "WHERE deck_id = %s", Integer.toString(deckId));
+    }
 
 
     /**
