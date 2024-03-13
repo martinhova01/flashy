@@ -1,6 +1,7 @@
 package restserver;
 
 import core.Card;
+import core.Comment;
 import core.Deck;
 import core.Profile;
 import db.DbConnection;
@@ -177,6 +178,39 @@ public class FlashyController {
     }
 
     /**
+     * Updates a deck. 
+     *
+     * @param profileId profile_id
+     * @param deckId deck id
+     * @param comment comment
+     */
+    @PutMapping(path = "/comment")
+    public boolean addComment(@RequestParam int profileId,
+        @RequestParam int deckId, @RequestParam String comment) {
+        if (!dbConnection.profileExists(profileId) || !dbConnection.deckExist(deckId)) {
+            return false;
+        } else {
+            dbConnection.addComment(profileId, deckId, comment);
+            return true;
+        }
+    }
+
+    /**
+     * gets all comments to specific deck.
+     *
+     * @return List with the comments
+     */
+    @GetMapping(path = "/deckComments")
+    public List<Comment> getCommentsByDeckId(@RequestParam int deckId) {
+        if (!dbConnection.deckExist(deckId)) {
+            return new ArrayList<Comment>();
+        } else {
+            return dbConnection.getDeckComments(deckId);
+        }
+    }
+
+
+    /**
      * If the profile already favorites the deck, remove the favorite.
      * Else add the deck as a favorite.
      *
@@ -208,13 +242,24 @@ public class FlashyController {
      * @param profileId the profile
      * @return the list of favorite decks
      */
-    @GetMapping(path = "profiles/{profileId}/favorites")
+    @GetMapping(path = "/profiles/{profileId}/favorites")
     public List<Deck> getFavoriteDecks(@PathVariable("profileId") int profileId) {
         return dbConnection.getFavoriteDecks(profileId);
     }
 
-    @GetMapping(path = "decks/{deckId}/owner")
+    @GetMapping(path = "/decks/{deckId}/owner")
     public String getOwner(@PathVariable("deckId") int deckId) {
         return dbConnection.getOwner(deckId);
     }
+
+    @PutMapping(path = "/like")
+    public boolean like(@RequestParam int profileId, @RequestParam int deckId) {
+        return dbConnection.like(profileId, deckId);
+    }
+
+    @GetMapping(path = "/likeExists")
+    public boolean likeExists(@RequestParam int profileId, @RequestParam int deckId) {
+        return dbConnection.likeExists(profileId, deckId);
+    }
+
 }
