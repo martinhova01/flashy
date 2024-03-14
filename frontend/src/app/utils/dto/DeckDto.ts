@@ -7,4 +7,5 @@ export type DeckDto = {
     cardList: CardDto[];
     visibility: boolean;
     category: String;
+    likes: number;
 }

@@ -12,7 +12,7 @@ import { getProfile } from "../utils/LocalStorage/profile";
 export default function BrowsePage() {
     
     //start med brukerens egne sett som dummy verdi
-    const [decks, setDecks] = useState<DeckDto[]>(getProfile().ownedDecks);
+    const [decks, setDecks] = useState<DeckDto[]>([]);
     
     const filterWidth = 3;
     const browseWidth = 12 - filterWidth;
@@ -24,7 +24,6 @@ export default function BrowsePage() {
     const fetchDecks = async () => {
         try {
             const request = await requests.getAllPublicDecks();
-
             setDecks(request);
         } catch (error) {
             console.error("Error fetching decks:", error);

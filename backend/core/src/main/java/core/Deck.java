@@ -12,17 +12,19 @@ public class Deck {
     private int deckId;
     private boolean visibility;
     private String category;
+    private int likes;
 
     private List<Card> cardList;
 
     /**
      * Constructor.
      */
-    public Deck(String deckName, int deckId, boolean visibility, String category) {
+    public Deck(String deckName, int deckId, boolean visibility, String category, int likes) {
         this.deckName = deckName;
         this.deckId = deckId;
         this.visibility = visibility;
         this.category = category;
+        this.likes = likes;
         this.cardList = new ArrayList<>();
     }
 
@@ -73,6 +75,15 @@ public class Deck {
     public void setCategory(String category) {
         this.category = category;
     }
+
+    public int getLikes() {
+        return likes;
+    }
+
+    public void setLikes(int likes) {
+        this.likes = likes;
+    }
+    
     
 
 }

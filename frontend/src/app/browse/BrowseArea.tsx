@@ -14,7 +14,7 @@ import { request } from "http";
 export function BrowseArea(props: {decks: DeckDto[], browseWidth: number, itemPadding: string}) {
     
     return <Grid container item xs={props.browseWidth} spacing="20px">
-        {props.decks.map( deck => <DeckCard deck={deck} itemPadding={props.itemPadding} /> )}
+        {props.decks.map( deck => <DeckCard deck={deck} itemPadding={props.itemPadding} key={deck.deckId} /> )}
     </Grid>
 
 }
@@ -29,9 +29,10 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
 
     const profile = getProfile();
 
-    const handleLikeClick = (event: any) => {
+    const handleLikeClick = async (event: any) => {
         event.stopPropagation(); 
-        setLiked(!liked);
+        const response: boolean = await requests.like(profile.profileId, props.deck.deckId);
+        setLiked(response);
         setLikesCount(liked ? likesCount - 1 : likesCount + 1); 
     };
 
@@ -43,8 +44,11 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
 
     const fetch = async () => {
         try {
+            setLikesCount(props.deck.likes);
             const fav: boolean = await requests.favoriteExists(profile.profileId, props.deck.deckId);
             setFavorited(fav);
+            const like: boolean = await requests.likeExists(profile.profileId, props.deck.deckId);
+            setLiked(like);
             const o: String = await requests.getOwner(props.deck.deckId);
             setOwner(o);
             const os: String = await requests.getOwnerSchool(props.deck.deckId);
@@ -53,11 +57,10 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
             console.error("Error fetching favorite:", error);
         }
     };
-  
+    
     useEffect(() => {
         fetch();
     }, [props]);
-
     
     return (
         <Grid item padding={props.itemPadding} xs={12} sm={6} md={6} lg={4}>
