@@ -26,7 +26,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
     const [frontPage, setFrontPage] = useState<String>("");
     const [backPage, setBackPage] = useState<String>("");
     const [cards, setCards] = useState<CardDto[]>([]);
-    const [visibility, setVisbility] = useState<boolean>(false);
+    const [visibility, setVisbility] = useState<number>(0);
     const [category, setCategory] = useState<String>("");
 
     const fetchDeck = async () => {
@@ -104,6 +104,10 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
         window.location.href = "/mydecks";
     }
 
+    function handleVisibility(event: any) {
+        setVisbility(event.target.value);
+    }
+
     function handleBack(){
         window.location.href = "/mydecks";
     }
@@ -127,10 +131,11 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
                     aria-label="synlighet"
                     name="synlighet"
                     value={visibility}
-                    onChange={(e) => {setVisbility(!visibility)}}
+                    onChange={handleVisibility}
                 >
-                    <FormControlLabel value={true} control={<Radio />} label="offentlig" />
-                    <FormControlLabel value={false} control={<Radio />} label="privat" />
+                    <FormControlLabel value={2} control={<Radio />} label="Alle kan redigere" />
+                    <FormControlLabel value={1} control={<Radio />} label="Offentlig" />
+                    <FormControlLabel value={0} control={<Radio />} label="Privat" />
                 </RadioGroup>
                 <Typography
                     variant="h5"

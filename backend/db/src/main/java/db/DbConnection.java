@@ -124,18 +124,18 @@ public class DbConnection {
     }
 
     private void seedDecks() {
-        String insertQuery = "INSERT INTO deck (name, owner_id, is_public, category)"
+        String insertQuery = "INSERT INTO deck (name, owner_id, visibility, category)"
                 + "VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "Sample Deck 1");
             statement.setInt(2, 1);
-            statement.setBoolean(3, true);
+            statement.setInt(3, 1);
             statement.setString(4, "Annet");
             statement.executeUpdate();
 
             statement.setString(1, "Sample Deck 2");
             statement.setInt(2, 2);
-            statement.setBoolean(3, false);
+            statement.setInt(3, 0);
             statement.setString(4, "Annet");
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -437,10 +437,10 @@ public class DbConnection {
             result.next();
 
             String name = result.getString("name");
-            boolean isPublic = result.getBoolean("is_public");
+            int visibility = result.getInt("visibility");
             String category = result.getString("category");
             int likes = getNumberOfLikes(deckId);
-            Deck d = new Deck(name, deckId, isPublic, category, likes);
+            Deck d = new Deck(name, deckId, visibility, category, likes);
 
             this.addCardsToDeck(d);
             return d;
@@ -580,10 +580,10 @@ public class DbConnection {
             while (deckResultSet.next()) {
                 String name = deckResultSet.getString("name");
                 int deckId = deckResultSet.getInt("deck_id");
-                boolean isPublic = deckResultSet.getBoolean("is_public");
+                int visibility = deckResultSet.getInt("visibility");
                 String category = deckResultSet.getString("category");
                 int likes = this.getNumberOfLikes(deckId);
-                Deck d = new Deck(name, deckId, isPublic, category, likes);
+                Deck d = new Deck(name, deckId, visibility, category, likes);
 
                 this.addCardsToDeck(d);
                 decks.add(d);
@@ -637,7 +637,7 @@ public class DbConnection {
      * @return the list
      */
     public List<Deck> getAllPublicDecks() {
-        String query = "SELECT * FROM deck WHERE is_public = true";
+        String query = "SELECT * FROM deck WHERE visibility = 1 OR visibility = 2";
 
         List<Deck> deckList = new ArrayList<>();
 
@@ -646,10 +646,10 @@ public class DbConnection {
             while (result.next()) {
                 String name = result.getString("name");
                 int deckId = result.getInt("deck_id");
-                boolean isPublic = result.getBoolean("is_public");
+                int visibility = result.getInt("visibility");
                 String category = result.getString("category");
                 int likes = getNumberOfLikes(deckId);
-                Deck d = new Deck(name, deckId, isPublic, category, likes);
+                Deck d = new Deck(name, deckId, visibility, category, likes);
 
                 this.addCardsToDeck(d);
 
@@ -775,10 +775,10 @@ public class DbConnection {
             while (result.next()) {
                 String name = result.getString("name");
                 int deckId = result.getInt("deck_id");
-                boolean isPublic = result.getBoolean("is_public");
+                int visibility = result.getInt("visibility");
                 String category = result.getString("category");
                 int likes = this.getNumberOfLikes(deckId);
-                Deck d = new Deck(name, deckId, isPublic, category, likes);
+                Deck d = new Deck(name, deckId, visibility, category, likes);
 
                 this.addCardsToDeck(d);
 
