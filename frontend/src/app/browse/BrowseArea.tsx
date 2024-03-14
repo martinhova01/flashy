@@ -1,4 +1,4 @@
-import { Button, ButtonBase, Card, Grid, IconButton, Typography } from "@mui/material";
+import { Button, ButtonBase, Card, CardActions, Grid, IconButton, Typography } from "@mui/material";
 import { DeckDto } from "../utils/dto/DeckDto";
 import { useEffect, useState } from "react";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
@@ -8,7 +8,6 @@ import StarIcon from '@mui/icons-material/Star';
 import { getProfile } from "@/app/utils/LocalStorage/profile";
 import { yellow } from '@mui/material/colors';
 import { requests } from "../utils/Api/requests";
-import { request } from "http";
 
 
 export function BrowseArea(props: {decks: DeckDto[], browseWidth: number, itemPadding: string}) {
@@ -61,6 +60,10 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
     useEffect(() => {
         fetch();
     }, [props]);
+
+    const editDeckButtonPressed = (deckId: number) => {
+        window.location.href = "/edit/" + deckId;
+    }
     
     return (
         <Grid item padding={props.itemPadding} xs={12} sm={6} md={6} lg={4}>
@@ -117,6 +120,11 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
                 </Grid>
                 
             </Button>
+            {props.deck.visibility > 1 ? 
+                <Button onClick={ () => editDeckButtonPressed(props.deck.deckId) }>
+                    Rediger
+                </Button>
+            : null}
         </Grid>
     )
 }
