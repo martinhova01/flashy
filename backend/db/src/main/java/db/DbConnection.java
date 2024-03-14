@@ -17,20 +17,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 /**
  * Class that handles connection to the database.
  */
 public class DbConnection {
 
-    private static String filePath = 
-        System.getProperty("user.home") + System.getProperty("file.separator") + "flashy.db";
+    private static String filePath = System.getProperty("user.home") + System.getProperty("file.separator")
+            + "flashy.db";
 
     private Connection connection;
 
     /**
-     * Constructor. Atempts to connect to database. Creates database if not already created
+     * Constructor. Atempts to connect to database. Creates database if not already
+     * created
      */
     public DbConnection() {
         try {
@@ -46,9 +45,8 @@ public class DbConnection {
         }
     }
 
-
     /**
-     * Checks if database file has been created. 
+     * Checks if database file has been created.
      *
      * @return true if db exists.
      */
@@ -93,7 +91,7 @@ public class DbConnection {
             System.out.println("Error creating tables: " + e.getMessage());
         }
     }
-    
+
     /**
      * Creates db-file and fills db with tables.
      */
@@ -108,6 +106,7 @@ public class DbConnection {
             System.out.println("SQLite connection error: " + e.getMessage());
         }
     }
+
     /**
      * Seeds data into the tables.
      *
@@ -126,7 +125,7 @@ public class DbConnection {
 
     private void seedDecks() {
         String insertQuery = "INSERT INTO deck (name, owner_id, is_public, category)"
-            + "VALUES (?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "Sample Deck 1");
             statement.setInt(2, 1);
@@ -145,9 +144,8 @@ public class DbConnection {
     }
 
     private void seedProfiles() {
-        String insertQuery =
-            "INSERT INTO profile (email, password, firstname, lastname, school, is_admin) "
-            + "VALUES (?, ?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO profile (email, password, firstname, lastname, school, is_admin) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "user1@example.com");
             statement.setString(2, "password");
@@ -171,8 +169,8 @@ public class DbConnection {
 
     private void seedCards() {
         String insertQuery = "INSERT INTO card"
-            + "(card_id, front_page, front_page_picture, back_page, back_page_picture, deck_id)"
-            + "VALUES (?, ?, ?, ?, ?, ?)";
+                + "(card_id, front_page, front_page_picture, back_page, back_page_picture, deck_id)"
+                + "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setInt(1, 0);
             statement.setString(2, "Sample Front Page 1");
@@ -255,7 +253,7 @@ public class DbConnection {
      * Atempts to get a profile with the given email and password from the database.
      * Gets all the owned decks of the profile.
      *
-     * @param email email
+     * @param email    email
      * @param password password
      * @return the profile if found, null otherwise
      */
@@ -271,7 +269,7 @@ public class DbConnection {
             }
             int id = result.getInt("profile_id");
             return getProfileById(id);
-            
+
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -279,7 +277,7 @@ public class DbConnection {
     }
 
     /**
-     * Gets a list of all the emails registered in the database. 
+     * Gets a list of all the emails registered in the database.
      *
      * @return the list of emails
      */
@@ -300,15 +298,14 @@ public class DbConnection {
 
     }
 
-
     /**
-     * Adds a new profile to the database. 
+     * Adds a new profile to the database.
      *
      * @param p the profile to add
      */
     public void addProfile(Profile p) {
         String query = SqlQueries.addProfileQuery(
-            p.getEmail(), p.getPassword(), p.getFirstname(), p.getLastname(), p.getSchool());
+                p.getEmail(), p.getPassword(), p.getFirstname(), p.getLastname(), p.getSchool());
 
         try {
             Statement statement = this.connection.createStatement();
@@ -316,11 +313,11 @@ public class DbConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
     }
 
     /**
-     * Deletes a profile from the database. 
+     * Deletes a profile from the database.
      *
      * @param profileId the id of the profile to delete
      */
@@ -341,8 +338,8 @@ public class DbConnection {
      */
     public void updateProfile(Profile p) {
         String query = SqlQueries.updateProfileQuery(
-            p.getProfileId(), p.getEmail(), p.getPassword(), 
-            p.getFirstname(), p.getLastname(), p.getSchool(), p.isAdmin());
+                p.getProfileId(), p.getEmail(), p.getPassword(),
+                p.getFirstname(), p.getLastname(), p.getSchool(), p.isAdmin());
 
         try {
             Statement statement = this.connection.createStatement();
@@ -366,7 +363,6 @@ public class DbConnection {
             ResultSet result = statement.executeQuery(query);
             return result.next();
 
-
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -377,12 +373,12 @@ public class DbConnection {
      * Adds a new deck to the database.
      *
      * @param profileId the owner of the deck
-     * @param deck the deck to add
+     * @param deck      the deck to add
      */
     public void addNewDeck(int profileId, Deck deck) {
 
         String query = SqlQueries.addNewDeckQuery(profileId,
-            deck.getDeckName(), deck.getVisibility(), deck.getCategory());
+                deck.getDeckName(), deck.getVisibility(), deck.getCategory());
 
         try {
             Statement statement = this.connection.createStatement();
@@ -392,7 +388,7 @@ public class DbConnection {
             e.printStackTrace();
         }
 
-        //find out which ID was given to the new deck
+        // find out which ID was given to the new deck
         String getIdQuery = "SELECT max(deck_id) as max FROM deck;";
         try {
             ResultSet result = connection.createStatement().executeQuery(getIdQuery);
@@ -405,17 +401,16 @@ public class DbConnection {
             e.printStackTrace();
         }
 
-        
     }
 
     private void addCard(int deckId, Card c) {
         String query = SqlQueries.addCardQuery(
-            c.getCardNumber(),
-            deckId,
-            c.getFrontpageString(),
-            c.getFrontpagePicture(),
-            c.getBackpageString(),
-            c.getBackpagePicture());
+                c.getCardNumber(),
+                deckId,
+                c.getFrontpageString(),
+                c.getFrontpagePicture(),
+                c.getBackpageString(),
+                c.getBackpagePicture());
 
         try {
             Statement statement = this.connection.createStatement();
@@ -424,7 +419,7 @@ public class DbConnection {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
     }
 
 
@@ -466,22 +461,20 @@ public class DbConnection {
             ResultSet result = statement.executeQuery(query);
             return result.next();
 
-
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
 
-
     /**
-     * Update a deck in the database. 
+     * Update a deck in the database.
      *
      * @param d the deck to update
      */
     public void updateDeck(Deck d) {
         String updateDeckQuery = SqlQueries.updateDeckQuery(
-            d.getDeckId(), d.getDeckName(), d.getVisibility(), d.getCategory());
+                d.getDeckId(), d.getDeckName(), d.getVisibility(), d.getCategory());
         try {
             Statement statement = connection.createStatement();
             statement.execute(updateDeckQuery);
@@ -490,13 +483,12 @@ public class DbConnection {
 
                 if (cardExists(c.getCardNumber(), d.getDeckId())) {
                     String query = SqlQueries.updateCardQuery(
-                        c.getCardNumber(),
-                        d.getDeckId(),
-                        c.getFrontpageString(),
-                        c.getFrontpagePicture(),
-                        c.getBackpageString(),
-                        c.getBackpagePicture()
-                    );
+                            c.getCardNumber(),
+                            d.getDeckId(),
+                            c.getFrontpageString(),
+                            c.getFrontpagePicture(),
+                            c.getBackpageString(),
+                            c.getBackpagePicture());
                     statement.execute(query);
                 } else {
                     addCard(d.getDeckId(), c);
@@ -510,8 +502,8 @@ public class DbConnection {
 
     private boolean cardExists(int cardNumber, int deckId) {
         String query = String.format(
-            "SELECT * FROM card WHERE card_id = %s AND deck_id = %s",
-            Integer.toString(cardNumber), Integer.toString(deckId));
+                "SELECT * FROM card WHERE card_id = %s AND deck_id = %s",
+                Integer.toString(cardNumber), Integer.toString(deckId));
 
         try {
             Statement statement = this.connection.createStatement();
@@ -525,7 +517,7 @@ public class DbConnection {
     }
 
     /**
-     * Delete a deck with a given ID from the database. 
+     * Delete a deck with a given ID from the database.
      *
      * @param deckId the id of the deck to delete
      */
@@ -560,7 +552,7 @@ public class DbConnection {
     }
 
     /**
-     * Get a Profile with a given ID from the database. 
+     * Get a Profile with a given ID from the database.
      */
     public Profile getProfileById(int id) {
         String getProfileQuery = SqlQueries.getProfileQuery(id);
@@ -577,10 +569,9 @@ public class DbConnection {
             String school = profileResultSet.getString("school");
             boolean isAdmin = profileResultSet.getBoolean("is_admin");
 
-
             ResultSet deckResultSet = connection
-                .createStatement()
-                .executeQuery(SqlQueries.getOwnedDecksQuery(profileId));
+                    .createStatement()
+                    .executeQuery(SqlQueries.getOwnedDecksQuery(profileId));
             List<Deck> decks = new ArrayList<>();
             while (deckResultSet.next()) {
                 String name = deckResultSet.getString("name");
@@ -594,7 +585,7 @@ public class DbConnection {
                 decks.add(d);
             }
             return new Profile(profileId, emailResult, passwordResult,
-                firstname, lastname, school, isAdmin, decks);
+                    firstname, lastname, school, isAdmin, decks);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -620,8 +611,8 @@ public class DbConnection {
     private void addCardsToDeck(Deck deck) {
         try {
             ResultSet cardResultSet = connection
-                .createStatement()
-                .executeQuery(SqlQueries.getCardsQuery(deck.getDeckId()));
+                    .createStatement()
+                    .executeQuery(SqlQueries.getCardsQuery(deck.getDeckId()));
             while (cardResultSet.next()) {
                 int cardId = cardResultSet.getInt("card_id");
                 String frontPage = cardResultSet.getString("front_page");
@@ -645,7 +636,7 @@ public class DbConnection {
         String query = "SELECT * FROM deck WHERE is_public = true";
 
         List<Deck> deckList = new ArrayList<>();
-        
+
         try {
             ResultSet result = connection.createStatement().executeQuery(query);
             while (result.next()) {
@@ -657,7 +648,7 @@ public class DbConnection {
                 Deck d = new Deck(name, deckId, isPublic, category, likes);
 
                 this.addCardsToDeck(d);
-                
+
                 deckList.add(d);
             }
 
@@ -718,10 +709,10 @@ public class DbConnection {
 
 
     /**
-     * If favorite row exists, delete row. Else add row 
+     * If favorite row exists, delete row. Else add row
      *
      * @param profileId the profile that favorites
-     * @param deckId the deck to favorite
+     * @param deckId    the deck to favorite
      * @return true if row was added, false if row was deleted
      */
     public boolean favorite(int profileId, int deckId) {
@@ -745,10 +736,10 @@ public class DbConnection {
     }
 
     /**
-     * Checks if a row in favorite exists. 
+     * Checks if a row in favorite exists.
      *
      * @param profileId the profile
-     * @param deckId the deck
+     * @param deckId    the deck
      * @return true if row exists
      */
     public boolean favoriteExists(int profileId, int deckId) {
@@ -764,7 +755,6 @@ public class DbConnection {
         }
     }
 
-
     /**
      * Get all decks favorited by this profile.
      *
@@ -775,7 +765,7 @@ public class DbConnection {
         String query = SqlQueries.getFavoriteDecksQuery(profileId);
 
         List<Deck> deckList = new ArrayList<>();
-        
+
         try {
             ResultSet result = connection.createStatement().executeQuery(query);
             while (result.next()) {
@@ -787,7 +777,7 @@ public class DbConnection {
                 Deck d = new Deck(name, deckId, isPublic, category, likes);
 
                 this.addCardsToDeck(d);
-                
+
                 deckList.add(d);
             }
 
@@ -867,6 +857,22 @@ public class DbConnection {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public String getOwnerSchool(int deckId) {
+        String query = SqlQueries.getOwnerSchoolQuery(deckId);
+
+        try {
+            ResultSet result = connection.createStatement().executeQuery(query);
+            result.next();
+            String ownerSchool = result.getString("school");
+
+            return ownerSchool;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
