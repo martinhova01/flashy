@@ -52,11 +52,10 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
             console.error("Error fetching favorite:", error);
         }
     };
-  
+    
     useEffect(() => {
         fetch();
     }, [props]);
-
     
     return (
         <Grid item padding={props.itemPadding} xs={12} sm={6} md={6} lg={4}>

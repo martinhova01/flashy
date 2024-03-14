@@ -9,7 +9,7 @@ export function SearchAndFilterArea(props: {itemPadding: string, filterWidth: nu
     
     const setDecks = props.setDecks;
     const [searchWord, setSearchWord] = useState<string>("");
-    const [categories, setCategories] = useState<boolean[]>(new Array(categoryNames.length).fill(false)); // Endret til 9 da vi har fjernet en kategori
+    const [categories, setCategories] = useState<boolean[]>(new Array(categoryNames.length).fill(false));
     
     const search = async (searchWord: string, categories: boolean[]) => {
         if (props.decks === undefined) {
