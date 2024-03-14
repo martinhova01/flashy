@@ -17,11 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
-
-
-
-
 /**
  * Class that defines the REST API-endpoints.
  */
@@ -33,21 +28,20 @@ public class FlashyController {
     public static final String FLASHY_SERVICE_PATH = "/flashy/";
     private DbConnection dbConnection = new DbConnection();
 
-
     /**
-    * Check if the server is running.
-    *
-    * @return true if client is succesfully connected to server
-    */
+     * Check if the server is running.
+     *
+     * @return true if client is succesfully connected to server
+     */
     @GetMapping
     public boolean isRunning() {
         return true;
     }
 
     /**
-     * Gets a profile with the given email and password from the database. 
+     * Gets a profile with the given email and password from the database.
      *
-     * @param email email
+     * @param email    email
      * @param password password
      * @return the profile or null if profile does not exist
      */
@@ -57,7 +51,7 @@ public class FlashyController {
     }
 
     /**
-     * Gets a profile with the given id from the database. 
+     * Gets a profile with the given id from the database.
      *
      * @param profileId id
      * @return the profile or null if profile does not exist
@@ -67,11 +61,10 @@ public class FlashyController {
         return dbConnection.getProfileById(profileId);
     }
 
-    @GetMapping (path = "/cardsByDeckId")
+    @GetMapping(path = "/cardsByDeckId")
     public ArrayList<Card> getCardsByDeckId(@RequestParam int deckId) {
         return dbConnection.getDeckById(deckId);
     }
-    
 
     /**
      * Add a new profile to the database.
@@ -90,7 +83,7 @@ public class FlashyController {
     }
 
     /**
-     * Deletes the profile with the given ID. 
+     * Deletes the profile with the given ID.
      *
      * @param profileId the id to delete
      * @return true if successfully updated, false otherwise.
@@ -105,7 +98,7 @@ public class FlashyController {
     }
 
     /**
-     * Updates profile with given profileID. 
+     * Updates profile with given profileID.
      *
      * @param profile profile
      * @return true if successfully updated, false otherwise.
@@ -122,7 +115,7 @@ public class FlashyController {
     /**
      * Add a new deck.
      *
-     * @param deck the deck to add
+     * @param deck    the deck to add
      * @param ownerId the owner of the deck
      * @return true if successfully added, false if owner does not exist
      */
@@ -136,7 +129,7 @@ public class FlashyController {
     }
 
     /**
-     * Updates a deck. 
+     * Updates a deck.
      *
      * @param deck the deck to update
      */
@@ -146,7 +139,7 @@ public class FlashyController {
     }
 
     /**
-     * Delete a deck with a given ID. 
+     * Delete a deck with a given ID.
      *
      * @param deckId the id of the deck to delete
      */
@@ -154,7 +147,6 @@ public class FlashyController {
     public void deleteDeck(@PathVariable("deck_id") int deckId) {
         dbConnection.deleteDeck(deckId);
     }
-    
 
     /**
      * gets all userprofiles.
@@ -181,7 +173,7 @@ public class FlashyController {
      * Else add the deck as a favorite.
      *
      * @param profileId the profile
-     * @param deckId the deck
+     * @param deckId    the deck
      * @return true if favorite was added, false if favorite was deleted
      */
     @PutMapping(path = "/favorite")
@@ -190,17 +182,16 @@ public class FlashyController {
     }
 
     /**
-     * Checks if a profile has favorited a deck. 
+     * Checks if a profile has favorited a deck.
      *
      * @param profileId the profile
-     * @param deckId the deck
+     * @param deckId    the deck
      * @return true id profile has favorited the deck
      */
     @GetMapping(path = "/favoriteExists")
     public boolean hasFavorited(@RequestParam int profileId, @RequestParam int deckId) {
         return dbConnection.favoriteExists(profileId, deckId);
     }
-
 
     /**
      * Gets all decks favorited by the profile.
@@ -216,5 +207,10 @@ public class FlashyController {
     @GetMapping(path = "decks/{deckId}/owner")
     public String getOwner(@PathVariable("deckId") int deckId) {
         return dbConnection.getOwner(deckId);
+    }
+
+    @GetMapping(path = "decks/{deckId}/ownerSchool")
+    public String getOwnerSchool(@PathVariable("deckId") int deckId) {
+        return dbConnection.getOwnerSchool(deckId);
     }
 }
