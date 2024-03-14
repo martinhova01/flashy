@@ -1,6 +1,5 @@
 package restserver;
 
-import core.Card;
 import core.Comment;
 import core.Deck;
 import core.Profile;
@@ -62,8 +61,8 @@ public class FlashyController {
         return dbConnection.getProfileById(profileId);
     }
 
-    @GetMapping(path = "/cardsByDeckId")
-    public ArrayList<Card> getCardsByDeckId(@RequestParam int deckId) {
+    @GetMapping(path = "/decks/{deckId}")
+    public Deck getDeck(@PathVariable("deckId") int deckId) {
         return dbConnection.getDeckById(deckId);
     }
 

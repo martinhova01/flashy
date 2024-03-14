@@ -338,4 +338,9 @@ public class SqlQueries {
                 + "WHERE deck.deck_id = %s", Integer.toString(deckId));
     }
 
+    public static String getDeckByIdQuery(int deckId) {
+        return String.format("SELECT * FROM deck "
+            + "WHERE deck_id = %s", Integer.toString(deckId));
+    }
+
 }

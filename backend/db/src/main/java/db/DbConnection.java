@@ -428,24 +428,28 @@ public class DbConnection {
      *
      * @param deckId the deck to get
      */
-    public ArrayList<Card> getDeckById(int deckId) {
-        ArrayList<Card> cards = new ArrayList<Card>();
-        String query = SqlQueries.getCardsQuery(deckId);
+    public Deck getDeckById(int deckId) {
+        String query = SqlQueries.getDeckByIdQuery(deckId);
+
         try {
-            ResultSet cardResultSet = connection.createStatement().executeQuery(query);
-            while (cardResultSet.next()) {
-                int cardId = cardResultSet.getInt("card_id");
-                String frontPage = cardResultSet.getString("front_page");
-                String frontPagePic = cardResultSet.getString("front_page_picture");
-                String backPage = cardResultSet.getString("back_page");
-                String backPagePic = cardResultSet.getString("back_page_picture");
-                cards.add(new Card(cardId, frontPage, backPage, frontPagePic, backPagePic));
-            }
+            Statement statement = this.connection.createStatement();
+            ResultSet result = statement.executeQuery(query);
+            result.next();
+
+            String name = result.getString("name");
+            boolean isPublic = result.getBoolean("is_public");
+            String category = result.getString("category");
+            int likes = getNumberOfLikes(deckId);
+            Deck d = new Deck(name, deckId, isPublic, category, likes);
+
+            this.addCardsToDeck(d);
+            return d;
+
+
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-
-        return cards;
     }
 
     /**
