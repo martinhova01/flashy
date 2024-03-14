@@ -5,20 +5,14 @@ import { CardDto } from "@/app/utils/dto/CardDto";
 import {
   Typography,
   Grid,
-  Card,
-  CardContent,
   Button,
-  LinearProgress,
-  TextField,
-  Paper,
-  Avatar,
-  Divider,
+  Container,
 } from "@mui/material";
 import { getProfile } from "@/app/utils/LocalStorage/profile";
 
 import { useEffect, useState } from "react";
-import ReactCardFlip from "react-card-flip";
-import { ProfileDto } from "@/app/utils/dto/ProfileDto";
+import CommentSection from "./CommentSection";
+import FlipCardArea from "./FlipCardArea";
 
 export default function flashcard({ params }: { params: { deckId: number } }) {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -32,6 +26,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   const [progress, setProgress] = useState(0);
   const [comment, setComment] = useState(''); //Nåværende kommentar
   const [comments, setComments] = useState<string[]>([]); //lagrer kommentar
+  const [sendCommentColor, setSendCommentColor] = useState<string>("#ffffff");
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setComment(event.target.value);
@@ -45,7 +40,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   }
 
   function handleBack() {
-    window.location.href = "/mydecks";
+    window.location.href = "/browse";
   }
 
   const fetchCard = async () => {
@@ -97,229 +92,72 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
     }
     return cardsArray;
   }
-
+  
   const handleHard = () => {
     if (cards === undefined || cards.length === 0) {
       console.log("Ingen kort :/");
       return;
     }
-
+    
     const updatedCards = [...cards];
     const tempCard = updatedCards[card];
-
+    
     // Remove the card at the current index
     updatedCards.splice(card, 1);
-
+    
     // Add the removed card to the end of the array
     updatedCards.push(tempCard);
-
+    
     // Update the state with the new array
     setCards(updatedCards);
-
+    
     const newProgress = (card / updatedCards.length) * 100;
     setProgress(newProgress);
     setIsFlipped(false);
   };
   
+  const metadata: string[] = [
+    profile.firstname + " " + profile.lastname + " sitt dekk",
+    "(navn på dekket)"
+  ]
   
-
   return (
-    <Grid 
-      container 
-      spacing={2}
-      style={{
-        padding: "1rem"
-      }}
-      >
-      <Grid 
-      item xs={12}
-      style={{ 
-        display: "flex", 
-        justifyContent: "flex-end",
+    
+    <Container>
+      
+      <Grid container direction={"column"}>
         
-      }}
-      >
-        <Button
-          variant="outlined"
-          style={{ margin: "1rem" }}
-          onClick={handleBack}
-        >
-          Tilbake
-        </Button>
-      </Grid>
-
-      <Grid 
-        item xs= {12}
-        md={7}
-        style={{ 
-          display: "flex", 
-          flexDirection: "column", 
-          alignContent: "center", 
-          justifyContent: "center" }}
-        >
-        <LinearProgress 
-        variant="determinate" 
-        value={progress}
-        style={{ width: "35rem"}}  
-        />
-
-
-        <ReactCardFlip 
-          flipDirection="horizontal" 
-          isFlipped={isFlipped}>
-
-          <Card 
-            className={"card"} 
-            onClick={handleFlip}
-            style={{ 
-              width: "35rem", 
-              height: "25rem", 
-              marginBottom: "1rem"}}>
-            <CardContent
-              sx={{
-                width: "35rem",
-                height: "25rem",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography variant="h5" component="h2">
-                {cards && cards.length > 0
-                  ? cards[card]!.frontpageString
-                  : "Loading"}
-              </Typography>
-
-            </CardContent>
-          </Card>
-
-          <Card 
-            className="card card-back" 
-            onClick={handleFlip}
-            style={{
-              width: "35rem",
-              height: "25rem",
-              marginBottom: "1rem"
-            }}
-            >
-            <CardContent
-              sx={{
-                width: "35rem",
-                height: "25rem",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Typography variant="h5" component="h2">
-                {cards && cards.length > 0
-                  ? cards[card]!.backpageString
-                  : "Loading"}
-              </Typography>
-            </CardContent>
-          </Card>
-        </ReactCardFlip>
-
-        <div>
-
-        <Button
-          variant="outlined"
-          color="error"
-          style={{ margin: "1rem" }}
-          onClick={handleHard}
-        >
-          Vanskelig
-        </Button>
-
-        <Button
-          variant="outlined"
-          color="success"
-          style={{ marginLeft: "1rem" }}
-          onClick={handleNextCard}
-        >
-          Lett
-        </Button>
-
-        <Button
-          variant="outlined"
-          style={{ margin: "1rem" }}
-          onClick={handleShuffleOnly}
-        >
-          Stokk kort
-        </Button>
-
-        <Button
-          variant="outlined"
-          style={{ margin: "1rem" }}
-          onClick={handleResetOrder}
-        >
-          Tilbakestill rekkefølge
-        </Button>
-
-        </div>
-      </Grid>
-
-
-      <Grid style={{paddingTop: "2rem"}}>
-      <Paper 
-        style={{
-          height: "30rem",
-          maxHeight: 300,
-          overflow: "auto",
-          width:"23rem"
-        }}>
-          <Typography  
-            style={{ marginBottom: '1rem' }}>
-                Kommentarer
-          </Typography>
-        {comments.map((comment, index) => (
-          <Paper key={index} style={{ padding: "1rem 1rem", marginBottom: '1rem' }}>
-            <Grid container wrap="nowrap" spacing={2}>
-              <Grid item xs>
-                <h4 style={{ margin: 0, textAlign: "left" }}>{`${profile.firstname} ${profile.lastname}`}</h4> {/* Bytt ut med brukerens navn om nødvendig */}
-                <p style={{ textAlign: "left" }}>{comment}</p>
-              </Grid>
-            </Grid>
-            {index < comments.length - 1 && <Divider variant="fullWidth" style={{ margin: "30px 0" }} />}
-          </Paper>
-        ))}
-
-      </Paper>
-
-      <Grid container spacing={1}>
-        <Grid>
-
-        
-        <TextField
-          label="Legg til en kommentar"
-          variant="outlined"
-          value={comment}
-          multiline
-          rows={2}
-          fullWidth
-          onChange={handleCommentChange}
-          style={{
-            marginTop: "1rem",
-            width: "20rem",
-          }}
-          >
+        <Grid container item spacing={2} style={{padding: "1rem"}} md={1} direction={"row"} >
           
-        </TextField>
+          <Grid container item md={10} direction="column">
+            {metadata.map( text => 
+              <Typography variant="h6" textAlign={"left"}>
+                {text}
+              </Typography>
+            )}
+          </Grid>
+          
+          <Grid item md={2}>
+            <Button variant="outlined" onClick={handleBack}>
+              Tilbake
+            </Button>
+          </Grid>
+          
         </Grid>
-
-        <Grid item style={{display: "flex", alignItems:"center"}} > 
-        <Button
-          variant="outlined"
-          color="primary"
-          style={{marginTop: "1rem"}}
-          onClick={handleAddComment}
-        >
-          Send
         
-        </Button>
+        <Grid container item spacing={2} style={{padding: "1rem"}} md={11}>
+          
+          { /* md = 7 */ }
+          { FlipCardArea(progress, isFlipped, handleFlip, cards, card, handleHard, handleNextCard, handleShuffleOnly, handleResetOrder) }
+          
+          { /* md = 5 */}
+          { CommentSection(comment, handleCommentChange, handleAddComment, comments, profile, sendCommentColor) }
+              
+        </Grid>
+        
       </Grid>
-      </Grid>
-      </Grid>
-    </Grid>
+      
+    </Container>
+    
   );
 }
