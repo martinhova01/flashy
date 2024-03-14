@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -15,34 +15,38 @@ import CircularButton from "../../components/CircularButton";
 import { CardDto } from "../../utils/dto/CardDto";
 import { DeckDto } from "../../utils/dto/DeckDto";
 import { requests } from "../../utils/Api/requests";
-import { ProfileDto } from "../../utils/dto/ProfileDto";
-import { getProfile, reloadProfile } from "@/app/utils/LocalStorage/profile";
+import { reloadProfile } from "@/app/utils/LocalStorage/profile";
 import { categoryNames } from "@/app/utils/dto/Categories";
 
 
 export default function EditDeck({params} : {params: {deckId: number}}) {
 
-    
-
-    const profile: ProfileDto = getProfile();
-    const oldDeck: DeckDto = getDeck(params.deckId);
-
-    const [deckName, setDeckName]= useState<String>(oldDeck.deckName);
+    const [deckName, setDeckName]= useState<String>("");
     const [cardNr, setCardNr] = useState<number>(0);
-    const [frontPage, setFrontPage] = useState<String>(oldDeck.cardList[0].frontpageString);
-    const [backPage, setBackPage] = useState<String>(oldDeck.cardList[0].backpageString);
-    const [cards, setCards] = useState<CardDto[]>(oldDeck.cardList);
-    const [visibility, setVisbility] = useState<boolean>(oldDeck.visibility);
-    const [category, setCategory] = useState<String>(oldDeck.category);
+    const [frontPage, setFrontPage] = useState<String>("");
+    const [backPage, setBackPage] = useState<String>("");
+    const [cards, setCards] = useState<CardDto[]>([]);
+    const [visibility, setVisbility] = useState<boolean>(false);
+    const [category, setCategory] = useState<String>("");
 
-
-    function getDeck(deckId: number): any{
-        for (let deck of profile.ownedDecks) {
-            if (deck.deckId == deckId) {
-                return deck;
-            }
+    const fetchDeck = async () => {
+        try {
+            const deck: DeckDto = await requests.getDeckByDeckId(Number(params.deckId));
+        
+            setCards(deck.cardList);
+            setDeckName(deck.deckName);
+            setFrontPage(deck.cardList[0].frontpageString);
+            setBackPage(deck.cardList[0].backpageString);
+            setVisbility(deck.visibility);
+            setCategory(deck.category);
+        } catch (error) {
+            console.error("Error fetching cards:", error);
         }
-    }
+    };
+    
+    useEffect(() => {
+        fetchDeck();
+    }, []);
     
 
     function nextCard() {
@@ -85,7 +89,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
         updateCards();
 
         let deck: DeckDto = {
-            deckId: oldDeck.deckId,
+            deckId: params.deckId,
             deckName: deckName,
             cardList: cards,
             visibility: visibility,
@@ -142,7 +146,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
                     onChange={(e) => {setCategory(e.target.value)}}
                 >
                     {categoryNames.map(c => (
-                        <FormControlLabel value={c} control={<Radio />} label={c} />
+                        <FormControlLabel key={c} value={c} control={<Radio />} label={c} />
                     ))}
                 </RadioGroup>
                 <Button variant="outlined" size="large" onClick={handleSave} sx={{margin: "1rem"}}>
