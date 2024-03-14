@@ -13,7 +13,7 @@ import { requests } from "../utils/Api/requests";
 export function BrowseArea(props: {decks: DeckDto[], browseWidth: number, itemPadding: string}) {
     
     return <Grid container item xs={props.browseWidth} spacing="20px">
-        {props.decks.map( deck => <DeckCard deck={deck} itemPadding={props.itemPadding} /> )}
+        {props.decks.map( deck => <DeckCard deck={deck} itemPadding={props.itemPadding} key={deck.deckId} /> )}
     </Grid>
 
 }
@@ -52,11 +52,10 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
             console.error("Error fetching favorite:", error);
         }
     };
-  
+    
     useEffect(() => {
         fetch();
     }, [props]);
-
     
     return (
         <Grid item padding={props.itemPadding} xs={12} sm={6} md={6} lg={4}>

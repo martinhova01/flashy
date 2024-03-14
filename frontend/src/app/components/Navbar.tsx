@@ -20,7 +20,7 @@ const Navbar = (props: {selected: number}) => {
     const variant = (menuItems.indexOf(item) == props.selected) ? "contained" : "outlined";
     
     return (
-      <Link href={item.link}>
+      <Link href={item.link} key={menuItems.indexOf(item)}>
         <Button variant={variant} onClick={onClick}>
           {item.text}
         </Button>

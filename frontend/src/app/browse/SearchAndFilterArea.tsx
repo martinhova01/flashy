@@ -1,94 +1,113 @@
-import { Box, Grid, TextField, Typography } from "@mui/material";
+import { Box, Checkbox, FormControlLabel, FormGroup, Grid, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { DeckDto } from "../utils/dto/DeckDto";
 import { requests } from "../utils/Api/requests";
+import React from "react";
+import { categoryNames } from "../utils/dto/Categories";
 
 export function SearchAndFilterArea(props: {itemPadding: string, filterWidth: number, decks: DeckDto[], setDecks: any}) {
     
-    // Bruk `setDecks` til å oppdatere hvilke decks som vises i browsing-siden :)
     const setDecks = props.setDecks;
-    const decks = props.decks;
+    const [searchWord, setSearchWord] = useState<string>("");
+    const [categories, setCategories] = useState<boolean[]>(new Array(categoryNames.length).fill(false));
     
-    const [alldecks, setAllDecks] = useState<DeckDto[]>();
-
-
-    const search = async (searchWord: string) => {
+    const search = async (searchWord: string, categories: boolean[]) => {
+        if (props.decks === undefined) {
+            return;
+        }
         
-            //check if alldecks have been set
-        if (alldecks == undefined) {
+        const allDecks = await requests.getAllPublicDecks();
+        
+        // Hvis søkeordet er tomt og ingen kategorier er valgt, vis alle dekkene
+        if (searchWord === "" && categories.every(category => !category)) {
+            await setDecks(allDecks);
             return;
         }
-
-        if (searchWord == "") {
-            setDecks(alldecks)
-            return;
-        }
-
+        
         const foundDecks: DeckDto[] = [];
-
-        for (var deck of alldecks) {
-
-            if (deck.deckName.toLowerCase().startsWith(searchWord.toLowerCase())) {
-
-                foundDecks.push(deck);
-            }
-        }
-
-        setDecks(foundDecks);
         
+        for (var deck of allDecks) {
+            
+            if (deck.deckName.toLowerCase().startsWith(searchWord.toLowerCase())) {
+                
+                const anyCategory = categories.every(category => !category);
+                
+                let isChecked = false;
+                
+                for (let index = 0; index < categories.length; index++) {
+                    
+                    if (deck.category === categoryNames[index]) {
+                        isChecked = categories[index];
+                    }
+                    
+                }
+                
+                if (anyCategory || isChecked) {
+                    foundDecks.push(deck);
+                }
+                
+            }
+            
+        }
+    
+        await setDecks(foundDecks);
     }
+    
 
     const resetAllDecks = async () => {
         try {
-          const request = await requests.getAllPublicDecks();
-    
-          setAllDecks(request);
+            const request = await requests.getAllPublicDecks();
+            setDecks(request);
         } catch (error) {
-          console.error("Error fetching decks:", error);
+            console.error("Error fetching decks:", error);
         }
-      };
+    };
 
     useEffect(() => {
         resetAllDecks();
     }, []);
-    
-    return (
+
+    const handleCategoryChange = async (index: number, value: boolean) => {
         
+        const updatedCategories = [...categories];
+        updatedCategories[index] = value;
+        setCategories(updatedCategories);
+        
+        await search(searchWord, updatedCategories);
+        
+    }
+
+    return (
         <Grid item xs={props.filterWidth} padding={props.itemPadding}>
-            
             <Box borderRadius={props.itemPadding} bgcolor={"lightgray"}>
-                
                 <Grid container direction={"column"}>
-                    
-                    {/* Du kan lage <Grid item> ... </Grid> inni her for å legge til ting, se eksempelet nedenfor som legger til en overskrift :) */}
-                    
                     <Grid item padding={props.itemPadding}>
-                        <Typography variant="h5">
-                            Søk & Filtrer
-                        </Typography>
+                        <Typography variant="h5">Søk & Filtrer</Typography>
                     </Grid>
-                    
-                    {/* Her kan det legges til flere elementer. De havner under hverandre. */}
                     <Grid item padding={props.itemPadding}>
                         <TextField
                             id="outlined-basic"
                             variant="outlined"
-                            //value={searchWord} // Oppdater til å bruke 'name' som verdi
                             label={"Search"}
+                            value={searchWord}
                             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                                search(event.target.value);
+                                setSearchWord(event.target.value);
+                                search(event.target.value, categories);
                             }}
                             sx={{ margin: '2rem' }}
                         />
+                        <FormGroup sx={{marginLeft: "2rem"}}>
+                            {categoryNames.map((category, index) => (
+                                <FormControlLabel 
+                                    key={index}
+                                    control={<Checkbox checked={categories[index]} onChange={(event) => handleCategoryChange(index, event.target.checked)}/>} 
+                                    label={category} 
+                                />
+                            ))}
+                        </FormGroup>
                     </Grid>
-                    
-                    
                 </Grid>
-                
             </Box>
-            
         </Grid>
-        
     )
-    
 }
