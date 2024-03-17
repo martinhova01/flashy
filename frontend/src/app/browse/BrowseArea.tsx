@@ -93,7 +93,7 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
                     
                     <Grid item container direction={"row"} alignContent={"center"} justifyContent={"space-between"} alignItems={"center"}>
                             <Typography variant="body1" textAlign={"left"} color="gray">
-                                {owner}
+                                {owner} ({ownerSchool})
                             </Typography>
                         
                             <Grid item>
@@ -110,12 +110,6 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
                                         {favorited ? <StarIcon/> : <StarBorderIcon/>}
                                 </IconButton>
                             </Grid>
-                    </Grid>
-                    
-                    <Grid item container direction={"row"} alignContent={"center"} justifyContent={"space-between"} alignItems={"center"}>
-                        <Typography variant="body1" textAlign={"left"} color="gray"> 
-                            {ownerSchool}
-                        </Typography>
                     </Grid>
                 </Grid>
                 
