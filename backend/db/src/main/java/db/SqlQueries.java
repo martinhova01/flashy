@@ -310,11 +310,11 @@ public class SqlQueries {
      * @param comment comment from user on deck
      * @return the query as a string
      */
-    public static String addComment(Integer userId, Integer deckId, String comment) {
+    public static String addComment(int userId, int deckId, String comment) {
         return String.format(
-            "INSERT INTO comments("
-            + "profile_id,deck_id,comment)"
-            + "VALUES('%s', '%s', '%s')", 
+            "INSERT INTO comments ("
+            + "profile_id, deck_id, comment) "
+            + "VALUES (%s, %s, '%s')", 
             userId, deckId, comment);
     }
 
