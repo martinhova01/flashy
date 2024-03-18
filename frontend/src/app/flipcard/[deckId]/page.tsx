@@ -127,10 +127,19 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
     setIsFlipped(false);
   };
   
-  const metadata: string[] = [
+  let [metadata, setMetadata] = useState<String[]>([
     profile.firstname + " " + profile.lastname + " sitt dekk",
-    "(navn på dekket)"
-  ]
+    "{deckName}"
+  ]);
+  
+  const fetchDeckName = async () => {
+    const deck = await requests.getDeckByDeckId(params.deckId);
+    let newMetadata = metadata;
+    newMetadata[1] = deck.deckName;
+    setMetadata(newMetadata);
+  }
+  
+  useEffect( () => { fetchDeckName() }, [] );
   
   return (
     
