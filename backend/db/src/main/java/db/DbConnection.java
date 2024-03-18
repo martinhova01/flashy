@@ -672,11 +672,12 @@ public class DbConnection {
      * @param deckId deckId
      * @param comment comment to deck
      */
-    public void addComment(Integer userId, Integer deckId, String comment) {
+    public void addComment(int userId, int deckId, String comment) {
         String query = SqlQueries.addComment(userId, deckId, comment);
 
         try {
-            connection.createStatement().executeQuery(query);
+            Statement statement = this.connection.createStatement();
+            statement.execute(query);
         } catch (SQLException e) {
             e.printStackTrace();
         }
