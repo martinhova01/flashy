@@ -237,5 +237,9 @@ export const requests = {
     const response = await api.get("/deckComments", {params: requestParams});
     return response.data;
   },
-  
+
+  getOwnerSchool: async function (deckId: number) {
+    const response = await api.get("/decks/" + deckId + "/ownerSchool");
+    return response.data;
+  },
 };

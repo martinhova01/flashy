@@ -8,6 +8,7 @@ import StarIcon from '@mui/icons-material/Star';
 import { getProfile } from "@/app/utils/LocalStorage/profile";
 import { yellow } from '@mui/material/colors';
 import { requests } from "../utils/Api/requests";
+import { request } from "http";
 
 
 export function BrowseArea(props: {decks: DeckDto[], browseWidth: number, itemPadding: string}) {
@@ -24,6 +25,8 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
     const [likesCount, setLikesCount] = useState<number>(0);
     const [favorited, setFavorited] = useState<boolean>(false);
     const [owner, setOwner] = useState<String>("");
+    const [ownerSchool, setOwnerSchool] = useState<String>("");
+
     const profile = getProfile();
 
     const handleLikeClick = async (event: any) => {
@@ -48,6 +51,8 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
             setLiked(like);
             const o: String = await requests.getOwner(props.deck.deckId);
             setOwner(o);
+            const os: String = await requests.getOwnerSchool(props.deck.deckId);
+            setOwnerSchool(os);
         } catch (error) {
             console.error("Error fetching favorite:", error);
         }
@@ -84,8 +89,6 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
                     </Grid>
                     
                     <Grid item container direction={"row"} alignContent={"center"} justifyContent={"space-between"} alignItems={"center"}>
-                        
-                        
                             <Typography variant="body1" textAlign={"left"} color="gray">
                                 {owner}
                             </Typography>
@@ -104,9 +107,13 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
                                         {favorited ? <StarIcon/> : <StarBorderIcon/>}
                                 </IconButton>
                             </Grid>
-                        
                     </Grid>
                     
+                    <Grid item container direction={"row"} alignContent={"center"} justifyContent={"space-between"} alignItems={"center"}>
+                        <Typography variant="body1" textAlign={"left"} color="gray"> 
+                            {ownerSchool}
+                        </Typography>
+                    </Grid>
                 </Grid>
                 
             </Button>
