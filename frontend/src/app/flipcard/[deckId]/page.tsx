@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import CommentSection from "./CommentSection";
 import FlipCardArea from "./FlipCardArea";
 import { CommentDto } from "@/app/utils/dto/CommentDto";
+import { DeckDto } from "@/app/utils/dto/DeckDto";
 
 export default function flashcard({ params }: { params: { deckId: number } }) {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -46,25 +47,27 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
     window.location.href = "/browse";
   }
 
-  const fetchCard = async () => {
+  const fetchDeck = async () => {
     try {
       
-      const cardsRequest = await requests.getCardsByDeckId(Number(params.deckId));
+      const deck: DeckDto = await requests.getDeckByDeckId(Number(params.deckId));
 
       // Use optional chaining to check for undefined
-      setCards(cardsRequest);
-      setOriginalCards(cardsRequest); //kopi av orginal kortene
+      setCards(deck.cardList);
+      setOriginalCards(deck.cardList); //kopi av orginal kortene
       
       const commentsRequest = await requests.getComments(params.deckId);
       setComments(commentsRequest);
       
+      setCards(deck.cardList);
+      setOriginalCards(deck.cardList); //kopi av orginal kortene
     } catch (error) {
       console.error("Error fetching cards:", error);
     }
   };
 
   useEffect(() => {
-    fetchCard();
+    fetchDeck();
   }, []);
 
   const handleShuffleOnly = () => {

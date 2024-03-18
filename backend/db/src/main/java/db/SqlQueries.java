@@ -105,10 +105,10 @@ public class SqlQueries {
      * @return the query as a string
      */
     public static String addNewDeckQuery(int profileId,
-            String name, boolean isPublic, String category) {
-        return String.format("INSERT INTO deck(name, owner_id, is_public, category)"
+            String name, int visibility, String category) {
+        return String.format("INSERT INTO deck(name, owner_id, visibility, category)"
                 + "VALUES('%s', %s, %s, '%s')",
-                name, Integer.toString(profileId), isPublic, category);
+                name, Integer.toString(profileId), Integer.toString(visibility), category);
     }
 
     /**
@@ -168,10 +168,10 @@ public class SqlQueries {
      * @return the query as a string.
      */
     public static String updateDeckQuery(int deckId,
-            String deckName, boolean visibility, String category) {
-        return String.format("UPDATE deck SET name = '%s', is_public = %s, category = '%s'"
+            String deckName, int visibility, String category) {
+        return String.format("UPDATE deck SET name = '%s', visibility = %s, category = '%s'"
                 + "WHERE deck_id = %s",
-                deckName, visibility, category, Integer.toString(deckId));
+                deckName, Integer.toString(visibility), category, Integer.toString(deckId));
     }
 
     /**
@@ -236,7 +236,7 @@ public class SqlQueries {
      * @return the query as a string
      */
     public static String getFavoriteDecksQuery(int profileId) {
-        return String.format("SELECT deck.deck_id, deck.name, deck.category, deck.is_public "
+        return String.format("SELECT deck.deck_id, deck.name, deck.category, deck.visibility "
                 + "FROM favorite INNER JOIN deck ON (favorite.deck_id = deck.deck_id) "
                 + "WHERE favorite.profile_id = %s",
                 Integer.toString(profileId));
@@ -336,6 +336,11 @@ public class SqlQueries {
         return String.format("SELECT profile.school "
                 + "FROM deck INNER JOIN profile ON (profile.profile_id = deck.owner_id) "
                 + "WHERE deck.deck_id = %s", Integer.toString(deckId));
+    }
+
+    public static String getDeckByIdQuery(int deckId) {
+        return String.format("SELECT * FROM deck "
+            + "WHERE deck_id = %s", Integer.toString(deckId));
     }
 
 }

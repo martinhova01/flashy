@@ -115,12 +115,8 @@ export const requests = {
     return response.data;
   },
 
-
-  getCardsByDeckId: async function (deckId: number): Promise<CardDto[]> {
-    const requestParams = {
-      deckId: Number(deckId),
-    };
-    const response = await api.get("/cardsByDeckId", { params: requestParams });
+  getDeckByDeckId: async function (deckId: number): Promise<DeckDto> {
+    const response = await api.get("/decks/" + deckId);
     return response.data;
   },
   
