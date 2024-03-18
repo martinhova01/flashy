@@ -1,8 +1,8 @@
 import { CardDto } from "../dto/CardDto";
+import { CommentDto } from "../dto/CommentDto";
 import { DeckDto } from "../dto/DeckDto";
 import { ProfileDto } from "../dto/ProfileDto";
 import { api } from "./api";
-import { AxiosResponse } from "axios";
 
 export const requests = {
   /**
@@ -202,7 +202,40 @@ export const requests = {
       profileId: profileId,
       deckId: deckId
     };
-    const response = await api.put("/like", {}, {params: requestParams})
+    const response = await api.put("/like", {}, {params: requestParams});
     return response.data;
   },
+  
+  /**
+   * Add a comment to a deck.
+   * 
+   * @param profileId The profileID of the person commenting
+   * @param deckId The deck that the comment is attached to
+   * @param comment The body of the comment
+   * @returns true if the comment was added, false otherwise
+   */
+  addComment: async function (profileId: number, deckId: number, comment: String): Promise<boolean> {
+    const requestParams = {
+      profileId: profileId,
+      deckId: deckId,
+      comment: comment
+    };
+    const response = await api.put("/comment", {}, {params: requestParams});
+    return response.data;
+  },
+  
+  /**
+   * Fetch all comments on a given deck.
+   * 
+   * @param deckId The ID of the deck we want to find comments of.
+   * @returns All comments (CommentDtos) on the given deck.
+   */
+  getComments: async function (deckId: number): Promise<CommentDto[]> {
+    const requestParams = {
+      deckId: deckId
+    }
+    const response = await api.get("/deckComments", {params: requestParams});
+    return response.data;
+  },
+  
 };

@@ -13,6 +13,7 @@ import { getProfile } from "@/app/utils/LocalStorage/profile";
 import { useEffect, useState } from "react";
 import CommentSection from "./CommentSection";
 import FlipCardArea from "./FlipCardArea";
+import { CommentDto } from "@/app/utils/dto/CommentDto";
 
 export default function flashcard({ params }: { params: { deckId: number } }) {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -25,17 +26,19 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   const [originalCards, setOriginalCards] = useState<CardDto[]>();
   const [progress, setProgress] = useState(0);
   const [comment, setComment] = useState(''); //Nåværende kommentar
-  const [comments, setComments] = useState<string[]>([]); //lagrer kommentar
+  const [comments, setComments] = useState<CommentDto[]>([]); // Lagrer kommentarer
   const [sendCommentColor, setSendCommentColor] = useState<string>("#ffffff");
 
   const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setComment(event.target.value);
   }
 
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     if (comment.trim()) {
-      setComments([...comments, comment]);
-      setComment(""); //nullstiller kommentarfelt
+      const result = await requests.addComment(profile.profileId, params.deckId, comment);
+      const newComment: CommentDto = {firstname: profile.firstname, lastname: profile.lastname, comment: comment};
+      setComments([...comments, newComment]);
+      setComment(""); // Nullstiller kommentarfelt
     }
   }
 
@@ -45,11 +48,16 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
 
   const fetchCard = async () => {
     try {
-      const request = await requests.getCardsByDeckId(Number(params.deckId));
+      
+      const cardsRequest = await requests.getCardsByDeckId(Number(params.deckId));
 
       // Use optional chaining to check for undefined
-      setCards(request);
-      setOriginalCards(request); //kopi av orginal kortene
+      setCards(cardsRequest);
+      setOriginalCards(cardsRequest); //kopi av orginal kortene
+      
+      const commentsRequest = await requests.getComments(params.deckId);
+      setComments(commentsRequest);
+      
     } catch (error) {
       console.error("Error fetching cards:", error);
     }
