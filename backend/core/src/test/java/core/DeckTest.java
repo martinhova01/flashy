@@ -7,7 +7,7 @@ public class DeckTest {
 
     @Test
     public void testDeckCreation() {
-        Deck deck = new Deck("Test Deck", 123, false, "Annet", 10);
+        Deck deck = new Deck("Test Deck", 123, 0, "Annet", 10);
         assertEquals("Test Deck", deck.getDeckName());
         assertEquals(123, deck.getDeckId());
         assertTrue(deck.getCardList().isEmpty());
@@ -15,7 +15,7 @@ public class DeckTest {
 
     @Test
     public void testAddCard() {
-        Deck deck = new Deck("Test Deck", 123, false, "Annet", 10);
+        Deck deck = new Deck("Test Deck", 123, 0, "Annet", 10);
         Card card = new Card(1, "fp", "bp", "fpp", "bpp");
         deck.addCard(card);
         assertFalse(deck.getCardList().isEmpty());
@@ -25,7 +25,7 @@ public class DeckTest {
 
     @Test
     public void testRemoveTopCard() {
-        Deck deck = new Deck("Test Deck", 123, false, "Annet", 10);
+        Deck deck = new Deck("Test Deck", 123, 0, "Annet", 10);
         Card card1 = new Card(1, "s", "s", "s", "s");
         Card card2 = new Card(2, "d", "d", "d", "d");
         deck.addCard(card1);
@@ -39,7 +39,7 @@ public class DeckTest {
 
     @Test
     public void testSetDeckNameAndID() {
-        Deck deck = new Deck("Old Deck", 456, false, "Annet", 10);
+        Deck deck = new Deck("Old Deck", 456, 0, "Annet", 10);
         assertEquals("Old Deck", deck.getDeckName());
         assertEquals(456, deck.getDeckId());
 

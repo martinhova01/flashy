@@ -5,7 +5,7 @@ export type DeckDto = {
     deckId: number;
     deckName: String;
     cardList: CardDto[];
-    visibility: boolean;
+    visibility: number;
     category: String;
     likes: number;
 }

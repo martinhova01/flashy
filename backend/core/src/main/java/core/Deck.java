@@ -10,7 +10,7 @@ public class Deck {
 
     private String deckName;
     private int deckId;
-    private boolean visibility;
+    private int visibility;
     private String category;
     private int likes;
 
@@ -19,7 +19,7 @@ public class Deck {
     /**
      * Constructor.
      */
-    public Deck(String deckName, int deckId, boolean visibility, String category, int likes) {
+    public Deck(String deckName, int deckId, int visibility, String category, int likes) {
         this.deckName = deckName;
         this.deckId = deckId;
         this.visibility = visibility;
@@ -60,11 +60,11 @@ public class Deck {
         this.deckId = deckId;
     }
 
-    public boolean getVisibility() {
+    public int getVisibility() {
         return visibility;
     }
 
-    public void setPublic(boolean visibility) {
+    public void setPublic(int visibility) {
         this.visibility = visibility;
     }
 
