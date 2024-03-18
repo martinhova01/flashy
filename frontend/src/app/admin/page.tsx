@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Divider, Grid, Paper, Typography } from "@mui/material";
 import { requests } from "../utils/Api/requests";
 import { ProfileDto } from "../utils/dto/ProfileDto";
+import AdminNavbar from "../components/AdminNavbar";
 import DarkmodeSwitch from "../components/DarkmodeSwitch";
 
 const page = () => {
@@ -48,8 +49,9 @@ const page = () => {
 
   return (
     <Box sx={{ flexGrow: 1, padding: 3 }}>
+      <AdminNavbar selected={0} />
       <Typography variant="h4" gutterBottom>
-        Admin
+        Administrer brukere
       </Typography>
       <Divider />
 

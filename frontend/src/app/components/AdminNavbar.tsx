@@ -3,25 +3,22 @@ import Link from "next/link";
 import React from "react";
 import { logOut } from "../utils/LocalStorage/profile";
 
-const Navbar = (props: {selected: number}) => {
+const AdminNavbar = (props: {selected: number}) => {
   
   // Legg til flere meny-elementer her
   const menuItems = [
-    { text: "Flashy", link: "/browse", function: null },
-    { text: "Mine dekk", link: "/mydecks", function: null },
-    { text: "Profil", link: "/profile", function: null },
-    { text: "Mine Favoritter", link: "/myFavorites", function: null },
+    { text: "Brukere", link: "/admin", function: null},
+    { text: "Offentlige dekk", link: "/deck", function: null },
     { text: "Logg ut", link: "/", function: logOut },
   ]
   
   const reactElements = menuItems.map( item => {
     
     const onClick = (item.function == null) ? ( () => {} ) : ( item.function );
-    const variant = (menuItems.indexOf(item) == props.selected) ? "contained" : "outlined";
-    
+
     return (
-      <Link href={item.link} key={menuItems.indexOf(item)}>
-        <Button variant={variant} onClick={onClick}>
+      <Link href={item.link}>
+        <Button onClick={onClick}>
           {item.text}
         </Button>
       </Link>
@@ -40,4 +37,4 @@ const Navbar = (props: {selected: number}) => {
   );
 };
 
-export default Navbar;
+export default AdminNavbar;

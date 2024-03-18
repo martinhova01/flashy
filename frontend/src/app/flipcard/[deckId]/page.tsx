@@ -19,7 +19,7 @@ import { getProfile } from "@/app/utils/LocalStorage/profile";
 
 import { useEffect, useState } from "react";
 import ReactCardFlip from "react-card-flip";
-import { ProfileDto } from "@/app/utils/dto/ProfileDto";
+import { DeckDto } from "@/app/utils/dto/DeckDto";
 import DarkmodeSwitch from "@/app/components/DarkmodeSwitch";
 
 export default function flashcard({ params }: { params: { deckId: number } }) {
@@ -47,23 +47,23 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   }
 
   function handleBack() {
-    window.location.href = "/mydecks";
+    window.location.href = "/browse";
   }
 
-  const fetchCard = async () => {
+  const fetchDeck = async () => {
     try {
-      const request = await requests.getCardsByDeckId(Number(params.deckId));
+      const deck: DeckDto = await requests.getDeckByDeckId(Number(params.deckId));
 
       // Use optional chaining to check for undefined
-      setCards(request);
-      setOriginalCards(request); //kopi av orginal kortene
+      setCards(deck.cardList);
+      setOriginalCards(deck.cardList); //kopi av orginal kortene
     } catch (error) {
       console.error("Error fetching cards:", error);
     }
   };
 
   useEffect(() => {
-    fetchCard();
+    fetchDeck();
   }, []);
 
   const handleShuffleOnly = () => {
@@ -120,6 +120,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
 
     const newProgress = (card / updatedCards.length) * 100;
     setProgress(newProgress);
+    setIsFlipped(false);
   };
   
   
