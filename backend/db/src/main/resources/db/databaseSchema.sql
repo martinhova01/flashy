@@ -23,9 +23,9 @@ CREATE TABLE card
 (
     card_id             INTEGER PRIMARY KEY AUTOINCREMENT,
     front_page          VARCHAR(2000),
-    front_page_picture  VARCHAR(MAX),
+    front_page_picture  TEXT,
     back_page           VARCHAR(2000),
-    back_page_picture   VARCHAR(MAX),
+    back_page_picture   TEXT,
     deck_id             INTEGER,
     FOREIGN KEY (deck_id) REFERENCES deck(deck_id) ON DELETE CASCADE
 );
