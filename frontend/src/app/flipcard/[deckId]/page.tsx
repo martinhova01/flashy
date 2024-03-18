@@ -128,18 +128,20 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   };
   
   let [metadata, setMetadata] = useState<String[]>([
-    profile.firstname + " " + profile.lastname + " sitt dekk",
-    "{deckName}"
+    "Laster eier ...",
+    "Laster dekknavn ..."
   ]);
   
-  const fetchDeckName = async () => {
-    const deck = await requests.getDeckByDeckId(params.deckId);
+  const fetchMetadata = async () => {
     let newMetadata = metadata;
+    const owner = await requests.getOwner(params.deckId);
+    newMetadata[0] = `${owner} sitt dekk`;
+    const deck = await requests.getDeckByDeckId(params.deckId);
     newMetadata[1] = deck.deckName;
     setMetadata(newMetadata);
   }
   
-  useEffect( () => { fetchDeckName() }, [] );
+  useEffect( () => { fetchMetadata() }, [] );
   
   return (
     
