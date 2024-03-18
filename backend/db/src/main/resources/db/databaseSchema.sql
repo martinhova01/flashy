@@ -23,9 +23,9 @@ CREATE TABLE card
 (
     card_id             INTEGER,
     front_page          VARCHAR(2000),
-    front_page_picture  VARCHAR(2083),
+    front_page_picture  TEXT,
     back_page           VARCHAR(2000),
-    back_page_picture   VARCHAR(2083),
+    back_page_picture   TEXT,
     deck_id             INTEGER,
     PRIMARY KEY (card_id, deck_id)
     FOREIGN KEY (deck_id) REFERENCES deck(deck_id) ON DELETE CASCADE
