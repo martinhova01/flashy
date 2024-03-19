@@ -7,6 +7,7 @@ import {
   Grid,
   Button,
   Container,
+  Box,
 } from "@mui/material";
 import { getProfile } from "@/app/utils/LocalStorage/profile";
 
@@ -16,6 +17,7 @@ import FlipCardArea from "./FlipCardArea";
 import { CommentDto } from "@/app/utils/dto/CommentDto";
 import { DeckDto } from "@/app/utils/dto/DeckDto";
 import DarkmodeSwitch from "@/app/components/DarkmodeSwitch";
+import DarkModeSwitch from "@/app/components/DarkmodeSwitch";
 
 export default function flashcard({ params }: { params: { deckId: number } }) {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -145,6 +147,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
   useEffect( () => { fetchMetadata() }, [] );
   
   return (
+    <div>
     
     <Container>
       
@@ -181,6 +184,10 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
       </Grid>
       
     </Container>
+    <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
+        <DarkmodeSwitch />
+    </Box>
+    </div>
     
   );
 }

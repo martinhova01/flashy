@@ -8,109 +8,66 @@
 }
 
 [data-theme="dark"] {
---background-color: #121212;
---text-color: #ffffff;
+    --background-color: #121212;
+    --text-color: #ffffff;
 }
 
 body {
-background-color: var(--background-color);
-color: var(--text-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
 }
 
-/* Dark mode styles for TextField */
-/* [data-theme="dark"] .MuiTextField-root {
-    background-color: #333333; /* Example background color for dark mode */
-  /* } */ */
-  
-  /* Border color for TextField */
-  [data-theme="dark"] .MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-    border-color: #ffffff; /* White border color */
-  }
-  
-  /* Text color for TextField */
-  [data-theme="dark"] .MuiTextField-root .MuiOutlinedInput-root .MuiInputBase-input {
-    color: #ffffff; /* White text color */
-  }
-  
-  /* Placeholder color for TextField */
-  [data-theme="dark"] .MuiTextField-root .MuiOutlinedInput-root .MuiInputLabel-root {
-    color: #ffffff; /* White placeholder color */
-  }
-  
-  /* Hover and focus styles for TextField in dark mode */
-  [data-theme="dark"] .MuiTextField-root .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline,
-  [data-theme="dark"] .MuiTextField-root .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: #ffffff; /* White border color on hover and focus */
-  }
-
-  [data-theme="dark"] .MuiTypography-root {
-    /* background-color: #222121; */
-    /* color: #ffffff; */
-  }
-
-  [data-theme="dark"] .MuiBox-root {
-    background-color: #121212; /* Dark-gray background color with transparency */
-    padding: 16px; /* Adjust padding as needed */
-  }
-
-  [data-theme="dark"] .MuiCard-root {
-    background-color: rgba(33, 33, 33, 0.8); /* Dark-gray background color with transparency */
-    color: #ffffff; /* White text color */
-    box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.1); /* Subtle box shadow */
-  }
-
-  /* Custom checkbox style for dark mode */
-[data-theme="dark"] .MuiCheckbox-root {
-    color: white; /* Checkbox color */
-  }
-/*   
-  Custom checkbox border color for dark mode
-  [data-theme="dark"] .MuiCheckbox-root.Mui-checked {
-    color: white; /* Checked checkbox color */
-  /* } */ */
-  
-  /* Custom checkbox border color for dark mode
-  [data-theme="dark"] .MuiCheckbox-root.Mui-checked .MuiSvgIcon-root {
-    color: white; /* Checked checkbox icon color */
-  /* } */ */
-  
-  /* Custom checkbox border color for dark mode */
-  [data-theme="dark"] .MuiCheckbox-root .MuiIconButton-root {
-    border-color: white; /* Checkbox border color */
-  }
-
-  /* Custom border color for TextField in dark mode */
 [data-theme="dark"] .MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-    border-color: white; /* Border color for TextField */
-  }
-  
-  /* Custom border color for TextField in dark mode when hovered */
-  [data-theme="dark"] .MuiTextField-root:hover .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-    border-color: white; /* Border color for TextField when hovered */
-  }
-  
-  /* Custom border color for TextField in dark mode when focused */
-  [data-theme="dark"] .MuiTextField-root .Mui-focused .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
-    border-color: white; /* Border color for TextField when focused */
-  }
+    border-color: #ffffff;
+}
 
-  /* Custom radio button style for dark mode */
+[data-theme="dark"] .MuiTextField-root .MuiOutlinedInput-root .MuiInputBase-input {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .MuiBox-root {
+    background-color: #121212;
+}
+
+[data-theme="dark"] .MuiCard-root {
+    background-color: rgba(33, 33, 33, 0.8);
+    color: #ffffff;
+    box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+
+[data-theme="dark"] .MuiCheckbox-root {
+    color: white;
+}
+
+[data-theme="dark"] .MuiCheckbox-root .MuiIconButton-root {
+    border-color: white;
+}
+
 [data-theme="dark"] .MuiRadio-root {
-    color: white; /* Radio button color */
-  }
-  
-  /* Custom radio button border color for dark mode */
-  [data-theme="dark"] .MuiRadio-root.Mui-checked .MuiSvgIcon-root {
-    color: white; /* Checked radio button color */
-  }
-  
-  /* Custom radio button border color for dark mode */
-  [data-theme="dark"] .MuiRadio-root .MuiIconButton-root {
-    border-color: white; /* Radio button border color */
-  }
+    color: white;
+}
 
-  [data-theme="dark"] .star-icon {
-    fill: none; /* Make the star outline transparent */
-    stroke: white; /* Set the stroke color to blue */
-    stroke-width: 1px; /* Set the stroke width */
-  }
+[data-theme="dark"] .MuiRadio-root.Mui-checked .MuiSvgIcon-root {
+    color: white;
+}
+
+[data-theme="dark"] .MuiRadio-root .MuiIconButton-root {
+    border-color: white;
+}
+
+[data-theme="dark"] .star-icon {
+    fill: none;
+    stroke: white;
+    stroke-width: 1px;
+}
+
+[data-theme="dark"] .MuiPaper-root {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+#comment {
+    background-color: rgb(125, 125, 125);
+    box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.1);
+}
