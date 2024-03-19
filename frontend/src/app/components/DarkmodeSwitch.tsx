@@ -1,15 +1,25 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Switch } from '@mui/material';
 
 const DarkModeSwitch = () => {
   const [darkMode, setDarkMode] = useState(false);
+  
 
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
-    document.documentElement.style.backgroundColor = newDarkMode ? '#000' : '#fff';
-    document.documentElement.style.color = newDarkMode ? '#fff' : '#000';
+    localStorage.setItem("colormode", newDarkMode ? "dark": "light")
   };
+
+
+  useEffect(() => {
+    const mode = localStorage.getItem("colormode");
+    if (mode == null) {
+      return;
+    }
+    setDarkMode(mode == "dark");
+    document.documentElement.setAttribute("data-theme", mode);
+  }, [darkMode]);
 
   return (
     <Switch checked={darkMode} onChange={toggleDarkMode} />

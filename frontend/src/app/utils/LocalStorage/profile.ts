@@ -31,5 +31,5 @@ export async function reloadProfile() {
 
 // Logs out of the currently loaded profile by clearing localStorage.
 export function logOut() {
-  localStorage.clear();
+  localStorage.removeItem("profile");
 }

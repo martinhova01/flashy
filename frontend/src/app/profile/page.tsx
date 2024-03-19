@@ -57,7 +57,6 @@ const page = () => {
         <CardContent>
           <Typography
             variant="body2"
-            color="text.secondary"
             className="p-1"
             sx={{ fontSize: "1rem" }}
           >
