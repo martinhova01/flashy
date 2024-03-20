@@ -69,7 +69,7 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
         <Grid item padding={props.itemPadding} xs={12} sm={6} md={6} lg={4}>
             <Button sx={{width: "100%"}} onClick={ () => { window.location.href = `/flipcard/${props.deck.deckId}` } }>
                 
-                <Grid container direction={"column"} spacing="10px">
+                <Grid container direction={"column"} spacing="10px" display={"flex"}>
                     
                     <Grid item>
                         <Card sx={{padding: props.itemPadding, width: "100%"}}>
@@ -79,6 +79,17 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
                                     <Typography variant="h6">
                                         {props.deck.deckName}
                                     </Typography>
+                                </Grid>
+
+                                <Grid item container justifyContent={"center"}>
+                                    {props.deck.cardList[0].frontpagePicture && (
+                                 <img 
+                                        src={props.deck.cardList[0].frontpagePicture} 
+                                        alt="Front of Card" 
+                                        style={{ maxWidth: '100%', maxHeight: '100px', objectFit: 'contain' }} // bildeintegrasjon
+                                         />
+                                         )}
+
                                 </Grid>
                                 
                                 <Grid item>

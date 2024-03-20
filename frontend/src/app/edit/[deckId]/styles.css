@@ -1,0 +1,7 @@
+.image-fit {
+    max-width: 15%;
+    max-height: 100px;
+    object-fit: contain;
+    display: block;
+  }
+  

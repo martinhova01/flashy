@@ -1,3 +1,4 @@
+/* page.tsx */
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -17,8 +18,8 @@ import { DeckDto } from "../../utils/dto/DeckDto";
 import { requests } from "../../utils/Api/requests";
 import { reloadProfile } from "@/app/utils/LocalStorage/profile";
 import { categoryNames } from "@/app/utils/dto/Categories";
-
 import DarkmodeSwitch from "@/app/components/DarkmodeSwitch";
+import './styles.css'; 
 
 export default function EditDeck({params} : {params: {deckId: number}}) {
 
@@ -29,6 +30,8 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
     const [cards, setCards] = useState<CardDto[]>([]);
     const [visibility, setVisbility] = useState<number>(0);
     const [category, setCategory] = useState<String>("");
+    const [frontBaseImage, setFrontBaseImage] = useState<string>("");
+    const [backBaseImage, setBackBaseImage] = useState<string>("");
 
     const fetchDeck = async () => {
         try {
@@ -38,6 +41,8 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
             setDeckName(deck.deckName);
             setFrontPage(deck.cardList[0].frontpageString);
             setBackPage(deck.cardList[0].backpageString);
+            setFrontBaseImage(deck.cardList[0].frontpagePicture);
+            setBackBaseImage(deck.cardList[0].backpagePicture);
             setVisbility(deck.visibility);
             setCategory(deck.category);
         } catch (error) {
@@ -48,209 +53,357 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
     useEffect(() => {
         fetchDeck();
     }, []);
+    const uploadFrontImage = async (e: any) => {
+      const file = e.target.files[0];
+      const base64 = await convertBase64(file);
+      if (typeof base64 === "string") {
+        setFrontBaseImage(base64);
+      }
+      console.log(frontBaseImage);
+    };
+    const uploadBackImage = async (e: any) => {
+      const file = e.target.files[0];
+      const base64 = await convertBase64(file);
+      if (typeof base64 === "string") {
+        setBackBaseImage(base64);
+      }
+      console.log(backBaseImage);
+    };
+  
+    const convertBase64 = (file: any) => {
+      return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+  
+        fileReader.onload = () => {
+          resolve(fileReader.result);
+        };
+  
+        fileReader.onerror = (error) => {
+          reject(error);
+        };
+      });
+    };
     
 
-    function nextCard() {
-        updateCards();
-        if (cardNr + 1 == cards.length) {
-            setFrontPage("");
-            setBackPage("");
-        }
-        else{
-            setFrontPage(cards[cardNr + 1].frontpageString);
-            setBackPage(cards[cardNr + 1].backpageString);
-        }
-        setCardNr(cardNr + 1);
+  function nextCard() {
+    updateCards();
+    if (cardNr + 1 == cards.length) {
+      setFrontPage("");
+      setBackPage("");
+      setBackBaseImage("");
+      setFrontBaseImage("");
+    } else {
+      setFrontPage(cards[cardNr + 1].frontpageString);
+      setBackPage(cards[cardNr + 1].backpageString);
+      setBackBaseImage(cards[cardNr + 1].backpagePicture);
+      setFrontBaseImage(cards[cardNr + 1].frontpagePicture);
     }
+    setCardNr(cardNr + 1);
+  }
 
-    function prevCard() {
-        updateCards()
-        if (cardNr == 0) {
-            return;
-        }
-        setFrontPage(cards[cardNr - 1].frontpageString);
-        setBackPage(cards[cardNr - 1].backpageString);
-        setCardNr(cardNr - 1)
-    } 
-
-    function updateCards() {
-        let card: CardDto = {
-            cardNumber: cardNr,
-            frontpageString: frontPage,
-            frontpagePicture: "",
-            backpageString: backPage,
-            backpagePicture: ""
-        }
-        let newCards = cards;
-        newCards[cardNr] = card;
-        setCards(newCards);
+  function prevCard() {
+    updateCards();
+    if (cardNr == 0) {
+      return;
     }
+    setFrontPage(cards[cardNr - 1].frontpageString);
+    setBackPage(cards[cardNr - 1].backpageString);
+    setBackBaseImage(cards[cardNr - 1].backpagePicture);
+    setFrontBaseImage(cards[cardNr - 1].frontpagePicture);
+    setCardNr(cardNr - 1);
+  }
 
-    async function handleSave() {
-        updateCards();
+  function updateCards() {
+    let card: CardDto = {
+      cardNumber: cardNr,
+      frontpageString: frontPage.toString(),
+      frontpagePicture: frontBaseImage,
+      backpageString: backPage.toString(),
+      backpagePicture: backBaseImage,
+    };
+    let newCards = cards;
+    newCards[cardNr] = card;
+    setCards(newCards);
+  }
 
-        let deck: DeckDto = {
-            deckId: params.deckId,
-            deckName: deckName,
-            cardList: cards,
-            visibility: visibility,
-            category: category,
+  async function handleSave() {
+    updateCards();
+
+    let deck: DeckDto = {
+      deckId: params.deckId,
+      deckName: deckName,
+      cardList: cards,
+      visibility: visibility,
+      category: category,
             likes: 0,
-        }
+    };
 
-        await requests.updateDeck(deck);
+    await requests.updateDeck(deck);
 
-        await reloadProfile();
+    await reloadProfile();
 
-        window.location.href = "/mydecks";
-    }
+    window.location.href = "/mydecks";
+  }
 
     function handleVisibility(event: any) {
         setVisbility(event.target.value);
     }
 
-    function handleBack(){
-        window.location.href = "/mydecks";
-    }
+  function handleBack() {
+    window.location.href = "/mydecks";
+  }
 
+  return (
+    <div>
+      <Box sx={{ alignItems: "center", display: "flex", flexDirection: "row" }}>
+        <Box
+          sx={{
+            flex: 0.2,
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <TextField
+            id="outlined-basic"
+            label="Tittel på sett"
+            value={deckName}
+            onChange={(e) => {
+              setDeckName(e.target.value);
+            }}
+            variant="outlined"
+            sx={{ margin: "2rem", width: 400 }}
+          />
 
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{
+              textDecoration: "underline",
+              marginLeft: "1rem",
+              marginTop: "1rem",
+              fontSize: "1.5rem",
+            }}
+          >
+            Synlighet:
+          </Typography>
+          <RadioGroup
+            row
+            aria-label="synlighet"
+            name="synlighet"
+            value={visibility}
+            onChange={handleVisibility}
+          >
+            <FormControlLabel key={2} value={2} control={<Radio />} label="Alle kan redigere" />
+            <FormControlLabel key={1} value={1} control={<Radio />} label="Offentlig" />
+            <FormControlLabel key={0} value={0} control={<Radio />} label="Privat" />
 
-    return (<div>
-        <Box sx={{alignItems: "center", display: "flex", flexDirection: "row"}}>
-            <Box sx={{flex: 0.2, alignItems: "center", display: "flex", flexDirection: "column"}}>
-                <TextField id="outlined-basic" label="Tittel på sett" value={deckName} onChange={(e) => {setDeckName(e.target.value)}} variant="outlined" sx={{margin: "2rem", width: 400}} />
-
-                <Typography
-                    variant="h5"
-                    component="div"
-                    sx={{textDecoration: "underline", marginLeft: "1rem", marginTop: "1rem", fontSize: "1.5rem"}}
-                >
-                    Synlighet:
-                </Typography>
-                <RadioGroup
-                    row
-                    aria-label="synlighet"
-                    name="synlighet"
-                    value={visibility}
-                    onChange={handleVisibility}
-                >
-                    <FormControlLabel value={2} control={<Radio />} label="Alle kan redigere" />
-                    <FormControlLabel value={1} control={<Radio />} label="Offentlig" />
-                    <FormControlLabel value={0} control={<Radio />} label="Privat" />
-                </RadioGroup>
-                <Typography
-                    variant="h5"
-                    component="div"
-                    sx={{textDecoration: "underline", marginLeft: "1rem", marginTop: "1rem", fontSize: "1.5rem"}}
-                >
-                    Kategori:
-                </Typography>
-                <RadioGroup
-                    aria-label="category"
-                    name="category"
-                    value={category}
-                    onChange={(e) => {setCategory(e.target.value)}}
-                >
-                    {categoryNames.map(c => (
-                        <FormControlLabel key={c} value={c} control={<Radio />} label={c} />
-                    ))}
-                </RadioGroup>
-                <Button variant="outlined" size="large" onClick={handleSave} sx={{margin: "1rem"}}>
-                    Lagre Sett
-                </Button>
-                <Button variant="outlined" size="large" onClick={handleBack}>
-                    Avbryt
-                </Button>
-            </Box>
-            <Box sx={{flex: 1, alignItems: "center", display: "flex", flexDirection: "row"}}>
-                <Box sx={{flex: 1, alignItems: "center", display: "flex", flexDirection: "column"}}>
-                    <CircularButton content="Forrige Kort" onClick={prevCard}/>
-                </Box>
-                
-
-                <Box sx={{alignItems: "center", display: "flex", flexDirection: "column"}}>
-                    
-                    
-                    <Card
-                    sx={{
-                    maxWidth: 400,
-                    margin: "1rem",
-                    marginLeft: "1.5rem",
-                    border: "1px solid #ccc",
-                    maxHeight: 250,
-                    }}
-                    >
-                        <CardContent>
-                            <Typography
-                            variant="h5"
-                            component="div"
-                            sx={{
-                            textDecoration: "underline",
-                            marginLeft: "1rem",
-                            marginTop: "1rem",
-                            fontSize: "1.5rem",
-                            }}
-                            >
-                                Forside
-                            </Typography>
-                            <TextField
-                                id="outlined-basic" label="skriv spørsmål her" value={frontPage} onChange={(e) => {setFrontPage(e.target.value)}} multiline rows={3} variant="outlined" sx={{margin: "2rem", width: 300}}/>  <br/>
-                        </CardContent>
-                    </Card>
-
-                    <Card
-                    sx={{
-                    maxWidth: 400,
-                    margin: "1rem",
-                    marginLeft: "1.5rem",
-                    border: "1px solid #ccc",
-                    maxHeight: 250,
-                    }}
-                    >
-                    <CardContent>
-                        <Typography
-                        variant="h5"
-                        component="div"
-                        sx={{
-                        textDecoration: "underline",
-                        marginLeft: "1rem",
-                        marginTop: "1rem",
-                        fontSize: "1.5rem",
-                        }}
-                    >
-                        Bakside
-                    </Typography>
-                        <TextField
-                            id="outlined-basic" label="skriv svar her" value={backPage} onChange={(e) => {setBackPage(e.target.value)}} multiline rows={3} variant="outlined" sx={{margin: "2rem", width: 300}}/>  <br/>
-                    </CardContent>
-                    </Card>
-
-                    <Typography
-                            variant="h5"
-                            component="div"
-                            sx={{
-                            marginLeft: "1rem",
-                            marginTop: "1rem",
-                            fontSize: "1.5rem",
-                            }}
-                        >
-                            Kort nr. {cardNr + 1}
-                    </Typography>
-                    
-                </Box>
-            
-
-                
-                <Box sx={{flex: 1, alignItems: "center", display: "flex", flexDirection: "column"}}>
-                    <CircularButton content="Neste Kort" onClick={nextCard}/>
-                </Box>
-
-            </Box>
+          </RadioGroup>
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{
+              textDecoration: "underline",
+              marginLeft: "1rem",
+              marginTop: "1rem",
+              fontSize: "1.5rem",
+            }}
+          >
+            Kategori:
+          </Typography>
+          <RadioGroup
+            aria-label="category"
+            name="category"
+            value={category}
+            onChange={(e) => {
+              setCategory(e.target.value);
+            }}
+          >
+            {categoryNames.map((c) => (
+              <FormControlLabel key={c} value={c} control={<Radio />} label={c} />
+            ))}
+          </RadioGroup>
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={handleSave}
+            sx={{ margin: "1rem" }}
+          >
+            Lagre Sett
+          </Button>
+          <Button variant="outlined" size="large" onClick={handleBack}>
+            Avbryt
+          </Button>
         </Box>
-        <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
+        <Box
+          sx={{
+            flex: 1,
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "row",
+          }}
+        >
+          <Box
+            sx={{
+              flex: 1,
+              alignItems: "center",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <CircularButton content="Forrige Kort" onClick={prevCard} />
+          </Box>
+
+          <Box
+            sx={{
+              alignItems: "center",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <Card
+              sx={{
+                maxWidth: 500,
+                margin: "1rem",
+                marginLeft: "1.5rem",
+                border: "1px solid #ccc",
+                maxHeight: 350,
+              }}
+            >
+              <CardContent>
+                <Typography
+                  variant="h5"
+                  component="div"
+                  sx={{
+                    textDecoration: "underline",
+                    marginLeft: "1rem",
+                    marginTop: "1rem",
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  Forside
+                </Typography>
+                <div className="App">
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      uploadFrontImage(e);
+                    }}
+                  />
+                  <Button
+                    variant="outlined"
+                    onClick={() => setFrontBaseImage('')}
+                    sx={{ mt: 1 }}
+                    size="small"
+                  >
+                    Slett Bilde
+                  </Button>
+                  <br></br>
+                  <img src={frontBaseImage} className="image-fit" />
+                  
+                </div>
+                <TextField
+                  id="outlined-basic"
+                  label="skriv spørsmål her"
+                  value={frontPage}
+                  onChange={(e) => {
+                    setFrontPage(e.target.value);
+                  }}
+                  multiline
+                  rows={3}
+                  variant="outlined"
+                  sx={{ margin: "2rem", width: 300 }}
+                />{" "}
+                <br />
+              </CardContent>
+            </Card>
+
+            <Card
+              sx={{
+                maxWidth: 500,
+                margin: "1rem",
+                marginLeft: "1.5rem",
+                border: "1px solid #ccc",
+                maxHeight: 350,
+              }}
+            >
+              <CardContent>
+                <Typography
+                  variant="h5"
+                  component="div"
+                  sx={{
+                    textDecoration: "underline",
+                    marginLeft: "1rem",
+                    marginTop: "0rem",
+                    fontSize: "1.5rem",
+                  }}
+                >
+                  Bakside
+                </Typography>
+                <div className="App">
+                  <input
+                    type="file"
+                    onChange={(e) => {
+                      uploadBackImage(e);
+                    }}
+                  />
+                  <Button
+                    variant="outlined"
+                    onClick={() => setBackBaseImage('')}
+                    sx={{ mt: 1 }}
+                    size="small"
+                  >
+                    Slett Bilde
+                  </Button>
+                  <img src={backBaseImage} className="image-fit" />
+                  
+                </div>
+                <TextField
+                  id="outlined-basic"
+                  label="skriv svar her"
+                  value={backPage}
+                  onChange={(e) => {
+                    setBackPage(e.target.value);
+                  }}
+                  multiline
+                  rows={3}
+                  variant="outlined"
+                  sx={{ margin: "2rem", width: 300 }}
+                />{" "}
+                <br />
+              </CardContent>
+            </Card>
+
+            <Typography
+              variant="h5"
+              component="div"
+              sx={{
+                marginLeft: "1rem",
+                marginTop: "1rem",
+                fontSize: "1.5rem",
+              }}
+            >
+              Kort nr. {cardNr + 1}
+            </Typography>
+          </Box>
+
+          <Box
+            sx={{
+              flex: 1,
+              alignItems: "center",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <CircularButton content="Neste Kort" onClick={nextCard} />
+          </Box>
+        </Box>
+      </Box>
+      <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
         <DarkmodeSwitch />
       </Box>
+      
     </div>
-        
-    )
+  );
 }

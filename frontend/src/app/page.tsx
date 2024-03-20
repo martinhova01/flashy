@@ -19,7 +19,9 @@ const Page = () => {
   const [email, setemail] = useState<String>("");
   const [password, setpassword] = useState<String>("");
 
-  const fetchData = async () => {
+
+  const fetchData = async (event: React.FormEvent) => {
+    event.preventDefault(); // Forhindrer standardformsubmitting
     try {
       if (await loadProfile(email, password)) {
         const profile = getProfile();
@@ -71,6 +73,8 @@ const Page = () => {
           Logg inn
         </Typography>
 
+        <form onSubmit={fetchData}>
+
         <Grid container direction={"column"} alignContent={"center"}>
           <TextField
             placeholder="E-post"
@@ -97,7 +101,7 @@ const Page = () => {
 
           <Box textAlign={"center"}>
             <div>
-              <Button onClick={fetchData} variant="outlined">
+              <Button onClick={fetchData} variant="outlined" type="submit">
                 Logg inn
               </Button>
             </div>
@@ -110,6 +114,7 @@ const Page = () => {
             </div>
           </Box>
         </Grid>
+        </form>
       </Container>
       <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
         <DarkModeSwitch />

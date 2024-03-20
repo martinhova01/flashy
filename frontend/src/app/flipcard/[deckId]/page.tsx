@@ -96,6 +96,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
       setCards([...originalCards]);
       setCard(0);
       setIsFlipped(false);
+      setProgress(0);
     }
   };
 
@@ -104,13 +105,15 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
       const j = Math.floor(Math.random() * (i + 1));
       [cardsArray[i], cardsArray[j]] = [cardsArray[j], cardsArray[i]];
     }
+    setProgress(0)
     return cardsArray;
   }
   
   const handleHard = () => {
-    if (cards === undefined || cards.length === 0) {
-      console.log("Ingen kort :/");
-      return;
+    setIsFlipped(false);
+
+    if (cards == undefined) {
+      return
     }
     
     const updatedCards = [...cards];
