@@ -1,3 +1,73 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+[data-theme="light"] {
+    --background-color: #ffffff;
+    --text-color: #000000;
+}
+
+[data-theme="dark"] {
+    --background-color: #121212;
+    --text-color: #ffffff;
+}
+
+body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .MuiTextField-root .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+    border-color: #ffffff;
+}
+
+[data-theme="dark"] .MuiTextField-root .MuiOutlinedInput-root .MuiInputBase-input {
+    color: #ffffff;
+}
+
+[data-theme="dark"] .MuiBox-root {
+    background-color: #121212;
+}
+
+[data-theme="dark"] .MuiCard-root {
+    background-color: rgba(33, 33, 33, 0.8);
+    color: #ffffff;
+    box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.1);
+}
+
+
+[data-theme="dark"] .MuiCheckbox-root {
+    color: white;
+}
+
+[data-theme="dark"] .MuiCheckbox-root .MuiIconButton-root {
+    border-color: white;
+}
+
+[data-theme="dark"] .MuiRadio-root {
+    color: white;
+}
+
+[data-theme="dark"] .MuiRadio-root.Mui-checked .MuiSvgIcon-root {
+    color: white;
+}
+
+[data-theme="dark"] .MuiRadio-root .MuiIconButton-root {
+    border-color: white;
+}
+
+[data-theme="dark"] .star-icon {
+    fill: none;
+    stroke: white;
+    stroke-width: 1px;
+}
+
+[data-theme="dark"] .MuiPaper-root {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+#comment {
+    background-color: rgb(125, 125, 125);
+    box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.1);
+}

@@ -16,73 +16,74 @@ import CircularButton from "../../components/CircularButton";
 import { CardDto } from "../../utils/dto/CardDto";
 import { DeckDto } from "../../utils/dto/DeckDto";
 import { requests } from "../../utils/Api/requests";
-import { ProfileDto } from "../../utils/dto/ProfileDto";
-import { getProfile, reloadProfile } from "@/app/utils/LocalStorage/profile";
-import { categories } from "@/app/utils/dto/Categories";
+import { reloadProfile } from "@/app/utils/LocalStorage/profile";
+import { categoryNames } from "@/app/utils/dto/Categories";
+
+import DarkmodeSwitch from "@/app/components/DarkmodeSwitch";
 import './styles.css'; 
 
+    const [deckName, setDeckName]= useState<String>("");
+    const [cardNr, setCardNr] = useState<number>(0);
+    const [frontPage, setFrontPage] = useState<String>("");
+    const [backPage, setBackPage] = useState<String>("");
+    const [cards, setCards] = useState<CardDto[]>([]);
+    const [visibility, setVisbility] = useState<number>(0);
+    const [category, setCategory] = useState<String>("");
+    const [frontBaseImage, setFrontBaseImage] = useState<string>("");
+    const [backBaseImage, setBackBaseImage] = useState<string>();
 
-export default function EditDeck({ params }: { params: { deckId: number } }) {
-  const profile: ProfileDto = getProfile();
-  const oldDeck: DeckDto = getDeck(params.deckId);
-
-  const [deckName, setDeckName] = useState<String>(oldDeck.deckName);
-  const [cardNr, setCardNr] = useState<number>(0);
-  const [frontPage, setFrontPage] = useState<String>(
-    oldDeck.cardList[0].frontpageString
-  );
-  const [backPage, setBackPage] = useState<String>(
-    oldDeck.cardList[0].backpageString
-  );
-  const [cards, setCards] = useState<CardDto[]>(oldDeck.cardList);
-  const [visibility, setVisbility] = useState<boolean>(oldDeck.visibility);
-  const [category, setCategory] = useState<String>(oldDeck.category);
-  const [frontBaseImage, setFrontBaseImage] = useState<string>(
-    oldDeck.cardList[0].frontpagePicture.toString()
-  );
-  const [backBaseImage, setBackBaseImage] = useState<string>(
-    oldDeck.cardList[0].backpagePicture.toString()
-  );
-
-  const uploadFrontImage = async (e: any) => {
-    const file = e.target.files[0];
-    const base64 = await convertBase64(file);
-    if (typeof base64 === "string") {
-      setFrontBaseImage(base64);
-    }
-    console.log(frontBaseImage);
-  };
-  const uploadBackImage = async (e: any) => {
-    const file = e.target.files[0];
-    const base64 = await convertBase64(file);
-    if (typeof base64 === "string") {
-      setBackBaseImage(base64);
-    }
-    console.log(backBaseImage);
-  };
-
-  const convertBase64 = (file: any) => {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsDataURL(file);
-
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-
-      fileReader.onerror = (error) => {
-        reject(error);
-      };
-    });
-  };
-
-  function getDeck(deckId: number): any {
-    for (let deck of profile.ownedDecks) {
-      if (deck.deckId == deckId) {
-        return deck;
+    const fetchDeck = async () => {
+        try {
+            const deck: DeckDto = await requests.getDeckByDeckId(Number(params.deckId));
+        
+            setCards(deck.cardList);
+            setDeckName(deck.deckName);
+            setFrontPage(deck.cardList[0].frontpageString);
+            setBackPage(deck.cardList[0].backpageString);
+            setFrontBaseImage(deck.cardList[0].frontpagePicture);
+            setBackBaseImage(deck.cardList[0].backpagePicture);
+            setVisbility(deck.visibility);
+            setCategory(deck.category);
+        } catch (error) {
+            console.error("Error fetching cards:", error);
+        }
+    };
+    
+    useEffect(() => {
+        fetchDeck();
+    }, []);
+    const uploadFrontImage = async (e: any) => {
+      const file = e.target.files[0];
+      const base64 = await convertBase64(file);
+      if (typeof base64 === "string") {
+        setFrontBaseImage(base64);
       }
-    }
-  }
+      console.log(frontBaseImage);
+    };
+    const uploadBackImage = async (e: any) => {
+      const file = e.target.files[0];
+      const base64 = await convertBase64(file);
+      if (typeof base64 === "string") {
+        setBackBaseImage(base64);
+      }
+      console.log(backBaseImage);
+    };
+  
+    const convertBase64 = (file: any) => {
+      return new Promise((resolve, reject) => {
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+  
+        fileReader.onload = () => {
+          resolve(fileReader.result);
+        };
+  
+        fileReader.onerror = (error) => {
+          reject(error);
+        };
+      });
+    };
+    
 
   function nextCard() {
     updateCards();
@@ -112,7 +113,7 @@ export default function EditDeck({ params }: { params: { deckId: number } }) {
 
   function updateCards() {
     let card: CardDto = {
-      cardNumber: 0,
+      cardNumber: cardNr,
       frontpageString: frontPage.toString(),
       frontpagePicture: frontBaseImage,
       backpageString: backPage.toString(),
@@ -127,11 +128,12 @@ export default function EditDeck({ params }: { params: { deckId: number } }) {
     updateCards();
 
     let deck: DeckDto = {
-      deckId: oldDeck.deckId,
+      deckId: params.deckId,
       deckName: deckName,
       cardList: cards,
       visibility: visibility,
       category: category,
+            likes: 0,
     };
 
     await requests.updateDeck(deck);
@@ -140,6 +142,10 @@ export default function EditDeck({ params }: { params: { deckId: number } }) {
 
     window.location.href = "/mydecks";
   }
+
+    function handleVisibility(event: any) {
+        setVisbility(event.target.value);
+    }
 
   function handleBack() {
     window.location.href = "/mydecks";
@@ -184,9 +190,7 @@ export default function EditDeck({ params }: { params: { deckId: number } }) {
             aria-label="synlighet"
             name="synlighet"
             value={visibility}
-            onChange={(e) => {
-              setVisbility(!visibility);
-            }}
+            onChange={handleVisibility}
           >
             <FormControlLabel
               value={true}

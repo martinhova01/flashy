@@ -1,8 +1,8 @@
 import { CardDto } from "../dto/CardDto";
+import { CommentDto } from "../dto/CommentDto";
 import { DeckDto } from "../dto/DeckDto";
 import { ProfileDto } from "../dto/ProfileDto";
 import { api } from "./api";
-import { AxiosResponse } from "axios";
 
 export const requests = {
   /**
@@ -115,17 +115,127 @@ export const requests = {
     return response.data;
   },
 
-
-  getCardsByDeckId: async function (deckId: number): Promise<CardDto[]> {
-    const requestParams = {
-      deckId: Number(deckId),
-    };
-    const response = await api.get("/cardsByDeckId", { params: requestParams });
+  getDeckByDeckId: async function (deckId: number): Promise<DeckDto> {
+    const response = await api.get("/decks/" + deckId);
     return response.data;
   },
   
   getAllPublicDecks: async function (): Promise<DeckDto[]> {
     const response = await api.get("/decks");
+    return response.data;
+  },
+
+  /**
+   * Get all decks favorited by the profile.
+   * @param profileId the id of the profile
+   * @returns the list of decks
+   */
+  getFavoriteDecks: async function (profileId: number): Promise<DeckDto[]> {
+    const response = await api.get("/profiles/" + profileId + "/favorites");
+    return response.data;
+  },
+
+  /**
+   * Add / remove favorite.
+   * 
+   * @param profileId the profile that favorites
+   * @param deckId the deck to favorite
+   * @returns true if favorite was added, false if favorite was removed
+   */
+  favorite: async function (profileId: number, deckId: number): Promise<boolean> {
+    const requestParams = {
+      profileId: profileId,
+      deckId: deckId
+    };
+    const response = await api.put("/favorite", {}, {params: requestParams})
+    return response.data;
+  },
+
+  /**
+   * Check if a profile has favorited a deck.
+   * @param profileId the profile
+   * @param deckId the deck
+   * @returns true if the profile has favorited the deck
+   */
+  favoriteExists: async function (profileId: number, deckId: number): Promise<boolean> {
+    const requestParams = {
+      profileId: profileId,
+      deckId: deckId
+    };
+    const response = await api.get("/favoriteExists", {params: requestParams});
+    return response.data;
+  },
+
+  getOwner: async function (deckId: number) {
+    const response = await api.get("/decks/" + deckId + "/owner");
+    return response.data;
+  },
+
+  /**
+   * Check if a profile has liked a deck.
+   * @param profileId the profile
+   * @param deckId the deck
+   * @returns true if the profile has liked the deck
+   */
+  likeExists: async function (profileId: number, deckId: number): Promise<boolean> {
+    const requestParams = {
+      profileId: profileId,
+      deckId: deckId
+    };
+    const response = await api.get("/likeExists", {params: requestParams});
+    return response.data;
+  },
+
+  /**
+   * Add / remove like.
+   * 
+   * @param profileId the profile that likes
+   * @param deckId the deck to like
+   * @returns true if like was added, false if like was removed
+   */
+  like: async function (profileId: number, deckId: number): Promise<boolean> {
+    const requestParams = {
+      profileId: profileId,
+      deckId: deckId
+    };
+    const response = await api.put("/like", {}, {params: requestParams});
+    return response.data;
+  },
+  
+  /**
+   * Add a comment to a deck.
+   * 
+   * @param profileId The profileID of the person commenting
+   * @param deckId The deck that the comment is attached to
+   * @param comment The body of the comment
+   * @returns true if the comment was added, false otherwise
+   */
+  addComment: async function (profileId: number, deckId: number, comment: String): Promise<boolean> {
+    const requestParams = {
+      profileId: profileId,
+      deckId: deckId,
+      comment: comment
+    };
+    const response = await api.put("/comment", {}, {params: requestParams});
+    return response.data;
+  },
+  
+  /**
+   * Fetch all comments on a given deck.
+   * 
+   * @param deckId The ID of the deck we want to find comments of.
+   * @returns All comments (CommentDtos) on the given deck.
+   */
+  getComments: async function (deckId: number): Promise<CommentDto[]> {
+    const requestParams = {
+      deckId: deckId
+    }
+    const response = await api.get("/deckComments", {params: requestParams});
+    return response.data;
+  },
+
+  getOwnerSchool: async function (deckId: number) {
+    const response = await api.get("/decks/" + deckId + "/ownerSchool");
     return response.data;
   },
 };
