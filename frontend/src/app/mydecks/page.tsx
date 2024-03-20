@@ -20,7 +20,7 @@ const MyDecksPage: React.FC = () => {
   
   const addNewDeckButtonPressed = async () => {
     const emptyCard: CardDto = {cardNumber: 0, frontpageString: "", frontpagePicture: "", backpageString: "", backpagePicture: ""};
-    const newDeck: DeckDto = {deckId: 0, deckName: `Nytt dekk ${Math.ceil(Math.random() * 1000)}`, cardList: [emptyCard], visibility: false, category: "Annet"};
+    const newDeck: DeckDto = {deckId: 0, deckName: `Nytt dekk`, cardList: [emptyCard], visibility: false, category: "Annet"};
     await requests.addNewDeck(newDeck, getProfile().profileId );
     await reloadProfile();
     setDecks( getProfile().ownedDecks );
