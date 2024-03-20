@@ -24,3 +24,4 @@ export default function InputFileUpload({ onChange, label }) {
     </Button>
   );
 }
+

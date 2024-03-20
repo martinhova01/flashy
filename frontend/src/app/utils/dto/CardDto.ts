@@ -2,8 +2,8 @@
 
 export type CardDto = {
     cardNumber: number;
-    frontpageString: String;
-    frontpagePicture: String;
-    backpageString: String;
-    backpagePicture: String;
+    frontpageString: string;
+    frontpagePicture: string;
+    backpageString: string;
+    backpagePicture: string;
 }

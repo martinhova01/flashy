@@ -52,7 +52,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
     try {
       const request = await requests.getCardsByDeckId(Number(params.deckId));
 
-      // Use optional chaining to check for undefined
+      
       setCards(request);
       setOriginalCards(request); //kopi av orginal kortene
     } catch (error) {
@@ -87,6 +87,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
       setCards([...originalCards]);
       setCard(0);
       setIsFlipped(false);
+      setProgress(0);
     }
   };
 
@@ -95,13 +96,15 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
       const j = Math.floor(Math.random() * (i + 1));
       [cardsArray[i], cardsArray[j]] = [cardsArray[j], cardsArray[i]];
     }
+    setProgress(0)
     return cardsArray;
   }
 
   const handleHard = () => {
-    if (cards === undefined || cards.length === 0) {
-      console.log("Ingen kort :/");
-      return;
+    setIsFlipped(false);
+
+    if (cards == undefined) {
+      return
     }
 
     const updatedCards = [...cards];
@@ -118,6 +121,9 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
 
     const newProgress = (card / updatedCards.length) * 100;
     setProgress(newProgress);
+
+    
+
   };
   
   
@@ -179,10 +185,14 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
                 width: "35rem",
                 height: "25rem",
                 display: "flex",
+                flexDirection: cards && cards.length > 0 && cards[card].frontpagePicture ? 'column-reverse' : 'column', // så bildet ikke overlapper teksten
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
+              {cards && cards.length > 0 && cards[card].frontpagePicture && (
+              <img src={cards[card].frontpagePicture} alt="Front of Card" style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain', marginBottom: '20px' }} />
+              )}
               <Typography variant="h5" component="h2">
                 {cards && cards.length > 0
                   ? cards[card]!.frontpageString
@@ -206,10 +216,14 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
                 width: "35rem",
                 height: "25rem",
                 display: "flex",
+                flexDirection: cards && cards.length > 0 && cards[card].backpagePicture ? 'column-reverse' : 'column', // unngå overlapp med både tekst og bilde
                 justifyContent: "center",
                 alignItems: "center",
               }}
             >
+                {cards && cards.length > 0 && cards[card].backpagePicture && (
+                <img src={cards[card].backpagePicture} alt="Back of Card" style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain', marginBottom: '20px' }} />
+              )}
               <Typography variant="h5" component="h2">
                 {cards && cards.length > 0
                   ? cards[card]!.backpageString

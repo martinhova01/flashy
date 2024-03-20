@@ -1,3 +1,4 @@
+/* page.tsx */
 "use client";
 import React, { useEffect, useState } from "react";
 import {
@@ -18,6 +19,8 @@ import { requests } from "../../utils/Api/requests";
 import { ProfileDto } from "../../utils/dto/ProfileDto";
 import { getProfile, reloadProfile } from "@/app/utils/LocalStorage/profile";
 import { categories } from "@/app/utils/dto/Categories";
+import './styles.css'; 
+
 
 export default function EditDeck({ params }: { params: { deckId: number } }) {
   const profile: ProfileDto = getProfile();
@@ -110,9 +113,9 @@ export default function EditDeck({ params }: { params: { deckId: number } }) {
   function updateCards() {
     let card: CardDto = {
       cardNumber: 0,
-      frontpageString: frontPage,
+      frontpageString: frontPage.toString(),
       frontpagePicture: frontBaseImage,
-      backpageString: backPage,
+      backpageString: backPage.toString(),
       backpagePicture: backBaseImage,
     };
     let newCards = cards;
@@ -260,11 +263,11 @@ export default function EditDeck({ params }: { params: { deckId: number } }) {
           >
             <Card
               sx={{
-                maxWidth: 400,
+                maxWidth: 500,
                 margin: "1rem",
                 marginLeft: "1.5rem",
                 border: "1px solid #ccc",
-                maxHeight: 250,
+                maxHeight: 350,
               }}
             >
               <CardContent>
@@ -287,8 +290,17 @@ export default function EditDeck({ params }: { params: { deckId: number } }) {
                       uploadFrontImage(e);
                     }}
                   />
+                  <Button
+                    variant="contained"
+                    onClick={() => setFrontBaseImage('')}
+                    sx={{ mt: 1 }}
+                    size="small"
+                  >
+                    Slett Bilde
+                  </Button>
                   <br></br>
-                  <img src={frontBaseImage} height="200px" />
+                  <img src={frontBaseImage} className="image-fit" />
+                  
                 </div>
                 <TextField
                   id="outlined-basic"
@@ -308,11 +320,11 @@ export default function EditDeck({ params }: { params: { deckId: number } }) {
 
             <Card
               sx={{
-                maxWidth: 400,
+                maxWidth: 500,
                 margin: "1rem",
                 marginLeft: "1.5rem",
                 border: "1px solid #ccc",
-                maxHeight: 250,
+                maxHeight: 350,
               }}
             >
               <CardContent>
@@ -322,7 +334,7 @@ export default function EditDeck({ params }: { params: { deckId: number } }) {
                   sx={{
                     textDecoration: "underline",
                     marginLeft: "1rem",
-                    marginTop: "1rem",
+                    marginTop: "0rem",
                     fontSize: "1.5rem",
                   }}
                 >
@@ -335,8 +347,16 @@ export default function EditDeck({ params }: { params: { deckId: number } }) {
                       uploadBackImage(e);
                     }}
                   />
-                  <br></br>
-                  <img src={backBaseImage} height="200px" />
+                  <Button
+                    variant="contained"
+                    onClick={() => setBackBaseImage('')}
+                    sx={{ mt: 1 }}
+                    size="small"
+                  >
+                    Slett Bilde
+                  </Button>
+                  <img src={backBaseImage} className="image-fit" />
+                  
                 </div>
                 <TextField
                   id="outlined-basic"
@@ -379,7 +399,6 @@ export default function EditDeck({ params }: { params: { deckId: number } }) {
           </Box>
         </Box>
       </Box>
-      <Typography>tekst {backBaseImage}</Typography>
     </div>
   );
 }

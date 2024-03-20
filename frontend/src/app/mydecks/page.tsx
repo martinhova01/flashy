@@ -64,6 +64,14 @@ const MyDecksPage: React.FC = () => {
                   <Typography variant="body2">
                     {deck.cardList.length} kort
                   </Typography>
+                  {/*forsidebilde på et sett*/}
+              {deck.cardList[0].frontpagePicture && (
+            <img 
+              src={deck.cardList[0].frontpagePicture} 
+              alt="Front of Card" 
+              style={{ maxWidth: '100%', maxHeight: '100px', objectFit: 'contain' }} // bildeintegrasjon
+            />
+          )}
                 </CardContent>
               </Button>
               <CardActions>
