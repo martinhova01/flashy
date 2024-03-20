@@ -17,11 +17,11 @@ const Navbar = (props: {selected: number}) => {
   const reactElements = menuItems.map( item => {
     
     const onClick = (item.function == null) ? ( () => {} ) : ( item.function );
-    const variant = (menuItems.indexOf(item) == props.selected) ? "text" : "outlined";
+    const variant = (menuItems.indexOf(item) == props.selected) ? "contained" : "outlined";
     
     return (
       <Link href={item.link} key={menuItems.indexOf(item)}>
-        <Button variant={variant} onClick={onClick} sx={{bgcolor: variant != "text" ? "" : "#cccccc"}}>
+        <Button variant={variant} onClick={onClick}>
           {item.text}  
         </Button>
       </Link>

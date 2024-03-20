@@ -90,7 +90,7 @@ const MyDecksPage: React.FC = () => {
         <Grid key={1} item xs={6} sm={3} md={2} lg={1}>
           <Card>
             <Button component="a" sx={{ m: "0rem", p: "0rem", paddingTop: "10px", paddingBottom: "10px" }} onClick={addNewDeckButtonPressed}>
-              <img src="https://cdn1.iconfinder.com/data/icons/basic-ui-elements-28/512/1034_Add_new_plus_sign-512.png" />
+              <img  style={{ width: '100%', height: '100%' }} src="https://cdn1.iconfinder.com/data/icons/basic-ui-elements-28/512/1034_Add_new_plus_sign-512.png" />
             </Button>
           </Card>
         </Grid>

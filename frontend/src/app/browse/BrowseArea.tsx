@@ -112,19 +112,20 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
                                         {likesCount}
                                 </Typography>
 
-                                <IconButton onClick={handleLikeClick} color="inherit">
-                                        {liked ? <FavoriteIcon color="error"/> : <FavoriteBorderIcon/>}
-                                </IconButton>
-
-                                <IconButton onClick={handleFavoriteClick} 
-                                    sx={{ color: favorited ? yellow[700] : 'action.active'}}>
-                                        {favorited ? <StarIcon/> : <StarBorderIcon className="star-icon"/>}
-                                </IconButton>
+                                
                             </Grid>
                     </Grid>
                 </Grid>
                 
             </Button>
+            <IconButton onClick={handleLikeClick} color="inherit">
+                    {liked ? <FavoriteIcon color="error"/> : <FavoriteBorderIcon/>}
+            </IconButton>
+
+            <IconButton onClick={handleFavoriteClick} 
+                sx={{ color: favorited ? yellow[700] : 'action.active'}}>
+                    {favorited ? <StarIcon/> : <StarBorderIcon className="star-icon"/>}
+            </IconButton>
             {props.deck.visibility > 1 ? 
                 <Button onClick={ () => editDeckButtonPressed(props.deck.deckId) }>
                     Rediger
