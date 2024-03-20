@@ -1,5 +1,3 @@
-// InputFileUpload.js
-
 import React from 'react';
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
@@ -15,7 +13,7 @@ const VisuallyHiddenInput = styled('input')({
   width: 1,
 });
 
-export default function InputFileUpload({ onChange, label }) {
+export default function InputFileUpload( onChange: any, label: string ) {
   return (
     <Button variant="contained" component="label">
       {label}

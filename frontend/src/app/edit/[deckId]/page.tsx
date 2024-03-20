@@ -18,9 +18,10 @@ import { DeckDto } from "../../utils/dto/DeckDto";
 import { requests } from "../../utils/Api/requests";
 import { reloadProfile } from "@/app/utils/LocalStorage/profile";
 import { categoryNames } from "@/app/utils/dto/Categories";
-
 import DarkmodeSwitch from "@/app/components/DarkmodeSwitch";
 import './styles.css'; 
+
+export default function EditDeck({params} : {params: {deckId: number}}) {
 
     const [deckName, setDeckName]= useState<String>("");
     const [cardNr, setCardNr] = useState<number>(0);
@@ -30,7 +31,7 @@ import './styles.css';
     const [visibility, setVisbility] = useState<number>(0);
     const [category, setCategory] = useState<String>("");
     const [frontBaseImage, setFrontBaseImage] = useState<string>("");
-    const [backBaseImage, setBackBaseImage] = useState<string>();
+    const [backBaseImage, setBackBaseImage] = useState<string>("");
 
     const fetchDeck = async () => {
         try {
@@ -95,8 +96,8 @@ import './styles.css';
     } else {
       setFrontPage(cards[cardNr + 1].frontpageString);
       setBackPage(cards[cardNr + 1].backpageString);
-      setBackBaseImage(`${cards[cardNr + 1].backpagePicture}`);
-      setFrontBaseImage(`${cards[cardNr + 1].frontpagePicture}`);
+      setBackBaseImage(cards[cardNr + 1].backpagePicture);
+      setFrontBaseImage(cards[cardNr + 1].frontpagePicture);
     }
     setCardNr(cardNr + 1);
   }
@@ -108,6 +109,8 @@ import './styles.css';
     }
     setFrontPage(cards[cardNr - 1].frontpageString);
     setBackPage(cards[cardNr - 1].backpageString);
+    setBackBaseImage(cards[cardNr - 1].backpagePicture);
+    setFrontBaseImage(cards[cardNr - 1].frontpagePicture);
     setCardNr(cardNr - 1);
   }
 
@@ -192,16 +195,10 @@ import './styles.css';
             value={visibility}
             onChange={handleVisibility}
           >
-            <FormControlLabel
-              value={true}
-              control={<Radio />}
-              label="offentlig"
-            />
-            <FormControlLabel
-              value={false}
-              control={<Radio />}
-              label="privat"
-            />
+            <FormControlLabel key={2} value={2} control={<Radio />} label="Alle kan redigere" />
+            <FormControlLabel key={1} value={1} control={<Radio />} label="Offentlig" />
+            <FormControlLabel key={0} value={0} control={<Radio />} label="Privat" />
+
           </RadioGroup>
           <Typography
             variant="h5"
@@ -223,8 +220,8 @@ import './styles.css';
               setCategory(e.target.value);
             }}
           >
-            {categories.map((c) => (
-              <FormControlLabel value={c} control={<Radio />} label={c} />
+            {categoryNames.map((c) => (
+              <FormControlLabel key={c} value={c} control={<Radio />} label={c} />
             ))}
           </RadioGroup>
           <Button
@@ -295,7 +292,7 @@ import './styles.css';
                     }}
                   />
                   <Button
-                    variant="contained"
+                    variant="outlined"
                     onClick={() => setFrontBaseImage('')}
                     sx={{ mt: 1 }}
                     size="small"
@@ -352,7 +349,7 @@ import './styles.css';
                     }}
                   />
                   <Button
-                    variant="contained"
+                    variant="outlined"
                     onClick={() => setBackBaseImage('')}
                     sx={{ mt: 1 }}
                     size="small"
@@ -403,6 +400,10 @@ import './styles.css';
           </Box>
         </Box>
       </Box>
+      <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
+        <DarkmodeSwitch />
+      </Box>
+      
     </div>
   );
 }
