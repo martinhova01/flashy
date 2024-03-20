@@ -13,6 +13,7 @@ import { ChangeEvent, useState } from "react";
 import { requests } from "./utils/Api/requests";
 import { ProfileDto } from "./utils/dto/ProfileDto";
 import { getProfile, loadProfile } from "./utils/LocalStorage/profile";
+import DarkModeSwitch from "./components/DarkmodeSwitch";
 
 const Page = () => {
   const [email, setemail] = useState<String>("");
@@ -110,6 +111,9 @@ const Page = () => {
           </Box>
         </Grid>
       </Container>
+      <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
+        <DarkModeSwitch />
+      </Box>
     </div>
   );
 };

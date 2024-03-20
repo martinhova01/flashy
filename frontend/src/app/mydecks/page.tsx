@@ -7,12 +7,14 @@ import {
   CardContent,
   Card,
   CardActions,
+  Box,
 } from "@mui/material";
 import Navbar from "../components/Navbar";
 import { getProfile, reloadProfile } from "../utils/LocalStorage/profile";
 import { DeckDto } from "../utils/dto/DeckDto";
 import { requests } from "../utils/Api/requests";
 import { CardDto } from "../utils/dto/CardDto";
+import DarkmodeSwitch from "../components/DarkmodeSwitch";
 
 const MyDecksPage: React.FC = () => {
   
@@ -85,6 +87,9 @@ const MyDecksPage: React.FC = () => {
           </Card>
         </Grid>
       </Grid>
+      <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
+        <DarkmodeSwitch />
+      </Box>
     </div>
   );
 };

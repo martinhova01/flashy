@@ -3,6 +3,7 @@ import { Typography, Container, TextField, Grid, Box, Button } from "@mui/materi
 import { useState } from "react";
 import { ProfileDto } from "../utils/dto/ProfileDto";
 import { requests } from "../utils/Api/requests";
+import DarkmodeSwitch from "../components/DarkmodeSwitch";
 
 export default function SignUpPage() {
 
@@ -95,6 +96,9 @@ export default function SignUpPage() {
 
 
         </Container>
+        <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
+        <DarkmodeSwitch />
+      </Box>
         
     </div>
     

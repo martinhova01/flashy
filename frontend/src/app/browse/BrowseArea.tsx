@@ -107,7 +107,7 @@ function DeckCard(props: {deck: DeckDto, itemPadding: string}) {
 
                                 <IconButton onClick={handleFavoriteClick} 
                                     sx={{ color: favorited ? yellow[700] : 'action.active'}}>
-                                        {favorited ? <StarIcon/> : <StarBorderIcon/>}
+                                        {favorited ? <StarIcon/> : <StarBorderIcon className="star-icon"/>}
                                 </IconButton>
                             </Grid>
                     </Grid>

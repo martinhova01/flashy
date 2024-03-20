@@ -18,6 +18,7 @@ import { requests } from "../../utils/Api/requests";
 import { reloadProfile } from "@/app/utils/LocalStorage/profile";
 import { categoryNames } from "@/app/utils/dto/Categories";
 
+import DarkmodeSwitch from "@/app/components/DarkmodeSwitch";
 
 export default function EditDeck({params} : {params: {deckId: number}}) {
 
@@ -246,6 +247,9 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
 
             </Box>
         </Box>
+        <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
+        <DarkmodeSwitch />
+      </Box>
     </div>
         
     )

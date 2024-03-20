@@ -7,11 +7,13 @@ import {
   CardContent,
   Card,
   CardActions,
+  Box,
 } from "@mui/material";
 import Navbar from "../components/Navbar";
 import { getProfile, reloadProfile } from "../utils/LocalStorage/profile";
 import { DeckDto } from "../utils/dto/DeckDto";
 import { requests } from "../utils/Api/requests";
+import DarkmodeSwitch from "../components/DarkmodeSwitch";
 
 const MyFavoritesPage: React.FC = () => {
   
@@ -81,6 +83,9 @@ const MyFavoritesPage: React.FC = () => {
           </Grid>
         ))}
       </Grid>
+      <Box sx={{ position: 'fixed', right: 0, bottom: 0, p: 2 }}>
+        <DarkmodeSwitch />
+      </Box>
     </div>
   );
 };

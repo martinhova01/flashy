@@ -25,7 +25,7 @@ export default function CommentSection(comment: any, handleCommentChange: any, h
                 >
                     <Grid container direction={"column"}>
                         {comments.map((comment: CommentDto, index: number) => (
-                            <Box margin={"10px"}>
+                            <Box id="comment" margin={"10px"}>
                                 <Typography variant="body1" textAlign={"left"}>
                                     <strong>{comment.firstname + " " + comment.lastname}</strong>
                                 </Typography>
