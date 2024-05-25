@@ -12,7 +12,7 @@ import { ProfileDto } from "../utils/dto/ProfileDto";
 import Navbar from "../components/Navbar";
 import DarkmodeSwitch from "../components/DarkmodeSwitch";
 
-const page = () => {
+const ProfilePage = () => {
 
   const storedProfileString = localStorage.getItem("profile");
   const storedProfile: ProfileDto = storedProfileString
@@ -80,4 +80,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default ProfilePage;

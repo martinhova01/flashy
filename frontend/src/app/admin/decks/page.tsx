@@ -1,11 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Box, Button, Divider, Grid, Paper, Typography } from "@mui/material";
-import { requests } from "../utils/Api/requests";
-import { DeckDto } from "../utils/dto/DeckDto";
-import AdminNavbar from "../components/AdminNavbar";
+import { requests } from "../../utils/api/requests";
+import { DeckDto } from "../../utils/dto/DeckDto";
+import AdminNavbar from "../../components/AdminNavbar";
 
-const page = () => {
+const AdminDecksPage = () => {
   const [decks, setDecks] = useState<DeckDto[]>([]);
 
   const fetchDecks = async () => {
@@ -78,4 +78,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default AdminDecksPage;

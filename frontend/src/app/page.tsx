@@ -10,12 +10,12 @@ import {
   Link,
 } from "@mui/material";
 import { ChangeEvent, useState } from "react";
-import { requests } from "./utils/Api/requests";
+import { requests } from "./utils/api/requests";
 import { ProfileDto } from "./utils/dto/ProfileDto";
-import { getProfile, loadProfile } from "./utils/LocalStorage/profile";
+import { getProfile, loadProfile } from "./utils/localStorage/profile";
 import DarkModeSwitch from "./components/DarkmodeSwitch";
 
-const Page = () => {
+const LoginPage = () => {
   const [email, setemail] = useState<String>("");
   const [password, setpassword] = useState<String>("");
 
@@ -123,4 +123,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default LoginPage;

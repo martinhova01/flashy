@@ -5,9 +5,9 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
-import { getProfile } from "@/app/utils/LocalStorage/profile";
+import { getProfile } from "@/app/utils/localStorage/profile";
 import { yellow } from '@mui/material/colors';
-import { requests } from "../utils/Api/requests";
+import { requests } from "../utils/api/requests";
 
 
 export function BrowseArea(props: {decks: DeckDto[], browseWidth: number, itemPadding: string}) {

@@ -10,9 +10,9 @@ import {
   Box,
 } from "@mui/material";
 import Navbar from "../components/Navbar";
-import { getProfile, reloadProfile } from "../utils/LocalStorage/profile";
+import { getProfile, reloadProfile } from "../utils/localStorage/profile";
 import { DeckDto } from "../utils/dto/DeckDto";
-import { requests } from "../utils/Api/requests";
+import { requests } from "../utils/api/requests";
 import DarkmodeSwitch from "../components/DarkmodeSwitch";
 
 const MyFavoritesPage: React.FC = () => {

@@ -1,7 +1,7 @@
 import { Box, Checkbox, FormControlLabel, FormGroup, Grid, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { DeckDto } from "../utils/dto/DeckDto";
-import { requests } from "../utils/Api/requests";
+import { requests } from "../utils/api/requests";
 import React from "react";
 import { categoryNames } from "../utils/dto/Categories";
 

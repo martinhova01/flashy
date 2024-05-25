@@ -1,11 +1,11 @@
 'use client'
 import DarkmodeSwitch from '@/app/components/DarkmodeSwitch';
-import { requests } from '@/app/utils/Api/requests';
+import { requests } from '@/app/utils/api/requests';
 import { ProfileDto } from '@/app/utils/dto/ProfileDto';
 import { Box, Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
-const page = () => {
+const EditProfilePage = () => {
 
   const storedProfileString = localStorage.getItem("profile");
   const storedProfile: ProfileDto = storedProfileString
@@ -228,4 +228,4 @@ const page = () => {
   )
 }
 
-export default page
+export default EditProfilePage;

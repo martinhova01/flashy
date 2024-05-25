@@ -1,6 +1,6 @@
 "use client";
 
-import { requests } from "@/app/utils/Api/requests";
+import { requests } from "@/app/utils/api/requests";
 import { CardDto } from "@/app/utils/dto/CardDto";
 import {
   Typography,
@@ -9,17 +9,16 @@ import {
   Container,
   Box,
 } from "@mui/material";
-import { getProfile } from "@/app/utils/LocalStorage/profile";
+import { getProfile } from "@/app/utils/localStorage/profile";
 
 import { useEffect, useState } from "react";
-import CommentSection from "./CommentSection";
-import FlipCardArea from "./FlipCardArea";
+import CommentSection from "../../components/CommentSection";
+import FlipCardArea from "../../components/FlipCardArea";
 import { CommentDto } from "@/app/utils/dto/CommentDto";
 import { DeckDto } from "@/app/utils/dto/DeckDto";
 import DarkmodeSwitch from "@/app/components/DarkmodeSwitch";
-import DarkModeSwitch from "@/app/components/DarkmodeSwitch";
 
-export default function flashcard({ params }: { params: { deckId: number } }) {
+export default function FlashcardPage({ params }: { params: { deckId: number } }) {
   const [isFlipped, setIsFlipped] = useState(false);
   const [card, setCard] = useState(0);
   const handleFlip = () => {
@@ -160,7 +159,7 @@ export default function flashcard({ params }: { params: { deckId: number } }) {
           
           <Grid container item md={10} direction="column">
             {metadata.map( text => 
-              <Typography variant="h6" textAlign={"left"}>
+              <Typography variant="h6" textAlign={"left"} key={0}>
                 {text}
               </Typography>
             )}

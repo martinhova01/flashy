@@ -1,14 +1,14 @@
 import { Box, Button, ButtonGroup } from "@mui/material";
 import Link from "next/link";
 import React from "react";
-import { logOut } from "../utils/LocalStorage/profile";
+import { logOut } from "../utils/localStorage/profile";
 
 const AdminNavbar = (props: {selected: number}) => {
   
   // Legg til flere meny-elementer her
   const menuItems = [
-    { text: "Brukere", link: "/admin", function: null},
-    { text: "Offentlige dekk", link: "/deck", function: null },
+    { text: "Brukere", link: "/admin/profiles", function: null},
+    { text: "Offentlige dekk", link: "/admin/decks", function: null },
     { text: "Logg ut", link: "/", function: logOut },
   ]
   
@@ -17,7 +17,7 @@ const AdminNavbar = (props: {selected: number}) => {
     const onClick = (item.function == null) ? ( () => {} ) : ( item.function );
 
     return (
-      <Link href={item.link}>
+      <Link href={item.link} key={item.text}>
         <Button onClick={onClick}>
           {item.text}
         </Button>

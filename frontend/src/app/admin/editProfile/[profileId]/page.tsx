@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Button, TextField, Checkbox } from "@mui/material";
-import { requests } from "@/app/utils/Api/requests";
+import { requests } from "@/app/utils/api/requests";
 import { ProfileDto } from "@/app/utils/dto/ProfileDto";
 
-const Page = ({ params }: { params: { profileId: string } }) => {
+const AdminEditProfilePage = ({ params }: { params: { profileId: string } }) => {
   const [profile, setProfile] = useState<ProfileDto>();
 
   const fetchProfile = async () => {
@@ -136,4 +136,4 @@ const Page = ({ params }: { params: { profileId: string } }) => {
   );
 };
 
-export default Page;
+export default AdminEditProfilePage;

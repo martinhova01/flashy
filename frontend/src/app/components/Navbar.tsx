@@ -1,14 +1,14 @@
 import { Box, Button, ButtonGroup } from "@mui/material";
 import Link from "next/link";
 import React from "react";
-import { logOut } from "../utils/LocalStorage/profile";
+import { logOut } from "../utils/localStorage/profile";
 
 const Navbar = (props: {selected: number}) => {
   
   // Legg til flere meny-elementer her
   const menuItems = [
     { text: "Flashy", link: "/browse", function: null },
-    { text: "Mine dekk", link: "/mydecks", function: null },
+    { text: "Mine dekk", link: "/myDecks", function: null },
     { text: "Profil", link: "/profile", function: null },
     { text: "Mine Favoritter", link: "/myFavorites", function: null },
     { text: "Logg ut", link: "/", function: logOut },

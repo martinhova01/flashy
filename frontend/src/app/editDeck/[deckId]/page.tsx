@@ -15,13 +15,13 @@ import {
 import CircularButton from "../../components/CircularButton";
 import { CardDto } from "../../utils/dto/CardDto";
 import { DeckDto } from "../../utils/dto/DeckDto";
-import { requests } from "../../utils/Api/requests";
-import { reloadProfile } from "@/app/utils/LocalStorage/profile";
+import { requests } from "../../utils/api/requests";
+import { reloadProfile } from "@/app/utils/localStorage/profile";
 import { categoryNames } from "@/app/utils/dto/Categories";
 import DarkmodeSwitch from "@/app/components/DarkmodeSwitch";
 import './styles.css'; 
 
-export default function EditDeck({params} : {params: {deckId: number}}) {
+export default function EditDeckPage({params} : {params: {deckId: number}}) {
 
     const [deckName, setDeckName]= useState<String>("");
     const [cardNr, setCardNr] = useState<number>(0);
@@ -143,7 +143,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
 
     await reloadProfile();
 
-    window.location.href = "/mydecks";
+    window.location.href = "/myDecks";
   }
 
     function handleVisibility(event: any) {
@@ -151,7 +151,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
     }
 
   function handleBack() {
-    window.location.href = "/mydecks";
+    window.location.href = "/myDecks";
   }
 
   return (

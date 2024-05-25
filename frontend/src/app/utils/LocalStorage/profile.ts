@@ -1,4 +1,4 @@
-import { requests } from "../Api/requests";
+import { requests } from "../api/requests";
 import { ProfileDto } from "../dto/ProfileDto";
 
 // Get the profile that is currently logged in (stored in localStorage).
