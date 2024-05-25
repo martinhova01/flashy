@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   Button,
@@ -18,7 +18,7 @@ import DarkmodeSwitch from "../components/DarkmodeSwitch";
 
 const MyDecksPage: React.FC = () => {
   
-  const [decks, setDecks] = useState<DeckDto[]>( getProfile().ownedDecks );
+  const [decks, setDecks] = useState<DeckDto[]>([]);
   
   const addNewDeckButtonPressed = async () => {
     const emptyCard: CardDto = {cardNumber: 0, frontpageString: "", frontpagePicture: "", backpageString: "", backpagePicture: ""};
@@ -41,6 +41,12 @@ const MyDecksPage: React.FC = () => {
   const viewDeckButtonPressed = (deckId: number) => {
     window.location.href = `/flipcard/${deckId}`
   }
+
+  useEffect(() => {
+    setDecks(getProfile().ownedDecks);
+  }, []);
+
+  
   
   return (
     <div>

@@ -24,14 +24,14 @@ jobs:
         run: npm i
         working-directory: frontend
 
-      # - name: 🧹 Linting
-      #   run: npm run lint
-      #   working-directory: frontend
+      - name: 🧹 Linting
+        run: npm run lint
+        working-directory: frontend
 
       # - name: ✅ Testing
       #   run: npm test
       #   working-directory: frontend
 
-      # - name: 🏗️ Building
-      #   run: npm run build
-      #   working-directory: frontend
+      - name: 🏗️ Building
+        run: npm run build
+        working-directory: frontend
