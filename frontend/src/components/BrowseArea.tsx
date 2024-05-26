@@ -5,7 +5,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
-import { getProfile } from "@/app/utils/localStorage/profile";
+import { getProfile } from "@/utils/localStorage/profile";
 import { yellow } from '@mui/material/colors';
 import { requests } from "../utils/api/requests";
 

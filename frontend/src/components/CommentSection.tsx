@@ -1,4 +1,4 @@
-import { CommentDto } from "@/app/utils/dto/CommentDto";
+import { CommentDto } from "@/utils/dto/CommentDto";
 import { Box, Button, Divider, Grid, Paper, TextField, Typography } from "@mui/material";
 
 export default function CommentSection(comment: any, handleCommentChange: any, handleAddComment: any, comments: CommentDto[], profile: any, sendCommentColor: any) {

@@ -1,14 +1,13 @@
 "use client";
 
 import { Grid, Container, Typography, Box } from "@mui/material";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/Navbar";
 import { useEffect, useState } from "react";
-import { DeckDto } from "../utils/dto/DeckDto";
-import { BrowseArea } from "../components/BrowseArea";
-import { SearchAndFilterArea } from "../components/SearchAndFilterArea";
-import { requests } from "../utils/api/requests";
-import { getProfile } from "../utils/localStorage/profile";
-import DarkmodeSwitch from "../components/DarkmodeSwitch";
+import { DeckDto } from "../../utils/dto/DeckDto";
+import { BrowseArea } from "../../components/BrowseArea";
+import { SearchAndFilterArea } from "../../components/SearchAndFilterArea";
+import { requests } from "../../utils/api/requests";
+import DarkmodeSwitch from "../../components/DarkmodeSwitch";
 
 export default function BrowsePage() {
     

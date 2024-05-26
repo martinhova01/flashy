@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Box, Button, Divider, Grid, Paper, Typography } from "@mui/material";
-import { requests } from "../../utils/api/requests";
-import { ProfileDto } from "../../utils/dto/ProfileDto";
-import AdminNavbar from "../../components/AdminNavbar";
-import DarkmodeSwitch from "../../components/DarkmodeSwitch";
+import { requests } from "../../../utils/api/requests";
+import { ProfileDto } from "../../../utils/dto/ProfileDto";
+import AdminNavbar from "../../../components/AdminNavbar";
+import DarkmodeSwitch from "../../../components/DarkmodeSwitch";
 
 const AdminProfilesPage = () => {
   const [profiles, setProfiles] = useState<ProfileDto[]>([]);
@@ -39,7 +39,7 @@ const AdminProfilesPage = () => {
 
   const handleEdit = (profileId: number) => {
     // Redirect to the edit page
-    window.location.href = `/admin/${profileId}`;
+    window.location.href = `/admin/editProfile/${profileId}`;
   };
 
   const handleDelete = (profileId: number) => {

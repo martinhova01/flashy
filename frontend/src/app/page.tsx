@@ -10,10 +10,8 @@ import {
   Link,
 } from "@mui/material";
 import { ChangeEvent, useState } from "react";
-import { requests } from "./utils/api/requests";
-import { ProfileDto } from "./utils/dto/ProfileDto";
-import { getProfile, loadProfile } from "./utils/localStorage/profile";
-import DarkModeSwitch from "./components/DarkmodeSwitch";
+import { getProfile, loadProfile } from "../utils/localStorage/profile";
+import DarkModeSwitch from "../components/DarkmodeSwitch";
 
 const LoginPage = () => {
   const [email, setemail] = useState<String>("");
@@ -26,7 +24,7 @@ const LoginPage = () => {
       if (await loadProfile(email, password)) {
         const profile = getProfile();
         if (profile.admin) {
-          window.location.href = "/admin";
+          window.location.href = "/admin/profiles";
         } else {
           window.location.href = "/browse";
         }

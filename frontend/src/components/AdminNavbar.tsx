@@ -15,10 +15,11 @@ const AdminNavbar = (props: {selected: number}) => {
   const reactElements = menuItems.map( item => {
     
     const onClick = (item.function == null) ? ( () => {} ) : ( item.function );
+    const variant = (menuItems.indexOf(item) == props.selected) ? "contained" : "outlined";
 
     return (
       <Link href={item.link} key={item.text}>
-        <Button onClick={onClick}>
+        <Button onClick={onClick} variant={variant}>
           {item.text}
         </Button>
       </Link>

@@ -1,10 +1,10 @@
 'use client'
-import DarkmodeSwitch from '@/app/components/DarkmodeSwitch';
-import { requests } from '@/app/utils/api/requests';
-import { ProfileDto } from '@/app/utils/dto/ProfileDto';
+import DarkmodeSwitch from '@/components/DarkmodeSwitch';
+import { requests } from '@/utils/api/requests';
+import { ProfileDto } from '@/utils/dto/ProfileDto';
 import { Box, Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { getProfile } from '../utils/localStorage/profile';
+import { getProfile } from '../../utils/localStorage/profile';
 
 const EditProfilePage = () => {
 

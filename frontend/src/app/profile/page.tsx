@@ -8,10 +8,10 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
-import { ProfileDto } from "../utils/dto/ProfileDto";
-import Navbar from "../components/Navbar";
-import DarkmodeSwitch from "../components/DarkmodeSwitch";
-import { getProfile } from "../utils/localStorage/profile";
+import { ProfileDto } from "../../utils/dto/ProfileDto";
+import Navbar from "../../components/Navbar";
+import DarkmodeSwitch from "../../components/DarkmodeSwitch";
+import { getProfile } from "../../utils/localStorage/profile";
 
 const ProfilePage = () => {
 

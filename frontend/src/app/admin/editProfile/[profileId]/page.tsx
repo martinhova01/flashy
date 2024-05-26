@@ -1,8 +1,8 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Button, TextField, Checkbox } from "@mui/material";
-import { requests } from "@/app/utils/api/requests";
-import { ProfileDto } from "@/app/utils/dto/ProfileDto";
+import { requests } from "@/utils/api/requests";
+import { ProfileDto } from "@/utils/dto/ProfileDto";
 
 const AdminEditProfilePage = ({ params }: { params: { profileId: string } }) => {
   const [profile, setProfile] = useState<ProfileDto>();
@@ -33,7 +33,7 @@ const AdminEditProfilePage = ({ params }: { params: { profileId: string } }) => 
     if (profile) {
       try {
         await requests.updateProfile(profile);
-        window.location.href = "/admin";
+        window.location.href = "/admin/profiles";
       } catch (error) {
         console.log(error);
       }
