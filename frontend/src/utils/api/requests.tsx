@@ -1,4 +1,3 @@
-import { CardDto } from "../dto/CardDto";
 import { CommentDto } from "../dto/CommentDto";
 import { DeckDto } from "../dto/DeckDto";
 import { ProfileDto } from "../dto/ProfileDto";

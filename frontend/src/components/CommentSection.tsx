@@ -1,4 +1,4 @@
-import { CommentDto } from "@/app/utils/dto/CommentDto";
+import { CommentDto } from "@/utils/dto/CommentDto";
 import { Box, Button, Divider, Grid, Paper, TextField, Typography } from "@mui/material";
 
 export default function CommentSection(comment: any, handleCommentChange: any, handleAddComment: any, comments: CommentDto[], profile: any, sendCommentColor: any) {
@@ -25,7 +25,7 @@ export default function CommentSection(comment: any, handleCommentChange: any, h
                 >
                     <Grid container direction={"column"}>
                         {comments.map((comment: CommentDto, index: number) => (
-                            <Box id="comment" margin={"10px"}>
+                            <Box id="comment" margin={"10px"} key={index}>
                                 <Typography variant="body1" textAlign={"left"}>
                                     <strong>{comment.firstname + " " + comment.lastname}</strong>
                                 </Typography>

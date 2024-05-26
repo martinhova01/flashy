@@ -1,17 +1,14 @@
 'use client'
-import DarkmodeSwitch from '@/app/components/DarkmodeSwitch';
-import { requests } from '@/app/utils/Api/requests';
-import { ProfileDto } from '@/app/utils/dto/ProfileDto';
+import DarkmodeSwitch from '@/components/DarkmodeSwitch';
+import { requests } from '@/utils/api/requests';
+import { ProfileDto } from '@/utils/dto/ProfileDto';
 import { Box, Button, Card, CardActions, CardContent, TextField, Typography } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { getProfile } from '../../utils/localStorage/profile';
 
-const page = () => {
+const EditProfilePage = () => {
 
-  const storedProfileString = localStorage.getItem("profile");
-  const storedProfile: ProfileDto = storedProfileString
-  ? JSON.parse(storedProfileString)
-  : null;
-
+  const [storedProfile, setStoredProfile] = useState<ProfileDto>();
   const [name, setName] = useState('');
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,6 +18,9 @@ const page = () => {
   
 
   const save = async () => {
+    if (!storedProfile) {
+      return
+    }
 
     const newProfile: ProfileDto = {
       profileId: storedProfile.profileId,
@@ -61,6 +61,10 @@ const page = () => {
   const cancel = () => {
     window.location.href= "/profile";
   }
+
+  useEffect(() => {
+    setStoredProfile(getProfile());
+  }, []);
 
 
 
@@ -105,7 +109,7 @@ const page = () => {
             id="outlined-basic"
             variant="outlined"
             value={name} // Oppdater til å bruke 'name' som verdi
-            label={storedProfile.firstname}
+            label={storedProfile ? storedProfile.firstname : ""}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setName(event.target.value);
             }}
@@ -128,7 +132,7 @@ const page = () => {
             id="outlined-basic"
             variant="outlined"
             value={lastName} // Oppdater til å bruke 'name' som verdi
-            label={storedProfile.lastname}
+            label={storedProfile ? storedProfile.lastname : ""}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setLastName(event.target.value);
             }}
@@ -151,7 +155,7 @@ const page = () => {
             id="outlined-basic"
             variant="outlined"
             value={email} // Oppdater til å bruke 'name' som verdi
-            label={storedProfile.email}
+            label={storedProfile ? storedProfile.email : ""}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setEmail(event.target.value);
             }}
@@ -196,7 +200,7 @@ const page = () => {
             id="outlined-basic"
             variant="outlined"
             value={school} // Oppdater til å bruke 'name' som verdi
-            label={storedProfile.school}
+            label={storedProfile ? storedProfile.school : ""}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setSchool(event.target.value);
             }}
@@ -228,4 +232,4 @@ const page = () => {
   )
 }
 
-export default page
+export default EditProfilePage;

@@ -9,15 +9,15 @@ import {
   CardActions,
   Box,
 } from "@mui/material";
-import Navbar from "../components/Navbar";
-import { getProfile, reloadProfile } from "../utils/LocalStorage/profile";
-import { DeckDto } from "../utils/dto/DeckDto";
-import { requests } from "../utils/Api/requests";
-import DarkmodeSwitch from "../components/DarkmodeSwitch";
+import Navbar from "../../components/Navbar";
+import { getProfile } from "../../utils/localStorage/profile";
+import { DeckDto } from "../../utils/dto/DeckDto";
+import { requests } from "../../utils/api/requests";
+import DarkmodeSwitch from "../../components/DarkmodeSwitch";
 
 const MyFavoritesPage: React.FC = () => {
   
-  const [decks, setDecks] = useState<DeckDto[]>(getProfile().ownedDecks);
+  const [decks, setDecks] = useState<DeckDto[]>([]);
   
   
   const viewDeckButtonPressed = (deckId: number) => {

@@ -1,23 +1,23 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { Box, Button, Divider, Grid, Paper, Typography } from "@mui/material";
-import { requests } from "../utils/Api/requests";
-import { DeckDto } from "../utils/dto/DeckDto";
-import AdminNavbar from "../components/AdminNavbar";
+import { requests } from "../../../utils/api/requests";
+import { DeckDto } from "../../../utils/dto/DeckDto";
+import AdminNavbar from "../../../components/AdminNavbar";
 
-const page = () => {
+const AdminDecksPage = () => {
   const [decks, setDecks] = useState<DeckDto[]>([]);
 
   const fetchDecks = async () => {
     try {
       // getProfile
       const fetchedDecks = await requests.getAllPublicDecks();
-        // check if profile exists
-        if (fetchedDecks) {
-          setDecks(fetchedDecks);
-        } else {
-          console.log("Could not get decks");
-        }
+      // check if profile exists
+      if (fetchedDecks) {
+        setDecks(fetchedDecks);
+      } else {
+        console.log("Could not get decks");
+      }
     } catch (error) {
       console.error("Error fetching deck:", error);
     }
@@ -78,4 +78,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default AdminDecksPage;

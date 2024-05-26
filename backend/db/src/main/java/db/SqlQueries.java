@@ -13,7 +13,7 @@ public class SqlQueries {
      */
     public static String getProfileQuery(int profileId) {
         return String.format("SELECT * FROM profile WHERE profile_id=%s;",
-                Integer.toString(profileId));
+            Integer.toString(profileId));
     }
 
     /**
@@ -26,11 +26,11 @@ public class SqlQueries {
      * @return the SQL-query as a String
      */
     public static String addProfileQuery(String email, String password, String firstName,
-            String lastName, String school) {
+        String lastName, String school) {
         return String.format(
-                "INSERT INTO profile (email, password, firstname, lastname, school, is_admin) "
-                        + "VALUES ('%s', '%s', '%s', '%s', '%s', %b)",
-                email, password, firstName, lastName, school, false);
+            "INSERT INTO profile (email, password, firstname, lastname, school, is_admin) "
+            + "VALUES ('%s', '%s', '%s', '%s', '%s', %b)",
+            email, password, firstName, lastName, school, false);
     }
 
     /**
@@ -41,7 +41,7 @@ public class SqlQueries {
      */
     public static String deleteProfileQuery(int profileId) {
         return String.format("DELETE FROM profile WHERE profile_id=%s",
-                Integer.toString(profileId));
+            Integer.toString(profileId));
     }
 
     /**
@@ -57,20 +57,20 @@ public class SqlQueries {
      * @return the SQL-query as a String
      */
     public static String updateProfileQuery(
-            int profileId,
-            String email,
-            String password,
-            String firstName,
-            String lastName,
-            String school,
-            boolean isAdmin) {
+        int profileId,
+        String email,
+        String password,
+        String firstName,
+        String lastName,
+        String school,
+        boolean isAdmin) {
 
         return String.format("UPDATE profile "
-                + "SET email='%s', password='%s',"
-                + "firstname='%s', lastname='%s', school='%s', is_admin=%b "
-                + "WHERE profile_id=%s",
-                email, password,
-                firstName, lastName, school, isAdmin, Integer.toString(profileId));
+            + "SET email='%s', password='%s',"
+            + "firstname='%s', lastname='%s', school='%s', is_admin=%b "
+            + "WHERE profile_id=%s",
+            email, password,
+            firstName, lastName, school, isAdmin, Integer.toString(profileId));
     }
 
     /**
@@ -81,8 +81,8 @@ public class SqlQueries {
      */
     public static String getOwnedDecksQuery(int profileId) {
         return String.format(
-                "SELECT * FROM deck WHERE owner_id = %s",
-                Integer.toString(profileId));
+            "SELECT * FROM deck WHERE owner_id = %s",
+            Integer.toString(profileId));
     }
 
     /**
@@ -93,7 +93,7 @@ public class SqlQueries {
      */
     public static String getCardsQuery(int deckId) {
         return String.format("SELECT * FROM card where deck_id = %s",
-                Integer.toString(deckId));
+            Integer.toString(deckId));
     }
 
     /**
@@ -101,14 +101,14 @@ public class SqlQueries {
      *
      * @param profileId the owner of the deck
      * @param name      the name of the deck
-     * @param isPublic  is deck public
+     * @param visibility 0=private, 1=public, 2=public to edit
      * @return the query as a string
      */
     public static String addNewDeckQuery(int profileId,
-            String name, int visibility, String category) {
+        String name, int visibility, String category) {
         return String.format("INSERT INTO deck(name, owner_id, visibility, category)"
-                + "VALUES('%s', %s, %s, '%s')",
-                name, Integer.toString(profileId), Integer.toString(visibility), category);
+            + "VALUES('%s', %s, %s, '%s')",
+            name, Integer.toString(profileId), Integer.toString(visibility), category);
     }
 
     /**
@@ -123,13 +123,13 @@ public class SqlQueries {
      * @return the query as a string.
      */
     public static String addCardQuery(int cardNumber, int deckId, String frontPage,
-            String frontPagePic, String backPage, String backPagePic) {
+        String frontPagePic, String backPage, String backPagePic) {
 
         return String.format(
-                "INSERT INTO CARD("
-                        + "card_id, front_page, front_page_picture, back_page, back_page_picture, deck_id)"
-                        + "VALUES(%s, '%s', '%s', '%s', '%s', %s)",
-                cardNumber, frontPage, frontPagePic, backPage, backPagePic, deckId);
+            "INSERT INTO CARD("
+            + "card_id, front_page, front_page_picture, back_page, back_page_picture, deck_id)"
+            + "VALUES(%s, '%s', '%s', '%s', '%s', %s)",
+            cardNumber, frontPage, frontPagePic, backPage, backPagePic, deckId);
     }
 
     public static String deleteDeckQuery(int deckId) {
@@ -154,8 +154,8 @@ public class SqlQueries {
      */
     public static String getProfileIdQuery(String email, String password) {
         return String.format("SELECT profile_id FROM profile"
-                + " WHERE email = '%s' AND password = '%s'",
-                email, password);
+            + " WHERE email = '%s' AND password = '%s'",
+            email, password);
     }
 
     /**
@@ -168,10 +168,10 @@ public class SqlQueries {
      * @return the query as a string.
      */
     public static String updateDeckQuery(int deckId,
-            String deckName, int visibility, String category) {
+        String deckName, int visibility, String category) {
         return String.format("UPDATE deck SET name = '%s', visibility = %s, category = '%s'"
-                + "WHERE deck_id = %s",
-                deckName, Integer.toString(visibility), category, Integer.toString(deckId));
+            + "WHERE deck_id = %s",
+            deckName, Integer.toString(visibility), category, Integer.toString(deckId));
     }
 
     /**
@@ -185,12 +185,12 @@ public class SqlQueries {
      * @return the query as a string
      */
     public static String updateCardQuery(int cardNumber, int deckId, String frontPage,
-            String frontPagePic, String backPage, String backPagePic) {
+        String frontPagePic, String backPage, String backPagePic) {
         return String.format("UPDATE card "
-                + "SET front_page='%s', front_page_picture='%s', back_page='%s', back_page_picture='%s'"
-                + "WHERE card_id = %s AND deck_id = %s",
-                frontPage, frontPagePic, backPage, backPagePic,
-                Integer.toString(cardNumber), Integer.toString(deckId));
+            + "SET front_page='%s', front_page_picture='%s', back_page='%s', back_page_picture='%s'"
+            + "WHERE card_id = %s AND deck_id = %s",
+            frontPage, frontPagePic, backPage, backPagePic,
+            Integer.toString(cardNumber), Integer.toString(deckId));
     }
 
     /**
@@ -202,7 +202,7 @@ public class SqlQueries {
      */
     public static String getFavoriteQuery(int profileId, int deckId) {
         return String.format("SELECT * FROM favorite WHERE deck_id = %s AND profile_id = %s",
-                Integer.toString(deckId), Integer.toString(profileId));
+            Integer.toString(deckId), Integer.toString(profileId));
     }
 
     /**
@@ -214,7 +214,7 @@ public class SqlQueries {
      */
     public static String deleteFavoriteQuery(int profileId, int deckId) {
         return String.format("DELETE FROM favorite WHERE deck_id = %s AND profile_id = %s",
-                Integer.toString(deckId), Integer.toString(profileId));
+            Integer.toString(deckId), Integer.toString(profileId));
     }
 
     /**
@@ -226,7 +226,7 @@ public class SqlQueries {
      */
     public static String addFavoriteQuery(int profileId, int deckId) {
         return String.format("INSERT INTO favorite (deck_id, profile_id) VALUES (%s, %s)",
-                Integer.toString(deckId), Integer.toString(profileId));
+            Integer.toString(deckId), Integer.toString(profileId));
     }
 
     /**
@@ -237,9 +237,9 @@ public class SqlQueries {
      */
     public static String getFavoriteDecksQuery(int profileId) {
         return String.format("SELECT deck.deck_id, deck.name, deck.category, deck.visibility "
-                + "FROM favorite INNER JOIN deck ON (favorite.deck_id = deck.deck_id) "
-                + "WHERE favorite.profile_id = %s",
-                Integer.toString(profileId));
+            + "FROM favorite INNER JOIN deck ON (favorite.deck_id = deck.deck_id) "
+            + "WHERE favorite.profile_id = %s",
+            Integer.toString(profileId));
     }
 
     /**
@@ -250,8 +250,8 @@ public class SqlQueries {
      */
     public static String getOwnerQuery(int deckId) {
         return String.format("SELECT profile.firstname, profile.lastname "
-                + "FROM deck INNER JOIN profile ON (profile.profile_id = deck.owner_id) "
-                + "WHERE deck.deck_id = %s", Integer.toString(deckId));
+            + "FROM deck INNER JOIN profile ON (profile.profile_id = deck.owner_id) "
+            + "WHERE deck.deck_id = %s", Integer.toString(deckId));
     }
 
     /**
@@ -275,7 +275,7 @@ public class SqlQueries {
      */
     public static String deleteLikeQuery(int profileId, int deckId) {
         return String.format("DELETE FROM user_like WHERE deck_id = %s AND profile_id = %s",
-        Integer.toString(deckId), Integer.toString(profileId));
+            Integer.toString(deckId), Integer.toString(profileId));
     }
 
     /**
@@ -326,18 +326,30 @@ public class SqlQueries {
      */
     public static String getDeckComments(Integer deckId) {
         return String.format("SELECT firstname, lastname, comment FROM comments "
-                + "INNER JOIN profile ON comments.profile_id = profile.profile_id "
-                + "WHERE deck_id = '%s'", deckId);
+            + "INNER JOIN profile ON comments.profile_id = profile.profile_id "
+            + "WHERE deck_id = '%s'", deckId);
     }
 
     
     
+    /**
+     * Generate SQL-query to get the school of the owner of a deck.
+     *
+     * @param deckId the deckId of the deck
+     * @return the query as a string
+     */
     public static String getOwnerSchoolQuery(int deckId) {
         return String.format("SELECT profile.school "
-                + "FROM deck INNER JOIN profile ON (profile.profile_id = deck.owner_id) "
-                + "WHERE deck.deck_id = %s", Integer.toString(deckId));
+            + "FROM deck INNER JOIN profile ON (profile.profile_id = deck.owner_id) "
+            + "WHERE deck.deck_id = %s", Integer.toString(deckId));
     }
 
+    /**
+     * Generate SQL-query to get a deck by the deckId.
+     *
+     * @param deckId the deckId
+     * @return the query as a string
+     */
     public static String getDeckByIdQuery(int deckId) {
         return String.format("SELECT * FROM deck "
             + "WHERE deck_id = %s", Integer.toString(deckId));

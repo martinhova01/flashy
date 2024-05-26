@@ -1,9 +1,9 @@
 "use client"
 import { Typography, Container, TextField, Grid, Box, Button } from "@mui/material";
 import { useState } from "react";
-import { ProfileDto } from "../utils/dto/ProfileDto";
-import { requests } from "../utils/Api/requests";
-import DarkmodeSwitch from "../components/DarkmodeSwitch";
+import { ProfileDto } from "../../utils/dto/ProfileDto";
+import { requests } from "../../utils/api/requests";
+import DarkmodeSwitch from "../../components/DarkmodeSwitch";
 
 export default function SignUpPage() {
 

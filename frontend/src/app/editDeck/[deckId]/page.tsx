@@ -12,16 +12,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import CircularButton from "../../components/CircularButton";
-import { CardDto } from "../../utils/dto/CardDto";
-import { DeckDto } from "../../utils/dto/DeckDto";
-import { requests } from "../../utils/Api/requests";
-import { reloadProfile } from "@/app/utils/LocalStorage/profile";
-import { categoryNames } from "@/app/utils/dto/Categories";
-import DarkmodeSwitch from "@/app/components/DarkmodeSwitch";
+import CircularButton from "../../../components/CircularButton";
+import { CardDto } from "../../../utils/dto/CardDto";
+import { DeckDto } from "../../../utils/dto/DeckDto";
+import { requests } from "../../../utils/api/requests";
+import { reloadProfile } from "@/utils/localStorage/profile";
+import { categoryNames } from "@/utils/dto/Categories";
+import DarkmodeSwitch from "@/components/DarkmodeSwitch";
 import './styles.css'; 
 
-export default function EditDeck({params} : {params: {deckId: number}}) {
+export default function EditDeckPage({params} : {params: {deckId: number}}) {
 
     const [deckName, setDeckName]= useState<String>("");
     const [cardNr, setCardNr] = useState<number>(0);
@@ -143,7 +143,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
 
     await reloadProfile();
 
-    window.location.href = "/mydecks";
+    window.location.href = "/myDecks";
   }
 
     function handleVisibility(event: any) {
@@ -151,7 +151,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
     }
 
   function handleBack() {
-    window.location.href = "/mydecks";
+    window.location.href = "/myDecks";
   }
 
   return (
@@ -300,7 +300,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
                     Slett Bilde
                   </Button>
                   <br></br>
-                  <img src={frontBaseImage} className="image-fit" />
+                  <img src={frontBaseImage} className="image-fit" alt=""/>
                   
                 </div>
                 <TextField
@@ -356,7 +356,7 @@ export default function EditDeck({params} : {params: {deckId: number}}) {
                   >
                     Slett Bilde
                   </Button>
-                  <img src={backBaseImage} className="image-fit" />
+                  <img src={backBaseImage} className="image-fit" alt=""/>
                   
                 </div>
                 <TextField

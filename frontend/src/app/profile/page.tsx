@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -8,26 +8,39 @@ import {
   CardContent,
   Typography,
 } from "@mui/material";
-import { ProfileDto } from "../utils/dto/ProfileDto";
-import Navbar from "../components/Navbar";
-import DarkmodeSwitch from "../components/DarkmodeSwitch";
+import { ProfileDto } from "../../utils/dto/ProfileDto";
+import Navbar from "../../components/Navbar";
+import DarkmodeSwitch from "../../components/DarkmodeSwitch";
+import { getProfile } from "../../utils/localStorage/profile";
 
-const page = () => {
+const ProfilePage = () => {
 
-  const storedProfileString = localStorage.getItem("profile");
-  const storedProfile: ProfileDto = storedProfileString
-  ? JSON.parse(storedProfileString)
-  : null;
+  
+  const [storedProfile, setStoredProfile] = useState<ProfileDto>();
 
-
-  const [fornavn, setFornavn] = useState(storedProfile.firstname);
-  const [etternavn, setEtternavn] = useState(storedProfile.lastname);
-  const [email, setEmail] = useState(storedProfile.email);
-  const [school, setSchool] = useState(storedProfile.school);
+  const [fornavn, setFornavn] = useState<String>("laster...");
+  const [etternavn, setEtternavn] = useState<String>("laster...");
+  const [email, setEmail] = useState<String>("laster...");
+  const [school, setSchool] = useState<String>("laster...");
 
   const editProfile = () => {
-    window.location.href= "/profile/editProfile";
+    window.location.href= "/editProfile";
   }
+
+  useEffect(() => {
+    setStoredProfile(getProfile());
+  }, []);
+
+  useEffect(() => {
+    if (storedProfile) {
+      setFornavn(storedProfile.firstname);
+      setEtternavn(storedProfile.lastname);
+      setEmail(storedProfile.email);
+      setSchool(storedProfile.school);
+    }
+  }, [storedProfile]);
+
+
 
   return (
     
@@ -80,4 +93,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default ProfilePage;

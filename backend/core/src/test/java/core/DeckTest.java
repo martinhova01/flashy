@@ -1,8 +1,15 @@
 package core;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Test;
+
+/**
+ * Testclass for Deck.
+ *
+ */
 public class DeckTest {
 
     @Test
@@ -38,7 +45,7 @@ public class DeckTest {
     }
 
     @Test
-    public void testSetDeckNameAndID() {
+    public void testSetDeckNameAndId() {
         Deck deck = new Deck("Old Deck", 456, 0, "Annet", 10);
         assertEquals("Old Deck", deck.getDeckName());
         assertEquals(456, deck.getDeckId());

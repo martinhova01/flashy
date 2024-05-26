@@ -1,25 +1,28 @@
 import { Box, Button, ButtonGroup } from "@mui/material";
 import Link from "next/link";
 import React from "react";
-import { logOut } from "../utils/LocalStorage/profile";
+import { logOut } from "../utils/localStorage/profile";
 
-const AdminNavbar = (props: {selected: number}) => {
+const Navbar = (props: {selected: number}) => {
   
   // Legg til flere meny-elementer her
   const menuItems = [
-    { text: "Brukere", link: "/admin", function: null},
-    { text: "Offentlige dekk", link: "/deck", function: null },
+    { text: "Flashy", link: "/browse", function: null },
+    { text: "Mine dekk", link: "/myDecks", function: null },
+    { text: "Profil", link: "/profile", function: null },
+    { text: "Mine Favoritter", link: "/myFavorites", function: null },
     { text: "Logg ut", link: "/", function: logOut },
   ]
   
   const reactElements = menuItems.map( item => {
     
     const onClick = (item.function == null) ? ( () => {} ) : ( item.function );
-
+    const variant = (menuItems.indexOf(item) == props.selected) ? "contained" : "outlined";
+    
     return (
-      <Link href={item.link}>
-        <Button onClick={onClick}>
-          {item.text}
+      <Link href={item.link} key={menuItems.indexOf(item)}>
+        <Button variant={variant} onClick={onClick}>
+          {item.text}  
         </Button>
       </Link>
     )
@@ -37,4 +40,4 @@ const AdminNavbar = (props: {selected: number}) => {
   );
 };
 
-export default AdminNavbar;
+export default Navbar;

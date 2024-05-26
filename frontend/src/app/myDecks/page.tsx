@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Grid,
   Button,
@@ -9,16 +9,16 @@ import {
   CardActions,
   Box,
 } from "@mui/material";
-import Navbar from "../components/Navbar";
-import { getProfile, reloadProfile } from "../utils/LocalStorage/profile";
-import { DeckDto } from "../utils/dto/DeckDto";
-import { requests } from "../utils/Api/requests";
-import { CardDto } from "../utils/dto/CardDto";
-import DarkmodeSwitch from "../components/DarkmodeSwitch";
+import Navbar from "../../components/Navbar";
+import { getProfile, reloadProfile } from "../../utils/localStorage/profile";
+import { DeckDto } from "../../utils/dto/DeckDto";
+import { requests } from "../../utils/api/requests";
+import { CardDto } from "../../utils/dto/CardDto";
+import DarkmodeSwitch from "../../components/DarkmodeSwitch";
 
 const MyDecksPage: React.FC = () => {
   
-  const [decks, setDecks] = useState<DeckDto[]>( getProfile().ownedDecks );
+  const [decks, setDecks] = useState<DeckDto[]>([]);
   
   const addNewDeckButtonPressed = async () => {
     const emptyCard: CardDto = {cardNumber: 0, frontpageString: "", frontpagePicture: "", backpageString: "", backpagePicture: ""};
@@ -35,12 +35,18 @@ const MyDecksPage: React.FC = () => {
   }
   
   const editDeckButtonPressed = (deckId: number) => {
-    window.location.href = `/edit/${deckId}`
+    window.location.href = `/editDeck/${deckId}`
   }
   
   const viewDeckButtonPressed = (deckId: number) => {
     window.location.href = `/flipcard/${deckId}`
   }
+
+  useEffect(() => {
+    setDecks(getProfile().ownedDecks);
+  }, []);
+
+  
   
   return (
     <div>
@@ -90,7 +96,7 @@ const MyDecksPage: React.FC = () => {
         <Grid key={1} item xs={6} sm={3} md={2} lg={1}>
           <Card>
             <Button component="a" sx={{ m: "0rem", p: "0rem", paddingTop: "10px", paddingBottom: "10px" }} onClick={addNewDeckButtonPressed}>
-              <img  style={{ width: '100%', height: '100%' }} src="https://cdn1.iconfinder.com/data/icons/basic-ui-elements-28/512/1034_Add_new_plus_sign-512.png" />
+              <img  alt={""} style={{ width: '100%', height: '100%' }} src="https://cdn1.iconfinder.com/data/icons/basic-ui-elements-28/512/1034_Add_new_plus_sign-512.png" />
             </Button>
           </Card>
         </Grid>
