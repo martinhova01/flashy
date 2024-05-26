@@ -22,8 +22,8 @@ import java.util.List;
  */
 public class DbConnection {
 
-    private static String filePath = System.getProperty("user.home") + System.getProperty("file.separator")
-            + "flashy.db";
+    private static String filePath = System.getProperty("user.home")
+        + System.getProperty("file.separator") + "flashy.db";
 
     private Connection connection;
 
@@ -144,8 +144,9 @@ public class DbConnection {
     }
 
     private void seedProfiles() {
-        String insertQuery = "INSERT INTO profile (email, password, firstname, lastname, school, is_admin) "
-                + "VALUES (?, ?, ?, ?, ?, ?)";
+        String insertQuery = "INSERT INTO "
+            + "profile(email, password, firstname, lastname, school, is_admin) "
+            + "VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(insertQuery)) {
             statement.setString(1, "user1@example.com");
             statement.setString(2, "password");
@@ -305,7 +306,7 @@ public class DbConnection {
      */
     public void addProfile(Profile p) {
         String query = SqlQueries.addProfileQuery(
-                p.getEmail(), p.getPassword(), p.getFirstname(), p.getLastname(), p.getSchool());
+            p.getEmail(), p.getPassword(), p.getFirstname(), p.getLastname(), p.getSchool());
 
         try {
             Statement statement = this.connection.createStatement();
@@ -338,8 +339,8 @@ public class DbConnection {
      */
     public void updateProfile(Profile p) {
         String query = SqlQueries.updateProfileQuery(
-                p.getProfileId(), p.getEmail(), p.getPassword(),
-                p.getFirstname(), p.getLastname(), p.getSchool(), p.isAdmin());
+            p.getProfileId(), p.getEmail(), p.getPassword(),
+            p.getFirstname(), p.getLastname(), p.getSchool(), p.isAdmin());
 
         try {
             Statement statement = this.connection.createStatement();
@@ -378,7 +379,7 @@ public class DbConnection {
     public void addNewDeck(int profileId, Deck deck) {
 
         String query = SqlQueries.addNewDeckQuery(profileId,
-                deck.getDeckName(), deck.getVisibility(), deck.getCategory());
+            deck.getDeckName(), deck.getVisibility(), deck.getCategory());
 
         try {
             Statement statement = this.connection.createStatement();
@@ -405,12 +406,12 @@ public class DbConnection {
 
     private void addCard(int deckId, Card c) {
         String query = SqlQueries.addCardQuery(
-                c.getCardNumber(),
-                deckId,
-                c.getFrontpageString(),
-                c.getFrontpagePicture(),
-                c.getBackpageString(),
-                c.getBackpagePicture());
+            c.getCardNumber(),
+            deckId,
+            c.getFrontpageString(),
+            c.getFrontpagePicture(),
+            c.getBackpageString(),
+            c.getBackpagePicture());
 
         try {
             Statement statement = this.connection.createStatement();
@@ -478,7 +479,7 @@ public class DbConnection {
      */
     public void updateDeck(Deck d) {
         String updateDeckQuery = SqlQueries.updateDeckQuery(
-                d.getDeckId(), d.getDeckName(), d.getVisibility(), d.getCategory());
+            d.getDeckId(), d.getDeckName(), d.getVisibility(), d.getCategory());
         try {
             Statement statement = connection.createStatement();
             statement.execute(updateDeckQuery);
@@ -487,12 +488,12 @@ public class DbConnection {
 
                 if (cardExists(c.getCardNumber(), d.getDeckId())) {
                     String query = SqlQueries.updateCardQuery(
-                            c.getCardNumber(),
-                            d.getDeckId(),
-                            c.getFrontpageString(),
-                            c.getFrontpagePicture(),
-                            c.getBackpageString(),
-                            c.getBackpagePicture());
+                        c.getCardNumber(),
+                        d.getDeckId(),
+                        c.getFrontpageString(),
+                        c.getFrontpagePicture(),
+                        c.getBackpageString(),
+                        c.getBackpagePicture());
                     statement.execute(query);
                 } else {
                     addCard(d.getDeckId(), c);
@@ -506,8 +507,8 @@ public class DbConnection {
 
     private boolean cardExists(int cardNumber, int deckId) {
         String query = String.format(
-                "SELECT * FROM card WHERE card_id = %s AND deck_id = %s",
-                Integer.toString(cardNumber), Integer.toString(deckId));
+            "SELECT * FROM card WHERE card_id = %s AND deck_id = %s",
+            Integer.toString(cardNumber), Integer.toString(deckId));
 
         try {
             Statement statement = this.connection.createStatement();
@@ -574,8 +575,8 @@ public class DbConnection {
             boolean isAdmin = profileResultSet.getBoolean("is_admin");
 
             ResultSet deckResultSet = connection
-                    .createStatement()
-                    .executeQuery(SqlQueries.getOwnedDecksQuery(profileId));
+                .createStatement()
+                .executeQuery(SqlQueries.getOwnedDecksQuery(profileId));
             List<Deck> decks = new ArrayList<>();
             while (deckResultSet.next()) {
                 String name = deckResultSet.getString("name");
@@ -589,7 +590,7 @@ public class DbConnection {
                 decks.add(d);
             }
             return new Profile(profileId, emailResult, passwordResult,
-                    firstname, lastname, school, isAdmin, decks);
+                firstname, lastname, school, isAdmin, decks);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -615,8 +616,8 @@ public class DbConnection {
     private void addCardsToDeck(Deck deck) {
         try {
             ResultSet cardResultSet = connection
-                    .createStatement()
-                    .executeQuery(SqlQueries.getCardsQuery(deck.getDeckId()));
+                .createStatement()
+                .executeQuery(SqlQueries.getCardsQuery(deck.getDeckId()));
             while (cardResultSet.next()) {
                 int cardId = cardResultSet.getInt("card_id");
                 String frontPage = cardResultSet.getString("front_page");
@@ -865,6 +866,12 @@ public class DbConnection {
         }
     }
 
+    /**
+     * Get the name of the profile that owns a deck with a given deckId.
+     *
+     * @param deckId the deckId
+     * @return the name of the owner
+     */
     public String getOwnerSchool(int deckId) {
         String query = SqlQueries.getOwnerSchoolQuery(deckId);
 
